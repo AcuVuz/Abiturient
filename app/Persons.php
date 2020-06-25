@@ -23,7 +23,6 @@ class Persons extends Model
       )
       ->join('abit_statements', 'abit_statements.person_id', '=', 'persons.id')
       ->where('persons.pers_type', 'a')
-      ->whereNull('abit_statements.date_return')
       ->orderBy('FirstName', 'ASC')
       ->get();
       $k = [];
