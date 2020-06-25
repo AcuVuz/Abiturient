@@ -22,7 +22,11 @@ class Persons extends Model
           where ap.pers_id = persons.id) as countPriv, persons.is_checked as Checked'
       )
       ->join('abit_statements', 'abit_statements.person_id', '=', 'persons.id')
-      ->where('persons.pers_type', 'a')
+      ->where([
+       ['persons.pers_type', 'a'],
+       ['persons.famil', '<>', ''],
+       ['persons.email', '<>', ''],
+      ])
       ->orderBy('FirstName', 'ASC')
       ->get();
       $k = [];

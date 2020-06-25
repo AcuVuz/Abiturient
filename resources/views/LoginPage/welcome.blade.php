@@ -33,7 +33,7 @@
                         <input type="checkbox" class="custom-control-input">
                         <span class="custom-control-label">Запомнить</span>
                     </label>
-                    <button type="submit" class="btn btn-primary">Ввойти</button>
+                    <button type="submit" class="btn btn-primary">Войти</button>
                 </div>
             </form>
             <!-- / Form -->
