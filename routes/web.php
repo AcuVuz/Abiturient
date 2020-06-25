@@ -108,3 +108,7 @@ Route::get('/repzajav', function(){
 Route::get('/reprasp', function(){
  return view('ReportPages.Report_Raspiska');
 });
+
+Route::get('/replichkart', function(){
+ return view('ReportPages.Report_LichKarta');
+});
