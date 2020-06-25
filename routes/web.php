@@ -98,3 +98,13 @@ Route::get('/reset-password', 'ResetPasswordController@index');
 Route::get('/contact', 'Contact\ContactController@index')->middleware('check');
 //=============== Отображение страницы Тех.поддержки  ============================//
 Route::get('/support', 'Support\SupportController@index')->middleware('check');
+
+
+
+Route::get('/repzajav', function(){
+ return view('ReportPages.Report_Zajav');
+});
+
+Route::get('/reprasp', function(){
+ return view('ReportPages.Report_Raspiska');
+});
