@@ -141,7 +141,7 @@
 								<td class="align-middle">{{ $ps->spec_name }}</td>
 								<td class="align-middle">{{ $ps->stlevel_name }}</td>
 								<td class="align-middle">{{ $ps->form_obuch }}</td>
-								<td>@if($person->is_checked == 'F')@if($ps->date_return == null)<a href="{{ url('/statement/return?ag=').$ps->id.'&pid='.$person->id }}" class="ion ion-md-close text-light"></a>@else <span class="ion ion-md-close text-light"></span> @endif @endif</td>
+								<td>@if($role != 5)@if($ps->date_return == null)<a href="{{ url('/statement/return?ag=').$ps->id.'&pid='.$person->id }}" class="ion ion-md-close text-light"></a>@else <span class="ion ion-md-close text-light"></span> @endif @endif</td>
 							</tr>
 							<tr>
 								<td colspan="5">
