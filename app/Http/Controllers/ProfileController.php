@@ -108,6 +108,9 @@ class ProfileController extends Controller
 		}
 		else $pid = $request->session()->get('person_id');
 
+		if ($request->session()->has('branch_id'))
+			$abit_branch = DB::table('abit_branch')->where('id', session('branch_id'))->get();
+		else
 		$abit_branch = DB::table('abit_branch')->get();
 
 		return view('ProfilePage.success_profile',
@@ -253,7 +256,17 @@ class ProfileController extends Controller
 		$person = DB::table('persons')->where('id', $request->pid)->first();
 		$pers_test = DB::table('pers_tests')->where('pers_id', $request->pid)->whereNull('start_time')->get();
 		foreach ($pers_test as $pt) {
-			DB::table('pers_tests')->where('id', $pt->id)->update([ 'start_time' => date('Y-m-d H', time()) ]);
+			$statements = DB::table('abit_statements as s')
+							->leftjoin('abit_examCard as ec', 'ec.state_id', 's.id')
+							->leftjoin('abit_examenGroup as eg', 'eg.id', 'ec.exam_id')
+							->leftjoin('abit_predmets as pr', 'pr.id', 'eg.predmet_id')
+							->leftjoin('abit_group as g', 'g.id', 's.group_id')
+							->where('s.person_id', $person->id)
+							->where('pr.test_id', $pt->test_id)
+							->whereIn('g.st_id', [1, 2])
+							->count();
+			if ($statements == 0)
+				DB::table('pers_tests')->where('id', $pt->id)->update([ 'start_time' => date('Y-m-d H', time()) ]);
 		}
 		$pers_test = DB::table('pers_tests as pt')
 						->leftjoin('tests as t', 't.id', 'pt.test_id')
@@ -262,7 +275,7 @@ class ProfileController extends Controller
 						->select('pt.*', 't.discipline', 'ta.name as targetAudience_name')
 						->where('pe.event_id', '6')->where('pt.pers_id', $request->pid)->get(); // ТУТ СТАТИЧЕСКОЕ ЗНАЧЕНИЕ, КОТОРОЕ НУЖНО БУДЕТ МЕНЯТЬ КАЖДЫЙ ГОД EVENT_ID
 		Mail::send('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test], function ($message) use ($person) {
-            $message->from('abiturient@ltsu.org', 'Информация с abit.ltsu.org');
+            $message->from('asu@ltsu.org', 'Информация с abit.ltsu.org');
             $message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись прошла проверку');
         });
 		return back();
@@ -376,16 +389,17 @@ class ProfileController extends Controller
 					{
 						if ($test->start_time != null)
 						{ 
-							$timestampStart = strtotime($test->start_time);
+							/*$timestampStart = strtotime($test->start_time);
 							$timestampEnd = time();
 							$seconds = ($timestampEnd - $timestampStart);
-							$testScatter_success = $seconds >= 172800 ? false : true; // 172800 sec == 2 days
+							$testScatter_success = $seconds >= 172800 ? false : true; */// 172800 sec == 2 days
+							$testScatter_success = true;
 						}
 						else $testScatter_success = false;
 					}
 					else $testScatter_success = false;
 		
-					if ($testScatter_success || in_array($test->status, [2, 3])) 
+					if ($testScatter_success) 
 					{
 						switch ($test->status) {
 							case 0:
@@ -646,7 +660,7 @@ class ProfileController extends Controller
 			]);
 
 			Mail::send('RegisterPage.email', ['login' => $login, 'pass' => $pass, 'fio' => $famil.' '.$name.' '.$otch], function ($message) use ($request) {
-				$message->from('abiturient@ltsu.org', 'ЛНУ имени Тараса Шевченко');
+				$message->from('asu@ltsu.org', 'ЛНУ имени Тараса Шевченко');
 				$message->to($request->email_abit, $request->First_Name.' '.$request->Name.' '.$request->Last_Name)->subject('Создание аккаунта на abit.ltsu.org');
 			});
 		}

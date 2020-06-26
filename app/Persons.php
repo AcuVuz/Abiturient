@@ -22,11 +22,14 @@ class Persons extends Model
           where ap.pers_id = persons.id) as countPriv, persons.is_checked as Checked'
       )
       ->join('abit_statements', 'abit_statements.person_id', '=', 'persons.id')
-      ->where([
-       ['persons.pers_type', 'a'],
-       ['persons.famil', '<>', ''],
-       ['persons.email', '<>', ''],
-      ])
+      ->join('abit_group', 'abit_group.id', '=', 'abit_statements.group_id')
+      ->join('abit_facultet', 'abit_facultet.id', '=', 'abit_group.fk_id')
+      ->join('user_roles', 'user_roles.abit_branch_id', '=', 'abit_facultet.branch_id')
+      ->where('persons.pers_type', 'a')
+      ->where('persons.famil','<>', '')
+      ->where('persons.email','<>', '')
+      ->where('user_roles.user_id', session('user_id'))
+      //->whereNull('abit_statements.date_return')
       ->orderBy('FirstName', 'ASC')
       ->get();
       $k = [];
