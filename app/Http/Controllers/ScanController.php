@@ -66,14 +66,45 @@ class ScanController extends Controller
                 $doc => DB::table('abit_typeDoc')->where('id', $doc)->first()->name
             ];
         }
+        $state = DB::table('abit_statements as s')
+                        ->leftjoin('abit_group as g', 'g.id', 's.group_id')
+                        ->leftjoin('abit_facultet as f', 'f.id', 'g.fk_id')
+                        ->where('s.person_id', $persons->id)
+                        ->select('f.branch_id')
+                        ->first();
+
+        if ($state->branch_id == 1)
+        {
+
+            Mail::send('MailsTemplate.MailScans', ['person' => $persons, 'docs' => $docss], function ($message) use ($persons, $attach) {
+                $message->from('asu@ltsu.org', 'Информация с сайта abit.ltsu.org');
+                $message->to('abiturient@ltsu.org')->subject('Скан-копии документов '.$persons->famil.' '.$persons->name.' '.$persons->otch);
+    
+                foreach ($attach as $a) {
+                    $message->attach($a);
+                }
+            });
+        }
+        else
+        {
+
+            Mail::send('MailsTemplate.MailScans', ['person' => $persons, 'docs' => $docss], function ($message) use ($persons, $attach) {
+                $message->from('asu@ltsu.org', 'Информация с сайта abit.ltsu.org');
+                $message->to('rovfaculty@ltsu.org')->subject('Скан-копии документов '.$persons->famil.' '.$persons->name.' '.$persons->otch);
+    
+                foreach ($attach as $a) {
+                    $message->attach($a);
+                }
+            });
+        }
         
-        Mail::send('MailsTemplate.MailScans', ['person' => $persons, 'docs' => $docss], function ($message) use ($persons, $attach) {
+       /* Mail::send('MailsTemplate.MailScans', ['person' => $persons, 'docs' => $docss], function ($message) use ($persons, $attach) {
             $message->from('asu@ltsu.org', 'Информация с сайта abit.ltsu.org');
             $message->to('abiturient@ltsu.org')->subject('Скан-копии документов '.$persons->famil.' '.$persons->name.' '.$persons->otch);
 
             foreach ($attach as $a) {
                 $message->attach($a);
             }
-        }); 
+        }); */
     }
 }

@@ -38,9 +38,9 @@ $(function() {
                 PersonsExamsTable(id_person)
                 selectClient(this);
                 //setTimeout(keek, 200);
-              // var table = $('#shtb').DataTable();
-              //  table.on( 'draw', function () {
-             //  } );
+                // var table = $('#shtb').DataTable();
+                //  table.on( 'draw', function () {
+                //  } );
             },
         });
     });
@@ -62,12 +62,12 @@ $(function() {
                     idPersons: id_person
                 },
             },
-           createdRow: function( row, data, dataIndex ) {
+            createdRow: function(row, data, dataIndex) {
 
-            if($(row).children(':nth-child(3)').text() != ''){
-             $(row).addClass('return-row');
-            }
-           },
+                if ($(row).children(':nth-child(3)').text() != '') {
+                    $(row).addClass('return-row');
+                }
+            },
         });
     }
 
@@ -105,65 +105,68 @@ $(function() {
 
     //=============== Таблица для отображения абитуриентов AbitTable ================================//
     abit_table();
-    function abit_table(){
-     var stxt = $('#custserach').val();
-     var dataTable = $('#table').dataTable({
-         processing: true,
-         //  serverSide: true,
-         ajax: {
-             url: '/loadTable',
-             data: {
-                 stxt: stxt
-             },
-         },
-         searching: false,
-         //Заменить с eng на ru
-         language: {
-             "processing": "Подождите...",
-             "search": "Поиск:",
-             "lengthMenu": "Показать _MENU_ записей",
-             "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
-             "infoEmpty": "Записи с 0 до 0 из 0 записей",
-             "infoFiltered": "(отфильтровано из _MAX_ записей)",
-             "infoPostFix": "",
-             "loadingRecords": "Загрузка записей...",
-             "zeroRecords": "Записи отсутствуют.",
-             "emptyTable": "В таблице отсутствуют данные",
-             "paginate": {
-                 "first": "Первая",
-                 "previous": "Предыдущая",
-                 "next": "Следующая",
-                 "last": "Последняя"
-             },
-             "aria": {
-                 "sortAscending": ": активировать для сортировки столбца по возрастанию",
-                 "sortDescending": ": активировать для сортировки столбца по убыванию"
-             },
-             "select": {
-                 "rows": {
-                     "_": "Выбрано записей: %d",
-                     "0": "Кликните по записи для выбора",
-                     "1": "Выбрана одна запись"
-                 }
-             }
-         },
-         "order": [[1, "desc" ]],
-         //Отрисовать кнопки
-         createdRow: function(row, data, index) {
 
-            if($(row).children(':nth-child(2)').text() != ''){
-             $(row).children(':nth-child(2)').addClass('checkd-row');
-            }
+    function abit_table() {
+        var stxt = $('#custserach').val();
+        var dataTable = $('#table').dataTable({
+            processing: true,
+            //  serverSide: true,
+            ajax: {
+                url: '/loadTable',
+                data: {
+                    stxt: stxt
+                },
+            },
+            searching: false,
+            //Заменить с eng на ru
+            language: {
+                "processing": "Подождите...",
+                "search": "Поиск:",
+                "lengthMenu": "Показать _MENU_ записей",
+                "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+                "infoEmpty": "Записи с 0 до 0 из 0 записей",
+                "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                "infoPostFix": "",
+                "loadingRecords": "Загрузка записей...",
+                "zeroRecords": "Записи отсутствуют.",
+                "emptyTable": "В таблице отсутствуют данные",
+                "paginate": {
+                    "first": "Первая",
+                    "previous": "Предыдущая",
+                    "next": "Следующая",
+                    "last": "Последняя"
+                },
+                "aria": {
+                    "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                    "sortDescending": ": активировать для сортировки столбца по убыванию"
+                },
+                "select": {
+                    "rows": {
+                        "_": "Выбрано записей: %d",
+                        "0": "Кликните по записи для выбора",
+                        "1": "Выбрана одна запись"
+                    }
+                }
+            },
+            "order": [
+                [1, "asc"]
+            ],
+            //Отрисовать кнопки
+            createdRow: function(row, data, index) {
 
-             $('td', row).eq(7).html('').append(
-                 '<a href="/profile?pid=' + data[0] + '" class="btn btn-default btn-xs icon-btn md-btn-flat product-tooltip" title="Открыть"><i class="ion ion-md-create"></i></a>&nbsp;'
-             );
-         },
-     });
+                if ($(row).children(':nth-child(2)').text() != '') {
+                    $(row).children(':nth-child(2)').addClass('checkd-row');
+                }
+
+                $('td', row).eq(7).html('').append(
+                    '<a href="/profile?pid=' + data[0] + '" class="btn btn-default btn-xs icon-btn md-btn-flat product-tooltip" title="Открыть"><i class="ion ion-md-create"></i></a>&nbsp;'
+                );
+            },
+        });
     }
 
-    $('#custserach').keyup(function(){
-     $('#table').DataTable().destroy();
-     abit_table();
+    $('#custserach').keyup(function() {
+        $('#table').DataTable().destroy();
+        abit_table();
     });
 });

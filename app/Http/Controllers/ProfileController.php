@@ -274,10 +274,25 @@ class ProfileController extends Controller
 						->leftjoin('pers_events as pe', 'pe.id', 'pt.pers_event_id')
 						->select('pt.*', 't.discipline', 'ta.name as targetAudience_name')
 						->where('pe.event_id', '6')->where('pt.pers_id', $request->pid)->get(); // ТУТ СТАТИЧЕСКОЕ ЗНАЧЕНИЕ, КОТОРОЕ НУЖНО БУДЕТ МЕНЯТЬ КАЖДЫЙ ГОД EVENT_ID
-		Mail::send('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test], function ($message) use ($person) {
-            $message->from('asu@ltsu.org', 'Информация с abit.ltsu.org');
-            $message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись прошла проверку');
-        });
+		
+		$state = DB::table('abit_statements as s')
+                        ->leftjoin('abit_group as g', 'g.id', 's.group_id')
+                        ->leftjoin('abit_facultet as f', 'f.id', 'g.fk_id')
+                        ->where('s.person_id', $person->id)
+                        ->select('f.branch_id')
+						->first();
+		if($state->branch_id == 1)
+		{
+			Mail::send('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test], function ($message) use ($person) {
+				$message->from('abiturient@ltsu.org', 'Информация с abit.ltsu.org');
+				$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись прошла проверку');
+			});
+		} else {
+			Mail::send('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test], function ($message) use ($person) {
+				$message->from('rovfaculty@ltsu.org', 'Информация с abit.ltsu.org');
+				$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись прошла проверку');
+			});
+		}
 		return back();
 		//return view('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test]);
 	}
@@ -739,7 +754,8 @@ class ProfileController extends Controller
 					'ball_sert'			=> $zno_ball
 				]);
 		}
-		return back()->with('active_list', $request->active_list);
+		//return back()->with(['active_list' => $request->active_list, 'pid' => $pid]);
+		return redirect('/profile?pid='.$pid);
 	}
 	public function delete_sertificate(Request $request)
 	{
