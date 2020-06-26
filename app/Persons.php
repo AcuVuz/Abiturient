@@ -10,28 +10,43 @@ class Persons extends Model
   public $timestamps = false;
 
   //=============== ТАБЛИЦА АБИТУРИЕНТОВ ================================//
-  public static function DashboardTable(){
+  public static function DashboardTable($stxt){
     //$tkt = APersPriv::select('id as ctt')->whereRaw('abit_persPrivilege.pers_id', 'persons.id')->count();
+    if($stxt == ''){
+     $item_abit = Persons::
+     selectRaw(
+       'distinct(persons.id) as id_Abit, persons.famil as FirstName,
+       persons.name as Name, persons.otch as LastName,
+       persons.email, persons.phone_one as PhoneOne, persons.phone_two as PhoneTwo,
+       (select count(ap.id) from abit_persPrivilege ap
+           where ap.pers_id = persons.id) as countPriv, persons.is_checked as Checked'
+       )
+       ->join('abit_statements', 'abit_statements.person_id', '=', 'persons.id')
+       ->join('abit_group', 'abit_group.id', '=', 'abit_statements.group_id')
+       ->join('abit_facultet', 'abit_facultet.id', '=', 'abit_group.fk_id')
+       ->join('user_roles', 'user_roles.abit_branch_id', '=', 'abit_facultet.branch_id')
+       ->where('persons.pers_type', 'a')
+       ->where('persons.famil','<>', '')
+       ->where('persons.email','<>', '')
+       ->where('user_roles.user_id', session('user_id'))
+       //->whereNull('abit_statements.date_return')
+       ->orderBy('FirstName', 'ASC')
+       ->get();
+    }else{
+     $item_abit = Persons::selectRaw(
+       'distinct(persons.id) as id_Abit, persons.famil as FirstName,
+       persons.name as Name, persons.otch as LastName,
+       persons.email, persons.phone_one as PhoneOne, persons.phone_two as PhoneTwo,
+       persons.is_checked as Checked'
+       )
+       ->where('persons.famil', 'like', '%'.$stxt.'%')
+       ->where('persons.pers_type', 'a')
+       ->where('persons.famil','<>', '')
+       ->where('persons.email','<>', '')
+       ->get();
+    }
 
-    $item_abit = Persons::
-    selectRaw(
-      'distinct(persons.id) as id_Abit, persons.famil as FirstName,
-      persons.name as Name, persons.otch as LastName,
-      persons.email, persons.phone_one as PhoneOne, persons.phone_two as PhoneTwo,
-      (select count(ap.id) from abit_persPrivilege ap
-          where ap.pers_id = persons.id) as countPriv, persons.is_checked as Checked'
-      )
-      ->join('abit_statements', 'abit_statements.person_id', '=', 'persons.id')
-      ->join('abit_group', 'abit_group.id', '=', 'abit_statements.group_id')
-      ->join('abit_facultet', 'abit_facultet.id', '=', 'abit_group.fk_id')
-      ->join('user_roles', 'user_roles.abit_branch_id', '=', 'abit_facultet.branch_id')
-      ->where('persons.pers_type', 'a')
-      ->where('persons.famil','<>', '')
-      ->where('persons.email','<>', '')
-      ->where('user_roles.user_id', session('user_id'))
-      //->whereNull('abit_statements.date_return')
-      ->orderBy('FirstName', 'ASC')
-      ->get();
+
       $k = [];
       $i = 0;
       foreach ($item_abit as $key) {

@@ -5,11 +5,13 @@
 	<link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/users.css') }}">
 	<link href="{{ asset('fonts/fonts/font-awesome.min.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/toastr.min.css') }}" rel="stylesheet">
+	<link href="{{ asset('css/sweetalert2.min.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/style.css') }}" rel="stylesheet">
 @endsection
 
 @section('scripts')
 	<script src="{{ asset('js/toastr.min.js') }}"></script>
+	<script src="{{ asset('js/sweetalert2.min.js') }}"></script>
 	<script src="{{ asset('js/profile.js') }}"></script>
 	<script>
 		var role = {{ $role }};
@@ -53,8 +55,10 @@
 			<div class="text-muted mb-2">E-mail: {{ $person->email }}</div>
 			<span class="profile-time-func">
 			@if($person->is_checked == 'F' || $role != 5)
-
-				<a href="javascript:void(0)" class="btn btn-primary btn-sm" onclick="FindFile();"><i class="ion ion-md-photos"></i> Фото</a>
+				<a href="javascript:void(0)" class="btn btn-primary btn-sm" onclick="FindFile();">
+					<i class="ion ion-md-photos"></i>
+					Фото
+				</a>
 				<form action="#" method="POST" enctype="multipart/form-data" id="loadPhoto" style="position:absolute;overflow: hidden;display:block;height:0px;width:0px;">
 					<input type="file"   id="FindFile" accept="image/jpeg,image/png,image/gif" name="FindFile" onchange="LoadFile();" style="display: none">
 					<input type="hidden" name="pid" value="{{ $person->id }}">
@@ -63,10 +67,25 @@
 				<iframe id="rFrame" name="rFrame" style="display: none"> </iframe>
 				<a href="{{ url('/insert_abit') }}" class="btn btn-default btn-sm"><i class="ion ion-md-person "></i> Данные</a>
 				@if($person_count_statements > 0)<a href="{{ url('/scanPhoto') }}" class="btn btn-default btn-sm"><i class="ion ion-md-images "></i> Скан фото</a>@endif
-				<div class="demo-paragraph-spacing mt-3">
-					@if($person_count_statements < 6) <a href="{{ url('/success_insert_abit') }}" class="btn btn-primary"><i class="ion ion-md-add"></i> Добавить заявление</a> @endif
-					@if($role != 5 && $person->is_checked == 'F') <a href="{{ url('/checked_abit?pid='.$person->id) }}" class="btn btn-success"><i class="ion ion-md-checkmark"></i> Проверено</a>
-					@elseif($role != 5) Проверено@endif
+					<div class="demo-paragraph-spacing mt-3">
+					@if($person_count_statements < 6)
+					<a href="{{ url('/success_insert_abit') }}" class="btn btn-primary">
+						<i class="ion ion-md-add"></i>
+						Добавить заявление
+						</a>
+					@endif
+					@if($role != 5 && $person->is_checked == 'F')
+						<a href="{{ url('/checked_abit?pid='.$person->id) }}" class="btn btn-success">
+							<i class="ion ion-md-checkmark"></i>
+							Проверено
+						</a>
+						<a href="#" style="display:none;">
+							<i class="fa fa-times" aria-hidden="true"></i>
+							Отказать
+						</a>
+					@elseif($role != 5)
+					Проверено
+					@endif
 				</div>
 			@else
 				Проверено

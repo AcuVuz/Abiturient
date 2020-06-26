@@ -33,9 +33,9 @@ class DashboardController extends Controller
     }
 
     // ------------ ЗАГРУЗКА ТАБЛИЦЫ АБИТУРИЕНТОВ ------------------------//
-    public function loadTable()
+    public function loadTable(Request $request)
     {
-        $arr = Persons::DashboardTable();
+        $arr = Persons::DashboardTable($request->stxt);
         header("Content-type: application/json; charset=utf-8");
         return json_encode($arr, true);
     }

@@ -32,6 +32,7 @@
 
             <!-- Clients list -->
             <div class="table-responsive ui-bordered">
+             <span class="search-span-dashboard-table"> <label for=custserach"">Поиск: </label><input type="text" id="custserach" name="custserach"></span>
                 <table id="table" class="clients-table table table-hover m-0">
 
                     <thead>
