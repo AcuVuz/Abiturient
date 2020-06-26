@@ -159,3 +159,20 @@
 .checkd-row{
  color: green;
 }
+.search-span-dashboard-table{
+ float: right;
+ margin-right: 2px;
+}
+.search-span-dashboard-table label{
+ margin-right: 7px;
+}
+.search-span-dashboard-table input{
+ border: 1px solid rgba(24,28,33,0.1);
+ border-radius: .25rem;
+ transition: 0.2s;
+}
+.search-span-dashboard-table input:focus{
+ outline: none;
+ border: 1px solid #fc5a5c;
+ transition: 0.2s;
+}
