@@ -33,10 +33,10 @@
         @if ($role == 1)
         <li class="sidenav-item{{ strpos($routeName, 'print.') === 0 ? ' active open' : '' }}">
             <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-document"></i><div>Печать документов</div></a>
-
+            @if(strpos($routeName, 'dashboards.') === 0)
             <ul class="sidenav-menu">
                 <li class="sidenav-item{{ $routeName == 'print.lich_card' ? ' active' : '' }}">
-                    <a href="/print/lich_card" target="_blank" class="sidenav-link"><div>Личная карта</div></a>
+                    <a href="/print/lich_card" id="print_lich_card" target="_blank" class="sidenav-link"><div>Личная карта</div></a>
                 </li>
             </ul>
             <ul class="sidenav-menu">
@@ -44,7 +44,7 @@
                     <a href="/print/opis" target="_blank" class="sidenav-link"><div>Опись (расписка)</div></a>
                 </li>
             </ul>
-            @if ($routeName == 'profile')
+            @elseif ($routeName == 'profile')
                 <ul class="sidenav-menu">
                     <li class="sidenav-item{{ $routeName == 'print.statement' ? ' active' : '' }}">
                         <a href="/print/statement" target="_blank" class="sidenav-link"><div>Заявление</div></a>
