@@ -29,6 +29,35 @@
                 </li>
             </ul>
         </li>
+        <!-- Печать документов -->
+        @if ($role == 1)
+        <li class="sidenav-item{{ strpos($routeName, 'print.') === 0 ? ' active open' : '' }}">
+            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-document"></i><div>Печать документов</div></a>
+
+            <ul class="sidenav-menu">
+                <li class="sidenav-item{{ $routeName == 'print.lich_card' ? ' active' : '' }}">
+                    <a href="/print/lich_card" target="_blank" class="sidenav-link"><div>Личная карта</div></a>
+                </li>
+            </ul>
+            <ul class="sidenav-menu">
+                <li class="sidenav-item{{ $routeName == 'print.opis' ? ' active' : '' }}">
+                    <a href="/print/opis" target="_blank" class="sidenav-link"><div>Опись (расписка)</div></a>
+                </li>
+            </ul>
+            @if ($routeName == 'profile')
+                <ul class="sidenav-menu">
+                    <li class="sidenav-item{{ $routeName == 'print.statement' ? ' active' : '' }}">
+                        <a href="/print/statement" target="_blank" class="sidenav-link"><div>Заявление</div></a>
+                    </li> 
+                </ul>
+                <ul class="sidenav-menu">
+                    <li class="sidenav-item{{ $routeName == 'print.examSheet' ? ' active' : '' }}">
+                        <a href="/print/examSheet" target="_blank" class="sidenav-link"><div>Экзаменационный лист</div></a>
+                    </li>
+                </ul>
+            @endif
+        </li>
+        @endif
              <!--  Графики данных
         <li class="sidenav-item{{ strpos($routeName, 'charts.') === 0 ? ' active open' : '' }}">
             <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-pie"></i><div>Тестовый вариант</div></a>

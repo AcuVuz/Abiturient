@@ -65,10 +65,13 @@ Route::post('/direction/search_predmet', 'DirectionController@search_predmet');
 //=============== Сохрание данных направления и теста ================================//
 Route::post('/direction/save', 'DirectionController@save');
 //=============== Отображение шаблона Направления ================================//
-
+ 
 Route::post('/upload_scan_photo', 'ScanController@Upload_Scan_Photo');
 
-
+Route::get('/print/lich_card', 'PrintController@lich_card')->name('print.lich_card')->middleware('check');
+Route::get('/print/opis', 'PrintController@opis')->name('print.opis')->middleware('check');
+Route::get('/print/statement', 'PrintController@statement')->name('print.statement')->middleware('check');
+Route::get('/print/examSheet', 'PrintController@examSheet')->name('print.examSheet')->middleware('check');
 
 //=============== Разрыв сессии ================================//
 Route::get('logout', 'DashboardController@logout')->name('logout');
