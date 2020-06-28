@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Validator;
+use App\Persons;
 
 class ProfileController extends Controller
 {
@@ -22,7 +23,7 @@ class ProfileController extends Controller
 		$predmet_zno = DB::table('abit_predmets')->where('is_zno', 'T')->orderby('name', 'asc')->get();
 		$abit_typeDoc = DB::table('abit_typeDoc')->orderby('name', 'asc')->get();
 
-		if ($request->session()->get('role_id') != 5) 
+		if ($request->session()->get('role_id') != 5)
 		{
 			if (isset($request->pid))
 			{
@@ -30,8 +31,8 @@ class ProfileController extends Controller
 				{
 					$pid = $request->pid;
 				}
-			} 
-			else 
+			}
+			else
 			{
 				$pid = $request->session()->has('person_id') ? $request->session()->get('person_id') : $request->pid;
 			}
@@ -39,7 +40,7 @@ class ProfileController extends Controller
 		else $pid = $request->session()->get('person_id');
 		if (isset($pid))
 		{
-			
+
 			$person = DB::table('persons')->where('id', $pid)->first();
 			$privileges = DB::table('abit_persPrivilege')
 							->leftjoin('abit_typePrivilege', 'abit_typePrivilege.id', 'abit_persPrivilege.priv_id')
@@ -60,7 +61,7 @@ class ProfileController extends Controller
 							->whereIn('ad.doc_id', array(1,7))
 							->first();
 
-			
+
 			$pers_zno = DB::table('abit_sertificate')
 						->leftjoin('abit_predmets', 'abit_predmets.id', 'abit_sertificate.predmet_id')
 						->where('person_id', $pid)
@@ -95,14 +96,14 @@ class ProfileController extends Controller
 				'abit_typeDoc'	=> $abit_typeDoc
 			]);
 		}
-		
+
 	}
 	//Уже зарегистрированный абитуриент
 	public function index_Success_Abit(Request $request)
 	{
 		$role = session('role_id');
 		$users = session('user_name');
-		if ($request->session()->get('role_id') != 5) 
+		if ($request->session()->get('role_id') != 5)
 		{
 			$pid = $request->session()->has('person_id') ? $request->session()->get('person_id') : $request->pid;
 		}
@@ -172,7 +173,7 @@ class ProfileController extends Controller
 		}
 		return $data;
 	}
-	
+
 	public function statement_return(Request $request)
 	{
 		if($request->has('ag'))
@@ -208,7 +209,7 @@ class ProfileController extends Controller
 					$group = DB::table('abit_group as g')->leftjoin('abit_formObuch as fo', 'fo.id', 'g.fo_id')->select('g.*', 'fo.nick as fo_nick')->where('g.id', $request->abit_group)->first();
 
 					$shifr = $group->fo_nick.$group->fo_id.$group->nick.$count_in_group;
-					
+
 					$AStatement_id = DB::table('abit_statements')->insertGetId([
 						'person_id' 		=> $request->pid,
 						'group_id'			=> $request->abit_group,
@@ -224,9 +225,9 @@ class ProfileController extends Controller
 							$grafik = DB::table('abit_grafikExam')->where('predmet_id', $ge->predmet_id)->where('fo_id', $group->fo_id)->where('st_id', $group->st_id)->first();
 							if ($grafik != null)
 								DB::table('abit_examCard')->insert(['state_id' => $AStatement_id, 'exam_id' => $ge->id, 'date_exam' => $grafik->date_exam]);
-							else 
+							else
 								DB::table('abit_examCard')->insert(['state_id' => $AStatement_id, 'exam_id' => $ge->id]);
-							
+
 							$tmp = DB::table('pers_events')->where('pers_id', $request->pid)->where('event_id', '6')->first(); 	// ТУТ СТОИТ ФИКСИРОВАННОЕ ПОЛЕ EVENT_ID = 6, ЭТО КОСТЫЛЬ И ПРИДЕТСЯ МЕНЯТЬ КАЖДЫЙ ГОД ДАННОЕ ЧИСЛО ИЗ ТАБЛИЦЫ EVENTS
 							if ($tmp == null) $event_pers = DB::table('pers_events')->insertGetId([ 'pers_id' => $request->pid, 'event_id' => '6' ]);		// ТУТ СТОИТ ФИКСИРОВАННОЕ ПОЛЕ EVENT_ID = 6, ЭТО КОСТЫЛЬ И ПРИДЕТСЯ МЕНЯТЬ КАЖДЫЙ ГОД ДАННОЕ ЧИСЛО ИЗ ТАБЛИЦЫ EVENTS
 							else $event_pers = $tmp->id;
@@ -236,7 +237,7 @@ class ProfileController extends Controller
 							{
 								if ($grafik != null)
 									DB::table('pers_tests')->insert(['pers_id' => $request->pid, 'test_id' => $tid, 'pers_event_id' => $event_pers, 'start_time' => $grafik->date_exam ]);
-								else 
+								else
 									DB::table('pers_tests')->insert(['pers_id' => $request->pid, 'test_id' => $tid, 'pers_event_id' => $event_pers ]);
 							}
 						}
@@ -247,7 +248,7 @@ class ProfileController extends Controller
 			}
 			else return back();
 		}
-		else return back(); 
+		else return back();
 	}
 
 	public function checked_abit(Request $request)
@@ -274,7 +275,7 @@ class ProfileController extends Controller
 						->leftjoin('pers_events as pe', 'pe.id', 'pt.pers_event_id')
 						->select('pt.*', 't.discipline', 'ta.name as targetAudience_name')
 						->where('pe.event_id', '6')->where('pt.pers_id', $request->pid)->get(); // ТУТ СТАТИЧЕСКОЕ ЗНАЧЕНИЕ, КОТОРОЕ НУЖНО БУДЕТ МЕНЯТЬ КАЖДЫЙ ГОД EVENT_ID
-		
+
 		$state = DB::table('abit_statements as s')
                         ->leftjoin('abit_group as g', 'g.id', 's.group_id')
                         ->leftjoin('abit_facultet as f', 'f.id', 'g.fk_id')
@@ -301,7 +302,7 @@ class ProfileController extends Controller
 	public function index_Profile(Request $request)
 	{
 		$request->session()->forget('active_list');
-		if ($request->session()->get('role_id') != 5) 
+		if ($request->session()->get('role_id') != 5)
 		{
 			if($request->has('pid'))
 			{
@@ -368,10 +369,10 @@ class ProfileController extends Controller
 								)
 								->where('pe.event_id', '6') 								// ТУТ ФИКСИРОВАННОЕ ЗНАЧЕНИЕ - КОСТЫЛЬ, ПОНАДОБИТСЯ КАЖДЫЙ ГОД МЕНЯТЬ EVENT_ID НА НУЖНЫЙ
 								->get();
-				
+
 				$persTests += [$ps->id => $person_tests];
 
-				foreach ($person_tests as $test) {	
+				foreach ($person_tests as $test) {
 					$testScatter_success = true;
 					$max_ball = 0;
 					$max_quest = 0;
@@ -381,12 +382,12 @@ class ProfileController extends Controller
 							->get();
 
 					if (count($tc) == 0) $testScatter_success = false;
-					
+
 					foreach ($tc as $tmp)
 					{
 						$max_ball += $tmp->ball_count * $tmp->ball;
 						$max_quest += $tmp->ball_count;
-		
+
 						$ttmp = DB::table('questions')->where('test_id', $test->test_id)->where('ball', $tmp->ball)->count();
 						if ($tmp->ball_count <= $ttmp) $testScatter_success= true;
 						else $testScatter_success = false;
@@ -399,11 +400,11 @@ class ProfileController extends Controller
 								->where('pers_events.id', $test->pers_event_id)
 								->select('events.*')
 								->first();
-		
-					if((strtotime($event->date_start) <= time()) && (strtotime($event->date_end) >= time()) || $test->status == 2) 
+
+					if((strtotime($event->date_start) <= time()) && (strtotime($event->date_end) >= time()) || $test->status == 2)
 					{
 						if ($test->start_time != null)
-						{ 
+						{
 							/*$timestampStart = strtotime($test->start_time);
 							$timestampEnd = time();
 							$seconds = ($timestampEnd - $timestampStart);
@@ -413,8 +414,8 @@ class ProfileController extends Controller
 						else $testScatter_success = false;
 					}
 					else $testScatter_success = false;
-		
-					if ($testScatter_success) 
+
+					if ($testScatter_success)
 					{
 						switch ($test->status) {
 							case 0:
@@ -424,8 +425,8 @@ class ProfileController extends Controller
 								$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-warning'>В процессе</span>";
 								break;
 							case 2:
-								$status = $test->test_ball_correct >= $test->min_ball ? 
-											"<span onclick='shortResult(".$test->id.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-success'>Пройден</span>" : 
+								$status = $test->test_ball_correct >= $test->min_ball ?
+											"<span onclick='shortResult(".$test->id.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-success'>Пройден</span>" :
 											"<span onclick='shortResult(".$test->id.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-danger'>Не пройден</span>";
 								break;
 							case 3:
@@ -436,7 +437,7 @@ class ProfileController extends Controller
 							$test->id => "true"
 						];
 					}
-					else 
+					else
 					{
 						$status = "<span class='badge badge-danger'>Тест не доступен</span>";
 						$successTest += [
@@ -449,7 +450,7 @@ class ProfileController extends Controller
 				}
 			}
 		}
- 
+
 		$person_count_statements = DB::table('abit_statements')->where('person_id', $person->id)->whereNull('date_return')->count();
 		return view('ProfilePage.profile',
 			[
@@ -520,7 +521,7 @@ class ProfileController extends Controller
 		$birthday 		= trim($request->birthday);
 		$citizen 		= trim($request->citizen);
 		$hostel_need 	= isset($request->hostel_need) ? trim($request->hostel_need) : 0;
-		
+
 		$en = 'F';
 		$fr = 'F';
 		$de = 'F';
@@ -632,8 +633,8 @@ class ProfileController extends Controller
                 // Output: 54esmdr0qf
 			$login = substr(str_shuffle($secret_string), 0, 5);
 			$pass = substr(str_shuffle($secret_string), 0, 10);
-			
-			
+
+
 			$pid = DB::table('persons')->insertGetId([
 				'login'         	=> $login,
 				'password'      	=> Hash::make($pass),
@@ -768,4 +769,7 @@ class ProfileController extends Controller
 		}
 		return back()->with('active_list', $request->active_list);
 	}
+		public function DiscardCheckedAbit(Request $request){
+			return Persons::AddDiscComment($request->comment, $request->person);
+		}
 }

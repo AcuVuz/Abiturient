@@ -192,7 +192,7 @@ class Persons extends Model
 				->where('abit_statements.person_id',$id_person)
 				->get();
 		}
-		else 
+		else
 		{
 			$query = AStatments::
 				select
@@ -212,7 +212,7 @@ class Persons extends Model
 	public static function GetDocumentObr($id_person)
 	{
 		$query = ADocument::
-			select 
+			select
 			(
 				'abit_typeDoc.name',
 				'abit_typeEducation.name as educ_name',
@@ -239,4 +239,12 @@ class Persons extends Model
 				->get();
 		return $query;
 	}
+
+	public static function AddDiscComment($comment, $pers_id){
+		$query = Persons::where('id', $pers_id)->first();
+		$query->Comment = $comment;
+		$query->save();
+		return 1;
+	}
+
 }

@@ -80,11 +80,11 @@
 						</a>
 					@endif
 					@if($role != 5 && $person->is_checked == 'F')
-						<a href="{{ url('/checked_abit?pid='.$person->id) }}" class="btn btn-success">
+						<a href="#" onClick="CheckedPerson('{{$person->id}}')" class="btn btn-success">
 							<i class="ion ion-md-checkmark"></i>
 							Проверено
 						</a>
-						<a href="#" style="display:none;">
+						<a href="#" onClick="DiscardPerson('{{$person->id}}')" class="btn btn-cancel">
 							<i class="fa fa-times" aria-hidden="true"></i>
 							Отказать
 						</a>

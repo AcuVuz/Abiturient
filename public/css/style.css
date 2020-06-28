@@ -176,3 +176,13 @@
  border: 1px solid #fc5a5c;
  transition: 0.2s;
 }
+.btn-cancel{
+  background-color: rgba(155, 17, 30, 0.9);;
+  color: white;
+   transition: 0.3s;
+}
+.btn-cancel:hover{
+ color:White;
+ background-color:rgba(155, 17, 30, 1);
+ transition: 0.3s;
+}

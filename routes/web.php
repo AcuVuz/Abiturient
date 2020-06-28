@@ -65,7 +65,7 @@ Route::post('/direction/search_predmet', 'DirectionController@search_predmet');
 //=============== Сохрание данных направления и теста ================================//
 Route::post('/direction/save', 'DirectionController@save');
 //=============== Отображение шаблона Направления ================================//
- 
+
 Route::post('/upload_scan_photo', 'ScanController@Upload_Scan_Photo');
 
 Route::get('/print/lich_card', 'PrintController@lich_card')->name('print.lich_card')->middleware('check');
@@ -103,6 +103,7 @@ Route::get('/contact', 'Contact\ContactController@index')->middleware('check');
 Route::get('/support', 'Support\SupportController@index')->middleware('check');
 
 
+Route::post('/discard_checked_abit', 'ProfileController@DiscardCheckedAbit');
 
 Route::get('/repzajav', function(){
  return view('ReportPages.Report_Zajav');

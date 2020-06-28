@@ -59,3 +59,86 @@ $(document).ready(function() {
 
 
 });
+
+function DiscardPerson(person){
+  Swal.fire({
+   title: 'Вы действительно хотите дать отказ данной персоне?',
+   icon: 'warning',
+   showCancelButton: true,
+   showConfirmButton: true,
+   cancelButtonText: 'Нет',
+   confirmButtonText: 'Да',
+   input: 'textarea',
+   inputPlaceholder: 'Введите причину отказа...',
+    customClass: {
+     confirmButton: 'confirm-button-disc-pers',
+     input: 'comment-textarea',
+   }
+  }).then((result) => {
+   if(result.dismiss === 'cancel'){
+    return false;
+   }else{
+      if( $('.comment-textarea').val() != ''){
+       $.ajax({
+      url: '/discard_checked_abit',
+      type: 'POST',
+      data: {
+          comment:  $('.comment-textarea').val(),
+          person : person
+      },
+      headers: {
+          'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      },
+      success: function(data) {
+        if(data == 1){
+         Swal.fire({
+          title: 'Комментарий успешно добавлен!',
+          icon: 'success',
+         });
+        }
+      }
+     });
+      }else{
+        Swal.fire({
+         title: 'Укажите причину отказа!',
+         icon: 'error',
+        }).then((result) => {
+          DiscardPerson(person);
+        });
+      }
+   }
+ });
+}
+
+function CheckedPerson(person){
+ Swal.fire({
+  title: 'Вы действительно хотите установить статус "Проверен" для данной персоны?',
+  icon: 'warning',
+  showCancelButton: true,
+  showConfirmButton: true,
+  cancelButtonText: 'Нет',
+  confirmButtonText: 'Да',
+ }).then((result) => {
+  if(result.dismiss === 'cancel'){
+   return false;
+  }else{
+   $.ajax({
+  url: '/checked_abit',
+  type: 'get',
+  data: {
+      pid : person
+  },
+  headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+  },
+  success: function(){
+     Swal.fire({
+      title: 'Статус успешно обновлён!',
+      icon: 'success',
+     }).then((result) => { location.reload(); });
+  }
+ });
+  }
+ });
+
+}
