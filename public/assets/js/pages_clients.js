@@ -21,7 +21,6 @@ $(function() {
     //=============== Событие при клике на строку таблицы AbitTable ================================//
     $('body').on('click', '.clients-table tr', function() {
         var id_person = this.cells[0].textContent;
-        $('#print_lich_card').prop('href', '/print/lich_card?pid=' + id_person);
         $.ajax({
             dataType: 'json',
             url: '/loadSidebar',

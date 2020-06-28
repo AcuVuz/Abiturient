@@ -174,7 +174,7 @@ class Persons extends Model
 				'persons.*'
 			)
 		->where('id',$id_person)
-			->first();
+		->first();
 		return $query;
 	}
 
@@ -215,9 +215,11 @@ class Persons extends Model
 			select 
 			(
 				'abit_typeDoc.name',
+				'abit_typeEducation.name as educ_name',
 				'abit_document.*'
 			)
 			->leftjoin('abit_typeDoc', 'abit_typeDoc.id', 'abit_document.doc_id')
+			->leftjoin('abit_typeEducation', 'abit_typeEducation.id', 'abit_document.educ_id')
 			->whereIn('abit_document.doc_id', [1, 7])
 			->where('abit_document.pers_id', $id_person)
 			->first();

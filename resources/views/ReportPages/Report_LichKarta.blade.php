@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
-		<title>Document</title>
+		<title>Печать личной карты</title>
 		<style>
 			.body-report{
 				padding: 0px;
@@ -26,10 +26,35 @@
 				padding-top: 3mm;
 			}
 		</style>
+		<style type="text/css" media="print">
+			.body-report{
+				padding: 0px;
+				margin: 0px;
+			}
+			.wrap-list{
+				width: 210mm;
+				height: 297mm;
+				font-family: "Times New Roman", Times, serif;
+			}
+			/*
+			.wrap-list{
+				width: 210mm;
+				height: 297mm;
+				font-family: DejaVu Sans, sans-serif;
+			}
+			*/
+			.sp-tb td{
+				padding-top: 3mm;
+			}
+			@page {
+				size: auto;   /* auto is the initial value */
+				margin: 0;  /* this affects the margin in the printer settings */
+			}
+		</style>
 	</head>
 	<body class="body-report">
-		<div class="wrap-list">
-			<div class="row" style=" padding-left: 12mm; padding-top: 10mm; padding-right: 12mm;">
+		<div class="wrap-list" id="wrap-list">
+			<div class="row" style="padding-left: 12mm; padding-top: 10mm; padding-right: 12mm;">
 				<table>
 					<td>
 						<p>

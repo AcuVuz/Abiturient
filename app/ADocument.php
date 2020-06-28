@@ -27,4 +27,18 @@ class ADocument extends Model
 			}
 		}
 	}
+
+	public static function GetPersonDocument($id_person)
+	{
+		$query = ADocument::
+				select
+				(
+					'abit_document.*',
+					'td.name as doc_name'
+				)
+				->join('abit_typeDoc as td', 'td.id', 'abit_document.doc_id')
+				->where('abit_document.pers_id', $id_person)
+				->get();
+		return $query;
+	}
 }

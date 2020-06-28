@@ -42,7 +42,12 @@
 		function toggle_table(id){
 			//$( ".hidden_card_table" ).toggle();
 			$( ".hidden_card_table" + id ).slideToggle();
-
+			$('#print_opis').prop('href', '/print/opis?asid=' + id);
+			$('#print_opis').show();
+			$('#print_statement').prop('href', '/print/statement?asid=' + id);
+			$('#print_statement').show();
+			$('#print_examSheet').prop('href', '/print/examSheet?asid=' + id);
+			$('#print_examSheet').show();
 		}
 	</script>
 @endsection
