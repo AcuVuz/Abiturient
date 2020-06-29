@@ -75,29 +75,29 @@ function DiscardPerson(person){
      input: 'comment-textarea',
    }
   }).then((result) => {
-   if(result.dismiss === 'cancel'){
+   if(result.dismiss === 'cancel' || result.dismiss === 'esc' || result.dismiss === 'backdrop'){
     return false;
    }else{
       if( $('.comment-textarea').val() != ''){
        $.ajax({
-      url: '/discard_checked_abit',
-      type: 'POST',
-      data: {
-          comment:  $('.comment-textarea').val(),
-          person : person
-      },
-      headers: {
-          'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-      },
-      success: function(data) {
-        if(data == 1){
-         Swal.fire({
-          title: 'Комментарий успешно добавлен!',
-          icon: 'success',
-         });
-        }
-      }
-     });
+         url: '/discard_checked_abit',
+         type: 'POST',
+         data: {
+             comment:  $('.comment-textarea').val(),
+             person : person
+         },
+         headers: {
+             'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+         },
+         success: function(data) {
+           if(data == 1){
+            Swal.fire({
+             title: 'Комментарий успешно добавлен!',
+             icon: 'success',
+            });
+           }
+         }
+        });
       }else{
         Swal.fire({
          title: 'Укажите причину отказа!',
@@ -119,25 +119,25 @@ function CheckedPerson(person){
   cancelButtonText: 'Нет',
   confirmButtonText: 'Да',
  }).then((result) => {
-  if(result.dismiss === 'cancel'){
+  if(result.dismiss === 'cancel' || result.dismiss === 'esc' || result.dismiss === 'backdrop'){
    return false;
   }else{
    $.ajax({
-  url: '/checked_abit',
-  type: 'get',
-  data: {
-      pid : person
-  },
-  headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-  },
-  success: function(){
-     Swal.fire({
-      title: 'Статус успешно обновлён!',
-      icon: 'success',
-     }).then((result) => { location.reload(); });
-  }
- });
+    url: '/checked_abit',
+    type: 'get',
+    data: {
+        pid : person
+    },
+    headers: {
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    success: function(){
+       Swal.fire({
+        title: 'Статус успешно обновлён!',
+        icon: 'success',
+       }).then((result) => { location.reload(); });
+    }
+   });
   }
  });
 
