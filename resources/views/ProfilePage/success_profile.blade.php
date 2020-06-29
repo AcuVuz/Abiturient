@@ -59,10 +59,11 @@
         {
             var fkid = $('#abit_facultet').val();
             var stid = $('#abit_stlevel').val();
+            var pid = $('#pid').val();
             $.ajax({
                 url: '/statement/get_form_obuch',
                 method: 'post',
-                data: { fkid : fkid, stid : stid },
+                data: { fkid : fkid, stid : stid, pid  : pid  },
                 headers: {
                     'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
                 },

@@ -146,7 +146,29 @@ class ProfileController extends Controller
 
 	public function get_form_obuch(Request $request)
 	{
-		$formobuch = DB::table('abit_group as g')->distinct()->leftjoin('abit_formObuch as fo', 'fo.id', 'g.fo_id')->where('g.fk_id', $request->fkid)->where('g.st_id', $request->stid)->select('fo.id', 'fo.name')->orderBy('fo.id', 'asc')->get();
+		$ochka = DB::table('abit_statements')
+				->leftjoin('abit_group as g', 'g.id', 'abit_statements.group_id')
+				->where('abit_statements.person_id', $request->pid)
+				->where('g.fo_id', '1')
+				->count();
+		$zaochka = DB::table('abit_statements')
+				->leftjoin('abit_group as g', 'g.id', 'abit_statements.group_id')
+				->where('abit_statements.person_id', $request->pid)
+				->where('g.fo_id', '2')
+				->count();
+		$fo = [];
+		if ($ochka < 3) $fo += [ 1 => 1];
+		if ($zaochka < 3) $fo += [ 2 => 2];
+		//dd($fo);
+		$formobuch = DB::table('abit_group as g')
+						->distinct()
+						->leftjoin('abit_formObuch as fo', 'fo.id', 'g.fo_id')
+						->where('g.fk_id', $request->fkid)
+						->where('g.st_id', $request->stid)
+						->whereIn('g.fo_id', $fo)
+						->select('fo.id', 'fo.name')
+						->orderBy('fo.id', 'asc')
+						->get();
 		$data = "<option>Выберите элемент</option>";
 		foreach ($formobuch as $fo) {
 			$data .= "<option value='".$fo->id."'>".$fo->name."</option>";
@@ -242,7 +264,7 @@ class ProfileController extends Controller
 							}
 						}
 					}
-					return redirect('/profile');
+					return redirect('/profile?pid='.$request->pid);
 				}
 				else return back();
 			}
