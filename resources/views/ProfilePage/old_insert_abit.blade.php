@@ -55,6 +55,10 @@
 			mask: ['(', /[1-10]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]
 		});
 		vanillaTextMask.maskInput({
+			inputElement: $('#phone_abit_two')[0],
+			mask: ['(', /[1-10]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]
+		});
+		vanillaTextMask.maskInput({
 			inputElement: $('#phone_mother')[0],
 			mask: ['(', /[1-10]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]
 		});
@@ -173,7 +177,7 @@
 									<div class="col">
 										<div class="form-group">
 											<label class="form-label">Второй номер телефона</label>
-											<input type="text" id="phone_abit" name="phone_two" class="form-control " placeholder="(___) ___-_____" value="{{ isset($person) ? $person->phone_two : ''}}">
+											<input type="text" id="phone_abit_two" name="phone_two" class="form-control " placeholder="(___) ___-_____" value="{{ isset($person) ? $person->phone_two : ''}}">
 										</div>
 									</div>
 									<div class="col">

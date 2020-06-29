@@ -15,26 +15,18 @@ class PrintController extends Controller
 {
     public function lich_card(Request $request)
     {
-        $person = Persons::GetPerson($request->pid);
-        $statements = Persons::GetStatement($request->pid, false);
-        $documentObr = Persons::GetDocumentObr($request->pid);
-        $lgots  = Persons::GetLgots($request->pid);
+        $statement = AStatments::GetStatement($request->asid);
+        $person = Persons::GetPerson($statement->person_id);
+        $documentObr = Persons::GetDocumentObr($statement->person_id);
+        $lgots  = Persons::GetLgots($statement->person_id);
         $lgot = '';
-        $shifr = '';
-        $spec = '';
-        foreach ($statements as $state) 
-        {
-            $shifr .= $state->shifr.', ';
-            $spec .= $state->SpecName.', ';
-        }
 
         foreach ($lgots as $l) $lgot .= $l->name.', ';
 
         return view('ReportPages.Report_LichKarta', 
             [
                 'person' => $person,
-                'shifr' => $shifr,
-                'spec'  => $spec,
+                'statement' => $statement,
                 'documentObr' => $documentObr,
                 'lgots' => $lgot
             ]

@@ -48,6 +48,8 @@
 			$('#print_statement').show();
 			$('#print_examSheet').prop('href', '/print/examSheet?asid=' + id);
 			$('#print_examSheet').show();
+			$('#print_lich_card').prop('href', '/print/lich_card?asid=' + id);
+			$('#print_lich_card').show();
 		}
 	</script>
 @endsection

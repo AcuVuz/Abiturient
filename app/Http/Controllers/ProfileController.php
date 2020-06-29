@@ -282,17 +282,27 @@ class ProfileController extends Controller
                         ->where('s.person_id', $person->id)
                         ->select('f.branch_id')
 						->first();
-		if($state->branch_id == 1)
+		if ($person->email != '')
 		{
-			Mail::send('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test], function ($message) use ($person) {
-				$message->from('abiturient@ltsu.org', 'Информация с abit.ltsu.org');
-				$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись прошла проверку');
-			});
-		} else {
-			Mail::send('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test], function ($message) use ($person) {
-				$message->from('rovfaculty@ltsu.org', 'Информация с abit.ltsu.org');
-				$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись прошла проверку');
-			});
+			if (isset($state)) {
+				if($state->branch_id == 1)
+				{
+					Mail::send('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test], function ($message) use ($person) {
+						$message->from('abiturient@ltsu.org', 'Информация с abit.ltsu.org');
+						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись прошла проверку');
+					});
+				} else {
+					Mail::send('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test], function ($message) use ($person) {
+						$message->from('rovfaculty@ltsu.org', 'Информация с abit.ltsu.org');
+						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись прошла проверку');
+					});
+				}
+			} else {
+				Mail::send('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test], function ($message) use ($person) {
+					$message->from('abiturient@ltsu.org', 'Информация с abit.ltsu.org');
+					$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись прошла проверку');
+				});
+			}
 		}
 		return back();
 		//return view('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test]);
@@ -422,7 +432,7 @@ class ProfileController extends Controller
 								$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;background-color: forestgreen;' class='badge badge-primary'>Готов к прохождению</span>";
 								break;
 							case 1:
-								$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-warning'>В процессе</span>";
+								$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-warning'>Продолжить</span>";
 								break;
 							case 2:
 								$status = $test->test_ball_correct >= $test->min_ball ?
@@ -430,7 +440,7 @@ class ProfileController extends Controller
 											"<span onclick='shortResult(".$test->id.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-danger'>Не пройден</span>";
 								break;
 							case 3:
-								$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-danger'>Приостановлен</span>";
+								$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-warning'>Продолжить</span>";
 								break;
 						}
 						$successTest += [
@@ -674,11 +684,13 @@ class ProfileController extends Controller
 				'pers_type'			=> 'a',
 				'hostel_need'       => $hostel_need
 			]);
-
-			Mail::send('RegisterPage.email', ['login' => $login, 'pass' => $pass, 'fio' => $famil.' '.$name.' '.$otch], function ($message) use ($request) {
-				$message->from('asu@ltsu.org', 'ЛНУ имени Тараса Шевченко');
-				$message->to($request->email_abit, $request->First_Name.' '.$request->Name.' '.$request->Last_Name)->subject('Создание аккаунта на abit.ltsu.org');
-			});
+			if (isset($request->email_abit))
+			{
+				Mail::send('RegisterPage.email', ['login' => $login, 'pass' => $pass, 'fio' => $famil.' '.$name.' '.$otch], function ($message) use ($request) {
+					$message->from('asu@ltsu.org', 'ЛНУ имени Тараса Шевченко');
+					$message->to($request->email_abit, $request->First_Name.' '.$request->Name.' '.$request->Last_Name)->subject('Создание аккаунта на abit.ltsu.org');
+				});
+			}
 		}
 
 		/**** Доки об образовании ****/
@@ -780,19 +792,27 @@ class ProfileController extends Controller
 				->where('s.person_id', $request->person)
 				->select('f.branch_id')
 				->first();
-		if($state->branch_id == 1)
-		{
-			Mail::send('MailsTemplate.MailUnCheckedAbit', ['person' => $person, 'comment' => $request->comment], function ($message) use ($person) {
-				$message->from('abiturient@ltsu.org', 'Информация с abit.ltsu.org');
-				$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись не прошла проверку');
-			});
-		} else {
-			Mail::send('MailsTemplate.MailUnCheckedAbit', ['person' => $person, 'comment' => $request->comment], function ($message) use ($person) {
-				$message->from('rovfaculty@ltsu.org', 'Информация с abit.ltsu.org');
-				$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись не прошла проверку');
-			});
+		if ($person->email != '') {
+			if (isset($state)) {
+				if($state->branch_id == 1)
+				{
+					Mail::send('MailsTemplate.MailUnCheckedAbit', ['person' => $person, 'comment' => $request->comment], function ($message) use ($person) {
+						$message->from('abiturient@ltsu.org', 'Информация с abit.ltsu.org');
+						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись не прошла проверку');
+					});
+				} else {
+					Mail::send('MailsTemplate.MailUnCheckedAbit', ['person' => $person, 'comment' => $request->comment], function ($message) use ($person) {
+						$message->from('rovfaculty@ltsu.org', 'Информация с abit.ltsu.org');
+						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись не прошла проверку');
+					});
+				}
+			} else {
+				Mail::send('MailsTemplate.MailUnCheckedAbit', ['person' => $person, 'comment' => $request->comment], function ($message) use ($person) {
+					$message->from('abiturient@ltsu.org', 'Информация с abit.ltsu.org');
+					$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись не прошла проверку');
+				});
+			}
 		}
-		
 		return Persons::AddDiscComment($request->comment, $request->person);
 	}
 }

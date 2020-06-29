@@ -35,7 +35,7 @@
             <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-document"></i><div>Печать документов</div></a>
             <ul class="sidenav-menu">
                 <li class="sidenav-item{{ $routeName == 'print.lich_card' ? ' active' : '' }}">
-                    <a href="/print/lich_card?pid={{ isset($person) ? $person->id : '-1' }}" id="print_lich_card" target="_blank" class="sidenav-link"><div>Личная карта</div></a>
+                    <a href="#" id="print_lich_card" style="display: none;" target="_blank" class="sidenav-link"><div>Личная карта</div></a>
                 </li>
             </ul>
             <ul class="sidenav-menu">

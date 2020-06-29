@@ -15,15 +15,8 @@
 				height: 297mm;
 				font-family: "Times New Roman", Times, serif;
 			}
-			/*
-			.wrap-list{
-				width: 210mm;
-				height: 297mm;
-				font-family: DejaVu Sans, sans-serif;
-			}
-			*/
 			.sp-tb td{
-				padding-top: 3mm;
+				padding-top: 2mm;
 			}
 		</style>
 		<style type="text/css" media="print">
@@ -44,7 +37,7 @@
 			}
 			*/
 			.sp-tb td{
-				padding-top: 3mm;
+				padding-top: 2mm;
 			}
 			@page {
 				size: auto;   /* auto is the initial value */
@@ -122,8 +115,8 @@
 					</table>
 				</div>
 				<div class="col" style="float: left; padding-left: 20mm;">
-					<div style="width: 55mm; height: 13mm; border: 1px solid black;">
-						<p style="text-align: center;"><b>{{ $shifr }}</b></p>
+					<div style="width: 55mm; height: auto; border: 1px solid black;">
+						<p style="text-align: center;"><b>{{ $statement->shifr_statement }}</b></p>
 					</div>
 					<div style="width: 55mm; min-height: 26mm; margin-top: 2mm; border: 1px solid black;">
 						<div style="width: 100%; height: 10mm; border-bottom: 1px solid black;">
@@ -136,7 +129,7 @@
 						</div>
 						<div>
 							<p style="text-decoration: underline; margin-top: 0mm;">
-								{{ $spec }}
+								{{ $statement->group_name }}
 							</p>
 						</div>
 					</div>
