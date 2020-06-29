@@ -769,7 +769,30 @@ class ProfileController extends Controller
 		}
 		return back()->with('active_list', $request->active_list);
 	}
-		public function DiscardCheckedAbit(Request $request){
-			return Persons::AddDiscComment($request->comment, $request->person);
+
+	public function DiscardCheckedAbit(Request $request)
+	{
+		$person = DB::table('persons')->where('id', $request->person)->first();
+		
+		$state = DB::table('abit_statements as s')
+				->leftjoin('abit_group as g', 'g.id', 's.group_id')
+				->leftjoin('abit_facultet as f', 'f.id', 'g.fk_id')
+				->where('s.person_id', $request->person)
+				->select('f.branch_id')
+				->first();
+		if($state->branch_id == 1)
+		{
+			Mail::send('MailsTemplate.MailUnCheckedAbit', ['person' => $person, 'comment' => $request->comment], function ($message) use ($person) {
+				$message->from('abiturient@ltsu.org', 'Информация с abit.ltsu.org');
+				$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись не прошла проверку');
+			});
+		} else {
+			Mail::send('MailsTemplate.MailUnCheckedAbit', ['person' => $person, 'comment' => $request->comment], function ($message) use ($person) {
+				$message->from('rovfaculty@ltsu.org', 'Информация с abit.ltsu.org');
+				$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись не прошла проверку');
+			});
 		}
+		
+		return Persons::AddDiscComment($request->comment, $request->person);
+	}
 }
