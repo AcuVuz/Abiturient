@@ -12,6 +12,7 @@ class Persons extends Model
 	//=============== ТАБЛИЦА АБИТУРИЕНТОВ ================================//
 	public static function DashboardTable($stxt){
 		//$tkt = APersPriv::select('id as ctt')->whereRaw('abit_persPrivilege.pers_id', 'persons.id')->count();
+		session('role_id') != 1 ? $pers_test = '1079' : $pers_test = '';
 		if($stxt == ''){
 		$item_abit = Persons::
 		selectRaw(
@@ -27,7 +28,7 @@ class Persons extends Model
 		->join('user_roles', 'user_roles.abit_branch_id', '=', 'abit_facultet.branch_id')
 		->where('persons.pers_type', 'a')
 		->where('persons.famil','<>', '')
-		->where('persons.email','<>', '')
+		->where('persons.id','<>', $pers_test)
 		->where('user_roles.user_id', session('user_id'))
 		//->whereNull('abit_statements.date_return')
 		->orderBy('FirstName', 'ASC')
@@ -42,7 +43,7 @@ class Persons extends Model
 		->where('persons.famil', 'like', '%'.$stxt.'%')
 		->where('persons.pers_type', 'a')
 		->where('persons.famil','<>', '')
-		->where('persons.email','<>', '')
+		->where('persons.id','<>', $pers_test)
 		->get();
 		}
 
