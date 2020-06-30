@@ -57,7 +57,7 @@ class RegisterController extends Controller
             }
             //==========================================================//
 
-            $secret_string = '0123456789abcdefghijklmnopqrstuvwxyz';
+            $secret_string = '0123456789abcdefghijkmnopqrstuvwxyz';
                 // Output: 54esmdr0qf
             $secret_string = substr(str_shuffle($secret_string), 0, 30);
 

@@ -661,7 +661,7 @@ class ProfileController extends Controller
                 $c = DB::table('persons')->where('pin', $pin)->first();
                 $isEmployed = $c != null;
             }
-			$secret_string = '0123456789abcdefghijklmnopqrstuvwxyz';
+			$secret_string = '0123456789abcdefghijkmnopqrstuvwxyz';
                 // Output: 54esmdr0qf
 			$login = substr(str_shuffle($secret_string), 0, 5);
 			$pass = substr(str_shuffle($secret_string), 0, 10);
