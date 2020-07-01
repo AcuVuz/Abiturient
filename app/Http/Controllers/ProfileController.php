@@ -150,11 +150,13 @@ class ProfileController extends Controller
 				->leftjoin('abit_group as g', 'g.id', 'abit_statements.group_id')
 				->where('abit_statements.person_id', $request->pid)
 				->where('g.fo_id', '1')
+				->whereNull('date_return')
 				->count();
 		$zaochka = DB::table('abit_statements')
 				->leftjoin('abit_group as g', 'g.id', 'abit_statements.group_id')
 				->where('abit_statements.person_id', $request->pid)
 				->where('g.fo_id', '2')
+				->whereNull('date_return')
 				->count();
 		$fo = [];
 		if ($ochka < 3) $fo += [ 1 => 1];
@@ -188,6 +190,7 @@ class ProfileController extends Controller
 						->where('person_id', $request->pid)
 						->whereNull('date_return');
 					})
+					->whereNotIn('g.id', [66, 129, 181, 254, 72, 135, 73, 136, 77, 140, 188, 261, 319, 335, 192, 265])
 					->orderBy('g.name', 'asc')->get();
 		$data = "<option>Выберите элемент</option>";
 		foreach ($group as $g) {
