@@ -234,12 +234,15 @@ class ProfileController extends Controller
 					$group = DB::table('abit_group as g')->leftjoin('abit_formObuch as fo', 'fo.id', 'g.fo_id')->select('g.*', 'fo.nick as fo_nick')->where('g.id', $request->abit_group)->first();
 
 					$shifr = $group->fo_nick.$group->fo_id.$group->nick.$count_in_group;
-
+					if ($request->session()->has('user_id'))
+					    $user_id = session('user_id');
+					else $user_id = 61;
 					$AStatement_id = DB::table('abit_statements')->insertGetId([
 						'person_id' 		=> $request->pid,
 						'group_id'			=> $request->abit_group,
 						'queue_number'		=> $count_in_group,
-						'shifr_statement'	=> $shifr
+						'shifr_statement'	=> $shifr,
+						'user_id'	=> $user_id
 					]);
 
 					$group_exam = DB::table('abit_examenGroup')->where('group_id', $request->abit_group)->get();

@@ -179,19 +179,29 @@
 .btn-cancel{
   background-color: rgba(155, 17, 30, 0.9);;
   color: white;
-   transition: 0.3s;
+  transition: 0.3s;
 }
 .btn-cancel:hover{
- color:White;
- background-color:rgba(155, 17, 30, 1);
- transition: 0.3s;
+  color:White;
+  background-color:rgba(155, 17, 30, 1);
+  transition: 0.3s;
 }
 .demo-paragraph-spacing > .profile-status{
+  margin-top: 10px;
+}
+.profile-status{
  margin-top: 10px;
 }
 .profile-status b{
- color: #02b371;
+  color: #02b371;
+}
+.profile-status-dismiss{
+  margin-top: 10px;
 }
 .profile-status-dismiss b{
- color:rgba(155, 17, 30, 1);
+  color:rgba(155, 17, 30, 1);
 }
+.profile-comment b{
+  word-wrap: break-word;
+  word-break: break-all;
+ }

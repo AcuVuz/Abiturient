@@ -55,13 +55,12 @@
 @endsection
 
 @section('content')
-	<div class="media align-items-center py-3 mb-3">
+	<div class="media align-items-top py-3 mb-3">
 		<img src="{{ $person->photo_url }}" alt="" class="d-block ui-w-100 rounded-circle" id="photo_main">
 		<div class="media-body ml-4">
 			<h4 class="font-weight-bold mb-0">{{ $person->famil.' '.$person->name.' '.$person->otch }}</h4>
 			<div class="text-muted mb-2">E-mail: {{ $person->email }}</div>
 			<span class="profile-time-func">
-			@if($person->is_checked == 'F' || $role != 5)
 				<a href="javascript:void(0)" class="btn btn-primary btn-sm" onclick="FindFile();">
 					<i class="ion ion-md-photos"></i>
 					Фото
@@ -72,8 +71,9 @@
 					<input type="submit" id="loadFile" style="display: none" value='Загрузить'>
 				</form>
 				<iframe id="rFrame" name="rFrame" style="display: none"> </iframe>
-				<a href="{{ url('/insert_abit') }}" class="btn btn-default btn-sm"><i class="ion ion-md-person "></i> Данные</a>
 				@if($person_count_statements > 0)<a href="{{ url('/scanPhoto') }}" class="btn btn-default btn-sm"><i class="ion ion-md-images "></i> Скан фото</a>@endif
+				@if($person->is_checked == 'F' || $role != 5)
+				<a href="{{ url('/insert_abit') }}" class="btn btn-default btn-sm"><i class="ion ion-md-person "></i> Данные</a>
 					<div class="demo-paragraph-spacing mt-3">
 					@if($person_count_statements < 6)
 					<a href="{{ url('/success_insert_abit') }}" class="btn btn-primary">
