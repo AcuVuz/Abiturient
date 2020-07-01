@@ -186,3 +186,12 @@
  background-color:rgba(155, 17, 30, 1);
  transition: 0.3s;
 }
+.demo-paragraph-spacing > .profile-status{
+ margin-top: 10px;
+}
+.profile-status b{
+ color: #02b371;
+}
+.profile-status-dismiss b{
+ color:rgba(155, 17, 30, 1);
+}

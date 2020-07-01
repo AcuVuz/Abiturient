@@ -278,7 +278,7 @@ class ProfileController extends Controller
 
 	public function checked_abit(Request $request)
 	{
-		DB::table('persons')->where('id', $request->pid)->update(['is_checked' => 'T']);
+		DB::table('persons')->where('id', $request->pid)->update(['is_checked' => 'T', 'Comment' => null]);
 		$person = DB::table('persons')->where('id', $request->pid)->first();
 		$pers_test = DB::table('pers_tests')->where('pers_id', $request->pid)->whereNull('start_time')->get();
 		foreach ($pers_test as $pt) {
@@ -810,7 +810,7 @@ class ProfileController extends Controller
 	public function DiscardCheckedAbit(Request $request)
 	{
 		$person = DB::table('persons')->where('id', $request->person)->first();
-		
+
 		$state = DB::table('abit_statements as s')
 				->leftjoin('abit_group as g', 'g.id', 's.group_id')
 				->leftjoin('abit_facultet as f', 'f.id', 'g.fk_id')

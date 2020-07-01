@@ -91,11 +91,19 @@
 							Отказать
 						</a>
 					@elseif($role != 5)
-					Проверено
+						@if($person->is_checked == 'T')
+							<p class="profile-status">Статус: <b>Проверен</b></p>
+					 @endif
 					@endif
 				</div>
 			@else
-				Проверено
+				@if($person->is_checked == 'T')
+					<p class="profile-status">Статус: <b>Проверен</b></p>
+				@endif
+			@endif
+			@if(isset($person->Comment))
+				<p class="profile-status profile-status-dismiss">Статус: <b>Отказано</b></p>
+				<p class="profile-comment">Комментарий: <b>{{$person->Comment}}</b></p>
 			@endif
 		</span>
 		</div>
