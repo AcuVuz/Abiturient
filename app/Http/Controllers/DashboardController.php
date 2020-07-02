@@ -60,4 +60,9 @@ class DashboardController extends Controller
       header("Content-type: application/json; charset=utf-8");
       return json_encode($arr, true);
     }
+    public function StaticTable(){
+      $arr = Persons::StaticTable();
+      header("Content-type: application/json; charset=utf-8");
+      return json_encode($arr, true);
+    }
 }

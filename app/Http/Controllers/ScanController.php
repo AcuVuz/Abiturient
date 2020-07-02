@@ -36,7 +36,7 @@ class ScanController extends Controller
         $attach = [];
         $i = 0;
        foreach($request->file('file') as $key => $image){
-           
+
         if ($image->isValid()){
          $max_size = (int)ini_get('upload_max_filesize') * 1000;
          $validator = Validator::make($request->all(), [
@@ -79,7 +79,7 @@ class ScanController extends Controller
             Mail::send('MailsTemplate.MailScans', ['person' => $persons, 'docs' => $docss], function ($message) use ($persons, $attach) {
                 $message->from('asu@ltsu.org', 'Информация с сайта abit.ltsu.org');
                 $message->to('abiturient@ltsu.org')->subject('Скан-копии документов '.$persons->famil.' '.$persons->name.' '.$persons->otch);
-    
+
                 foreach ($attach as $a) {
                     $message->attach($a);
                 }
@@ -91,13 +91,13 @@ class ScanController extends Controller
             Mail::send('MailsTemplate.MailScans', ['person' => $persons, 'docs' => $docss], function ($message) use ($persons, $attach) {
                 $message->from('asu@ltsu.org', 'Информация с сайта abit.ltsu.org');
                 $message->to('rovfaculty@ltsu.org')->subject('Скан-копии документов '.$persons->famil.' '.$persons->name.' '.$persons->otch);
-    
+
                 foreach ($attach as $a) {
                     $message->attach($a);
                 }
             });
         }
-        
+
        /* Mail::send('MailsTemplate.MailScans', ['person' => $persons, 'docs' => $docss], function ($message) use ($persons, $attach) {
             $message->from('asu@ltsu.org', 'Информация с сайта abit.ltsu.org');
             $message->to('abiturient@ltsu.org')->subject('Скан-копии документов '.$persons->famil.' '.$persons->name.' '.$persons->otch);

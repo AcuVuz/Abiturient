@@ -49,6 +49,8 @@ Route::get('/verificate', 'RegisterController@verificate');
 Route::get('/dashboard', 'DashboardController@index')->name('dashboards.dashboard-1')->middleware('check');
 //=============== Вызгрузка данных json в таблицу dashboard ================================//
 Route::get('/loadTable', 'DashboardController@loadTable');
+
+Route::get('/StaticTable', 'DashboardController@StaticTable');
 //=============== Вызгрузка данных json в sidebar dashboard ================================//
 Route::get('/loadSidebar', 'DashboardController@loadSidebar');
 //=============== Вызгрузка данных json в sidebar таблицу поданных заявлений dashboard ================================//
@@ -116,3 +118,12 @@ Route::get('/reprasp', function(){
 Route::get('/replichkart', function(){
  return view('ReportPages.Report_LichKarta');
 });
+
+
+Route::get('/statistic', function(){
+ return view('DashboardPage.dashboardStatistic', [
+  'username' => session('user_name'),
+  'title' => 'Статистика поданных заявлений',
+  'role' => session('role_id')
+ ]);
+})->name('Report.dashboards-statistic')->middleware('check');

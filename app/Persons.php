@@ -248,4 +248,47 @@ class Persons extends Model
 		return 1;
 	}
 
+	public static function StaticTable(){
+		$query = AGroup::selectRaw('distinct (abit_stlevel.name) as stname, abit_group.name as groupname, abit_facultet.id as fakid,
+											abit_facultet.name as fakname,
+											(select count(s.id) from abit_statements s
+											left join abit_group ag2 on ag2.id = s.group_id
+											where ag2.name = abit_group.name and ag2.fo_id = 1 and ag2.st_id = abit_group.st_id) as ochka,
+											(select count(s.id) from abit_statements s
+											left join abit_group ag2 on ag2.id = s.group_id
+											where ag2.name = abit_group.name and ag2.fo_id = 2 and ag2.st_id = abit_group.st_id) as zaochka,
+
+											(select count(s.id) from abit_statements s
+											left join abit_group ag2 on ag2.id = s.group_id
+											where ag2.name = abit_group.name and ag2.fo_id = 1 and s.date_return is not null and ag2.st_id = abit_group.st_id) as ochka_vozvr,
+											(select count(s.id) from abit_statements s
+											left join abit_group ag2 on ag2.id = s.group_id
+											where ag2.name = abit_group.name and ag2.fo_id = 2 and s.date_return is not null and ag2.st_id = abit_group.st_id) as zaochka_vozvr')
+		->join('abit_stlevel', 'abit_stlevel.id', '=', 'abit_group.st_id')
+		->join('abit_facultet', 'abit_facultet.id', '=', 'abit_group.fk_id')
+		->get();
+
+		$k = [];
+		$i = 0;
+		foreach ($query as $key) {
+
+			$k +=[$i =>[ '',
+						$key->stname,
+						$key->groupname,
+						$key->ochka, //FIO
+						$key->zaochka,
+						$key->ochka_vozvr,
+						$key->zaochka_vozvr,'','',
+						$key->fakname, $key->famil]];
+			$i++;
+		}
+
+		$arr=array
+		(
+			"data" => $k
+		);
+
+		return $arr;
+	}
+
 }

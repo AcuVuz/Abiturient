@@ -47,9 +47,9 @@
             <ul class="sidenav-menu">
                 <li class="sidenav-item{{ $routeName == 'print.statement' ? ' active' : '' }}">
                     <a href="#" id="print_statement" style="display: none;" target="_blank" class="sidenav-link"><div>Заявление</div></a>
-                </li> 
+                </li>
             </ul>
-            
+
             <ul class="sidenav-menu">
                 <li class="sidenav-item{{ $routeName == 'print.examSheet' ? ' active' : '' }}">
                     <a href="#" id="print_examSheet" style="display: none;" target="_blank" class="sidenav-link"><div>Экзаменационный лист</div></a>
@@ -58,6 +58,16 @@
             @endif
         </li>
         @endif
+        <!-- Основная страница -->
+        <li class="sidenav-item{{ strpos($routeName, 'Report.') === 0 ?  ' active open' : '' }}">
+            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-document"></i><div>Отчеты</div></a>
+
+            <ul class="sidenav-menu">
+                <li class="sidenav-item{{ $routeName == 'Report.dashboards-statistic' ? ' active' : '' }}">
+                    <a href="/statistic" class="sidenav-link"><div>Статистика заявлений</div></a>
+                </li>
+            </ul>
+        </li>
              <!--  Графики данных
         <li class="sidenav-item{{ strpos($routeName, 'charts.') === 0 ? ' active open' : '' }}">
             <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-pie"></i><div>Тестовый вариант</div></a>

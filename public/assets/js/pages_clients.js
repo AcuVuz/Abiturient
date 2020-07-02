@@ -169,4 +169,5 @@ $(function() {
         $('#table').DataTable().destroy();
         abit_table();
     });
+
 });

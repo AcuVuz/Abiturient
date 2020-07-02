@@ -83,6 +83,7 @@
 								});
 								self.on("success", function(first,response) {
 					    $('.scan_suc_msg').text('Документы успешно отсканированны!');
+									$('#scan_btn').prop('disabled', true);
 					  });
 							},
 						});

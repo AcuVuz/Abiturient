@@ -204,4 +204,14 @@
 .profile-comment b{
   word-wrap: break-word;
   word-break: break-all;
- }
+}
+.ds-st-wrap{
+  width: 100%;
+}
+.title-block{
+  text-align: center;
+  padding: 20px;
+}
+.st-table-block{
+ padding: 20px;
+}
