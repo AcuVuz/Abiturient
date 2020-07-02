@@ -190,7 +190,7 @@ class ProfileController extends Controller
 						->where('person_id', $request->pid)
 						->whereNull('date_return');
 					})
-					->whereNotIn('g.id', [66, 129, 181, 254, 72, 135, 73, 136, 77, 140, 188, 261, 319, 335, 192, 265])
+					->whereNotIn('g.id', [20, 46, 58, 59, 61, 66, 68, 72, 73, 77, 124, 129, 131, 135, 136, 140, 169, 170, 178, 181, 188, 190, 191, 192, 205, 206, 218, 219, 220, 221, 240, 245, 246, 251, 254, 261, 263, 264, 265, 278, 279, 319, 335])
 					->orderBy('g.name', 'asc')->get();
 		$data = "<option>Выберите элемент</option>";
 		foreach ($group as $g) {
