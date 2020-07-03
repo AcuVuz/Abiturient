@@ -218,6 +218,64 @@ class ProfileController extends Controller
 		return back();
 	}
 
+	public function statement_del_return(Request $request)
+	{
+		if($request->has('ag'))
+		{
+			if ($request->ag > 0)
+			{
+				$statement = DB::table('abit_statements')->where('id', $request->ag)->where('person_id', $request->pid)->first();
+				if ($statement->date_return != null)
+				{
+					DB::table('abit_statements')->where('id', $statement->id)->update([
+						'date_return'	=> null,
+						'comment_return'=> null
+					]);
+				}
+			}
+		}
+		return back();
+	}
+
+	public function statement_set_orig(Request $request)
+	{
+		if($request->has('ag'))
+		{
+			if ($request->ag > 0)
+			{
+				$statement = DB::table('abit_statements')->where('id', $request->ag)->where('person_id', $request->pid)->first();
+				$statement_isOrig = DB::table('abit_statements')->where('is_original', 'T')->where('person_id', $request->pid)->count();
+				if ($statement->date_return == null && $statement_isOrig == 0)
+				{
+					DB::table('abit_statements')->where('id', $statement->id)->update([
+						'is_original'	=> 'T'
+					]);
+					DB::table('persons')->where('id', $request->pid)->update([ 'is_orig' => 'T' ]);
+				}
+			}
+		}
+		return back();
+	}
+
+	public function statement_del_orig(Request $request)
+	{
+		if($request->has('ag'))
+		{
+			if ($request->ag > 0)
+			{
+				$statement = DB::table('abit_statements')->where('id', $request->ag)->where('person_id', $request->pid)->first();
+				if ($statement->is_original == 'T')
+				{
+					DB::table('abit_statements')->where('id', $statement->id)->update([
+						'is_original'	=> 'F'
+					]);
+					DB::table('persons')->where('id', $request->pid)->update([ 'is_orig' => 'F' ]);
+				}
+			}
+		}
+		return back();
+	}
+
 	public function statement_create(Request $request)
 	{
 		if($request->has('abit_group'))

@@ -188,7 +188,8 @@
 					@if(count($person_statement) > 0)
 						@foreach ($person_statement as $ps)
 							<tr onClick="toggle_table({{ $ps->id }})" class="visible_card_table_td" id="visible_card_table_td"
-								onContextMenu="onContextMenu(event, {{ $ps->id.','.$person->id.',"'.$ps->is_original.'",'.$ps->date_return }})"
+								onContextMenu="onContextMenu(event, {{ $ps->id.','.$person->id.',"'.$ps->is_original.'","'.$ps->date_return.'"' }})"
+
 								@if($ps->is_original == 'T')
 									style="background-color: #3fff0075;"
 								@elseif($ps->date_return != null)
@@ -199,7 +200,7 @@
 								<td class="align-middle">{{ $ps->spec_name }}</td>
 								<td class="align-middle">{{ $ps->stlevel_name }}</td>
 								<td class="align-middle">{{ $ps->form_obuch }}</td>
-								<td>@if($role != 5)@if($ps->date_return == null && $ps->is_original != 'T')<a href="{{ url('/statement/return?ag=').$ps->id.'&pid='.$person->id }}" class="ion ion-md-close text-light"></a> @elseif($ps->date_return != null) {{ date('d.m.Y H:i:s', strtotime($ps->date_return)) }} @endif @endif</td>
+								<td>@if($ps->date_return != null) {{ date('d.m.Y H:i:s', strtotime($ps->date_return)) }} @endif</td>
 							</tr>
 							<tr>
 								<td colspan="5">
@@ -486,7 +487,7 @@
 	<script src="{{ asset('js/timescript.js') }}"></script>
 
 
-	@if ($role == 1)
+	@if ($role != 5)
 		<menu class="menu">
 			<li class="menu-item" id="menu_orig">
 				<button type="button" class="menu-btn" onclick="set_orig();">
@@ -494,21 +495,21 @@
 					<span class="menu-text">Оригинал документов</span>
 				</button>
 			</li>
-			<li class="menu-item" id="menu_del_orig" disabled>
-				<button type="button" class="menu-btn"  onclick="del_orig();">
+			<li class="menu-item" id="menu_del_orig">
+				<button type="button" class="menu-btn" onclick="del_orig();">
 					<i class="fa fa-minus"></i>
 					<span class="menu-text">Убрать оригинал документов</span>
 				</button>
 			</li>
 			<li class="menu-separator"></li>
 			<li class="menu-item" id="menu_vozvr">
-				<button type="button" class="menu-btn"  onclick="set_vozvr();">
+				<button type="button" class="menu-btn" onclick="set_vozvr();">
 					<i class="fa fa-ban"></i>
 					<span class="menu-text">Сделать возврат</span>
 				</button>
 			</li>
 			<li class="menu-item" id="menu_del_vozvr">
-				<button type="button" class="menu-btn"  onclick="del_vozvr();">
+				<button type="button" class="menu-btn" onclick="del_vozvr();">
 					<i class="fa fa-reply"></i>
 					<span class="menu-text">Отменить возврат</span>
 				</button>
@@ -642,8 +643,8 @@
 			{
 				let form = document.createElement('form');
 				form.action = '/statement/set_orig';
-				form.method = 'POST';
-				form.innerHTML = '<input type="hidden" name="sid" value="' + sid + '">{{ csrf_field() }}';
+				form.method = 'GET';
+				form.innerHTML = '<input type="hidden" name="ag" value="' + sid + '"><input type="hidden" name="pid" value="' + pid + '">{{ csrf_field() }}';
 				document.body.append(form);
 				form.submit();
 			}
@@ -652,8 +653,8 @@
 			{
 				let form = document.createElement('form');
 				form.action = '/statement/del_orig';
-				form.method = 'POST';
-				form.innerHTML = '<input type="hidden" name="sid" value="' + sid + '">{{ csrf_field() }}';
+				form.method = 'GET';
+				form.innerHTML = '<input type="hidden" name="ag" value="' + sid + '"><input type="hidden" name="pid" value="' + pid + '">{{ csrf_field() }}';
 				document.body.append(form);
 				form.submit();
 			}
@@ -696,25 +697,22 @@
 				} else {
 					$('#menu_orig').removeClass('disabled');
 					$('#menu_del_orig').addClass('disabled');
-					if (date_return != '') {
+					if (date_return == '') {
 						$('#menu_vozvr').removeClass('disabled');
 						$('#menu_del_vozvr').addClass('disabled');
 					} else {
 						$('#menu_vozvr').addClass('disabled');
 						$('#menu_del_vozvr').removeClass('disabled');
+						$('#menu_orig').addClass('disabled');
 					}
 				}
 				sid = l_sid;
 				pid = l_pid;
 				showMenu(e.pageX, e.pageY);
-				document.addEventListener('mousedown', onMouseDown, false);
 			}
-			function onMouseDown(e){
+			$(document).click(function(){
 				hideMenu();
-				sid = 0;
-				pid = 0;
-				document.removeEventListener('mousedown', onMouseDown);
-			}
+			});
 		</script>
 
 
