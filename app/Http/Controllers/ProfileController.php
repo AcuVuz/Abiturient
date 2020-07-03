@@ -373,7 +373,7 @@ class ProfileController extends Controller
 								->leftjoin('abit_formObuch as fo', 'fo.id', 'g.fo_id')
 								->leftjoin('abit_stlevel as st', 'st.id', 'g.st_id')
 								->where('abit_statements.person_id', $person->id)
-								->select('af.name as fac_name', 'g.name as spec_name', 'abit_statements.shifr_statement', 'fo.name as form_obuch', 'abit_statements.date_return', 'abit_statements.id', 'st.name as stlevel_name')
+								->select('af.name as fac_name', 'g.name as spec_name', 'abit_statements.shifr_statement', 'fo.name as form_obuch', 'abit_statements.date_return', 'abit_statements.id', 'st.name as stlevel_name', 'abit_statements.is_original')
 								->get();
 		$person_tests = [];
 		$persTests = [];

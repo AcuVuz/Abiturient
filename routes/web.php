@@ -28,6 +28,9 @@ Route::middleware(['check','timeout'])->group(function () {
  Route::post('/statement/get_group', 'ProfileController@get_group');
  Route::post('/statement/create', 'ProfileController@statement_create');
  Route::get('/statement/return', 'ProfileController@statement_return');
+ Route::get('/statement/del_return', 'ProfileController@statement_del_return');
+ Route::get('/statement/set_orig', 'ProfileController@statement_set_orig');
+ Route::get('/statement/del_orig', 'ProfileController@statement_del_orig');
  Route::get('/checked_abit', 'ProfileController@checked_abit');
  Route::get('/scanPhoto', 'ScanController@index');
 });

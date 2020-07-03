@@ -109,11 +109,11 @@
 				<a href="{{ url('/insert_abit') }}" class="btn btn-default btn-sm"><i class="ion ion-md-person "></i> Данные</a>
 					<div class="demo-paragraph-spacing mt-3">
 					@if($person_count_statements < 6)
-					<a href="{{ url('/success_insert_abit') }}" class="btn btn-primary">
-						<i class="ion ion-md-add"></i>
-						Добавить заявление
-						</a>
-					@endif
+						<a href="{{ url('/success_insert_abit') }}" class="btn btn-primary">
+							<i class="ion ion-md-add"></i>
+								Добавить заявление
+							</a>
+						@endif
 					@if($role != 5 && $person->is_checked == 'F')
 						<a href="#" onClick="CheckedPerson('{{$person->id}}')" class="btn btn-success">
 							<i class="ion ion-md-checkmark"></i>
@@ -146,22 +146,29 @@
 		<div class="card-body">
 			<table class="table user-view-table m-0">
 				<tbody>
-				<tr>
-					<td>Регистрация:</td>
-					<td>{{ date('d/m/Y', strtotime($person->date_crt)) }}</td>
-				</tr>
-				<tr>
-					<td>Нуждается в общежитии:</td>
-					<td><span class="badge badge-outline-success">{{ $person->hostel_need == 1 ? 'Да' : 'Нет' }}</span></td>
-				</tr>
-				<!--<tr>
-					<td>Количество фотографий:</td>
-					<td><span class="badge badge-outline-success">{{ $person->count_photo }}</span></td>
-				</tr>
-				<tr>
-					<td>Оригинал документов:</td>
-					<td><span class="badge badge-outline-danger">{{ $person->is_orig == 'T' ? 'Да' : 'Нет' }}</span></td>
-				</tr>-->
+					@if($role != 5)
+						<tr>
+							<td style="font-size: 14pt;"><span class="badge badge-outline-success"># {{ $person->id }}</span></td>
+							<td></td>
+						</tr>
+					@endif
+					<tr>
+						<td>Регистрация:</td>
+						<td>{{ date('d/m/Y', strtotime($person->date_crt)) }}</td>
+					</tr>
+					<tr>
+						<td>Нуждается в общежитии:</td>
+						<td>@if($person->hostel_need == 1)<span class="badge badge-outline-success"> Да @else <span class="badge badge-outline-danger"> Нет @endif</span></td>
+					</tr>
+					<tr>
+						<td>Оригинал документов:</td>
+						<td>@if($person->is_orig == 'T')<span class="badge badge-outline-success"> Да @else <span class="badge badge-outline-danger"> Нет @endif</span></td>
+					</tr>
+					<!--<tr>
+						<td>Количество фотографий:</td>
+						<td><span class="badge badge-outline-success">{{ $person->count_photo }}</span></td>
+					</tr>
+					-->
 				</tbody>
 			</table>
 		</div>
@@ -180,16 +187,19 @@
 				<tbody>
 					@if(count($person_statement) > 0)
 						@foreach ($person_statement as $ps)
-							<tr onClick="toggle_table({{ $ps->id }})" class="visible_card_table_td"
-								@if($ps->date_return != null)
+							<tr onClick="toggle_table({{ $ps->id }})" class="visible_card_table_td" id="visible_card_table_td"
+								onContextMenu="onContextMenu(event, {{ $ps->id.','.$person->id.',"'.$ps->is_original.'",'.$ps->date_return }})"
+								@if($ps->is_original == 'T')
+									style="background-color: #3fff0075;"
+								@elseif($ps->date_return != null)
 									style="background-color: #ffad5e;"
 								@endif
-								>
+							>
 								<td class="align-middle">{{ $ps->fac_name }}</td>
 								<td class="align-middle">{{ $ps->spec_name }}</td>
 								<td class="align-middle">{{ $ps->stlevel_name }}</td>
 								<td class="align-middle">{{ $ps->form_obuch }}</td>
-								<td>@if($role != 5)@if($ps->date_return == null)<a href="{{ url('/statement/return?ag=').$ps->id.'&pid='.$person->id }}" class="ion ion-md-close text-light"></a>@else <span class="ion ion-md-close text-light"></span> @endif @endif</td>
+								<td>@if($role != 5)@if($ps->date_return == null && $ps->is_original != 'T')<a href="{{ url('/statement/return?ag=').$ps->id.'&pid='.$person->id }}" class="ion ion-md-close text-light"></a> @elseif($ps->date_return != null) {{ date('d.m.Y H:i:s', strtotime($ps->date_return)) }} @endif @endif</td>
 							</tr>
 							<tr>
 								<td colspan="5">
@@ -474,4 +484,239 @@
 		</div>
 	</div>
 	<script src="{{ asset('js/timescript.js') }}"></script>
+
+
+	@if ($role == 1)
+		<menu class="menu">
+			<li class="menu-item" id="menu_orig">
+				<button type="button" class="menu-btn" onclick="set_orig();">
+					<i class="fa fa-check"></i>
+					<span class="menu-text">Оригинал документов</span>
+				</button>
+			</li>
+			<li class="menu-item" id="menu_del_orig" disabled>
+				<button type="button" class="menu-btn"  onclick="del_orig();">
+					<i class="fa fa-minus"></i>
+					<span class="menu-text">Убрать оригинал документов</span>
+				</button>
+			</li>
+			<li class="menu-separator"></li>
+			<li class="menu-item" id="menu_vozvr">
+				<button type="button" class="menu-btn"  onclick="set_vozvr();">
+					<i class="fa fa-ban"></i>
+					<span class="menu-text">Сделать возврат</span>
+				</button>
+			</li>
+			<li class="menu-item" id="menu_del_vozvr">
+				<button type="button" class="menu-btn"  onclick="del_vozvr();">
+					<i class="fa fa-reply"></i>
+					<span class="menu-text">Отменить возврат</span>
+				</button>
+			</li>
+		</menu>
+		<style>
+			.container {
+				left: 0;
+				margin: auto;
+				position: absolute;
+				top: 20%;
+				width: 100%;
+				text-align: center;
+			}
+			.menu {
+				position: absolute;
+				width: 250px;
+				padding: 2px;
+				margin: 0;
+				border: 1px solid #bbb;
+				background: #eee;
+				background: -webkit-linear-gradient(to bottom, #fff 0%, #e5e5e5 100px, #e5e5e5 100%);
+				background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100px, #e5e5e5 100%);
+				z-index: 100;
+				border-radius: 3px;
+				box-shadow: 1px 1px 4px rgba(0,0,0,.2);
+				opacity: 0;
+				-webkit-transform: translate(0, 15px) scale(.95);
+				transform: translate(0, 15px) scale(.95);
+				transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+				pointer-events: none;
+			}
+			.menu-item {
+				display: block;
+				position: relative;
+				margin: 0;
+				padding: 0;
+				white-space: nowrap;
+			}
+			.menu-btn {
+				background: none;
+				line-height: normal;
+				overflow: visible;
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				display: block;
+				width: 100%;
+				color: #444;
+				font-family: 'Roboto', sans-serif;
+				font-size: 13px;
+				text-align: left;
+				cursor: pointer;
+				border: 1px solid transparent;
+				white-space: nowrap;
+				padding: 6px 8px;
+				border-radius: 3px;
+			}
+			.menu-btn::-moz-focus-inner,
+			.menu-btn::-moz-focus-inner {
+				border: 0;
+				padding: 0;
+			}
+			.menu-text {
+				margin-left: 25px;
+			}
+			.menu-btn .fa {
+				position: absolute;
+				left: 8px;
+				top: 50%;
+				-webkit-transform: translateY(-50%);
+				transform: translateY(-50%);
+			}
+			.menu-item:hover > .menu-btn {
+				color: #fff;
+				outline: none;
+				background-color: #2E3940;
+				background: -webkit-linear-gradient(to bottom, #5D6D79, #2E3940);
+				background: linear-gradient(to bottom, #5D6D79, #2E3940);
+				border: 1px solid #2E3940;
+			}
+			.menu-item.disabled {
+				opacity: .5;
+				pointer-events: none;
+			}
+			.menu-item.disabled .menu-btn {
+				cursor: default;
+			}
+			.menu-separator {
+				display:block;
+				margin: 7px 5px;
+				height:1px;
+				border-bottom: 1px solid #fff;
+				background-color: #aaa;
+			}
+			.menu-item.submenu::after {
+				content: "";
+				position: absolute;
+				right: 6px;
+				top: 50%;
+				-webkit-transform: translateY(-50%);
+				transform: translateY(-50%);
+				border: 5px solid transparent;
+				border-left-color: #808080;
+			}
+			.menu-item.submenu:hover::after {
+				border-left-color: #fff;
+			}
+			.menu .menu {
+				top: 4px;
+				left: 99%;
+			}
+			.show-menu,
+			.menu-item:hover > .menu {
+				opacity: 1;
+				-webkit-transform: translate(0, 0) scale(1);
+				transform: translate(0, 0) scale(1);
+				pointer-events: auto;
+			}
+			.menu-item:hover > .menu {
+				-webkit-transition-delay: 100ms;
+				transition-delay: 300ms;
+			}
+
+		</style>
+		<script>
+			var menu = document.querySelector('.menu');
+			var sid = 0;
+			var pid = 0;
+			function set_orig()
+			{
+				let form = document.createElement('form');
+				form.action = '/statement/set_orig';
+				form.method = 'POST';
+				form.innerHTML = '<input type="hidden" name="sid" value="' + sid + '">{{ csrf_field() }}';
+				document.body.append(form);
+				form.submit();
+			}
+
+			function del_orig()
+			{
+				let form = document.createElement('form');
+				form.action = '/statement/del_orig';
+				form.method = 'POST';
+				form.innerHTML = '<input type="hidden" name="sid" value="' + sid + '">{{ csrf_field() }}';
+				document.body.append(form);
+				form.submit();
+			}
+
+			function set_vozvr()
+			{
+				let form = document.createElement('form');
+				form.action = '/statement/return';
+				form.method = 'GET';
+				form.innerHTML = '<input type="hidden" name="ag" value="' + sid + '"><input type="hidden" name="pid" value="' + pid + '">{{ csrf_field() }}';
+				document.body.append(form);
+				form.submit();
+			}
+
+			function del_vozvr()
+			{
+				let form = document.createElement('form');
+				form.action = '/statement/del_return';
+				form.method = 'GET';
+				form.innerHTML = '<input type="hidden" name="ag" value="' + sid + '"><input type="hidden" name="pid" value="' + pid + '">{{ csrf_field() }}';
+				document.body.append(form);
+				form.submit();
+			}
+
+			function showMenu(x, y){
+				menu.style.left = x + 'px';
+				menu.style.top = y + 'px';
+				menu.classList.add('show-menu');
+			}
+			function hideMenu(){
+				menu.classList.remove('show-menu');
+			}
+			function onContextMenu(e, l_sid, l_pid, is_orig, date_return){
+				e.preventDefault();
+				if (is_orig == 'T') {
+					$('#menu_orig').addClass('disabled');
+					$('#menu_del_orig').removeClass('disabled');
+					$('#menu_del_vozvr').addClass('disabled');
+					$('#menu_vozvr').addClass('disabled');
+				} else {
+					$('#menu_orig').removeClass('disabled');
+					$('#menu_del_orig').addClass('disabled');
+					if (date_return != '') {
+						$('#menu_vozvr').removeClass('disabled');
+						$('#menu_del_vozvr').addClass('disabled');
+					} else {
+						$('#menu_vozvr').addClass('disabled');
+						$('#menu_del_vozvr').removeClass('disabled');
+					}
+				}
+				sid = l_sid;
+				pid = l_pid;
+				showMenu(e.pageX, e.pageY);
+				document.addEventListener('mousedown', onMouseDown, false);
+			}
+			function onMouseDown(e){
+				hideMenu();
+				sid = 0;
+				pid = 0;
+				document.removeEventListener('mousedown', onMouseDown);
+			}
+		</script>
+
+
+	@endif
 @endsection
