@@ -39,18 +39,51 @@
             form.submit();
         }
 
-		function toggle_table(id){
-			//$( ".hidden_card_table" ).toggle();
-			$( ".hidden_card_table" + id ).slideToggle();
-			$('#print_opis').prop('href', '/print/opis?asid=' + id);
-			$('#print_opis').show();
-			$('#print_statement').prop('href', '/print/statement?asid=' + id);
-			$('#print_statement').show();
-			$('#print_examSheet').prop('href', '/print/examSheet?asid=' + id);
-			$('#print_examSheet').show();
-			$('#print_lich_card').prop('href', '/print/lich_card?asid=' + id);
-			$('#print_lich_card').show();
-		}
+		@if($role != 5)
+			function toggle_table(id){
+				//$( ".hidden_card_table" ).toggle();
+				$( ".hidden_card_table" + id ).slideToggle();
+				$('#print_opis').prop('href', '/print/opis?asid=' + id);
+				$('#print_opis_menu').show();
+				$('#print_statement').prop('href', '/print/statement?asid=' + id);
+				$('#print_statement_menu').show();
+				$('#print_examSheet').prop('href', '/print/examSheet?asid=' + id);
+				$('#print_examSheet_menu').show();
+				$('#print_lich_card').prop('href', '/print/lich_card?asid=' + id);
+				$('#print_lich_card_menu').show();
+			}
+			var l_ptid = 0;
+			var l_hash = 0;
+			function fullPrint(ptid, status, hash)
+			{
+				if (status == 2) 
+				{
+					l_ptid = ptid;
+					l_hash = hash;
+					$('#print_fullReport_menu').show();
+				}
+				else 
+				{
+					l_ptid = 0;
+					l_hash = 0;
+					$('#print_fullReport_menu').hide();
+				}
+			}
+
+			function fullResult()
+			{
+				if (l_ptid != 0)
+				{
+					let form = document.createElement('form');
+					form.action = 'https://test.ltsu.org/test/result/full';
+					form.method = 'POST';
+					form.target = '_blank';
+					form.innerHTML = '<input name="ptid" value="' + l_ptid + '"><input name="_hash" value="' + l_hash + '">{{ csrf_field() }}';
+					document.body.append(form);
+					form.submit();
+				}
+			}
+		@endif
 	</script>
 @endsection
 
@@ -176,7 +209,7 @@
 												@if(isset($persTests[$ps->id]))
 													@foreach ($persTests[$ps->id] as $pt)
 														@if (isset($pt->discipline))
-															<tr>
+															<tr @if($role != 5) onclick="fullPrint({{ $pt->id.','.$pt->status.',\''.$person->user_hash.'\'' }})" @endif>
 																<td>{{$loop->iteration}}</td>
 																<td class="align-middle">{{ $pt->discipline }}</td>
 																<td class='text-center'><?php echo htmlspecialchars_decode($statusTest[$pt->id]); ?></td>

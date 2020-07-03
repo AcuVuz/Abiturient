@@ -33,29 +33,34 @@
         @if ($routeName == 'profile')
         <li class="sidenav-item{{ $routeName == 'profile' ? ' active open' : '' }}">
             <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-document"></i><div>Печать документов</div></a>
-            <ul class="sidenav-menu">
+            <ul class="sidenav-menu" id="print_statement_menu" style="display: none;">
                 <li class="sidenav-item{{ $routeName == 'print.lich_card' ? ' active' : '' }}">
-                    <a href="#" id="print_lich_card" style="display: none;" target="_blank" class="sidenav-link"><div>Личная карта</div></a>
+                    <a href="#" id="print_lich_card" target="_blank" class="sidenav-link"><div>Личная карта</div></a>
                 </li>
             </ul>
-            <ul class="sidenav-menu">
+            <ul class="sidenav-menu" id="print_opis_menu" style="display: none;">
                 <li class="sidenav-item{{ $routeName == 'print.opis' ? ' active' : '' }}">
-                    <a href="#" id="print_opis" style="display: none;" target="_blank" class="sidenav-link"><div>Опись (расписка)</div></a>
+                    <a href="#" id="print_opis" target="_blank" class="sidenav-link"><div>Опись (расписка)</div></a>
                 </li>
             </ul>
             @if($role == 1)
-            <ul class="sidenav-menu">
+            <ul class="sidenav-menu" id="print_statement_menu" style="display: none;">
                 <li class="sidenav-item{{ $routeName == 'print.statement' ? ' active' : '' }}">
-                    <a href="#" id="print_statement" style="display: none;" target="_blank" class="sidenav-link"><div>Заявление</div></a>
+                    <a href="#" id="print_statement"target="_blank" class="sidenav-link"><div>Заявление</div></a>
                 </li>
             </ul>
 
-            <ul class="sidenav-menu">
+            <ul class="sidenav-menu" id="print_examSheet_menu" style="display: none;">
                 <li class="sidenav-item{{ $routeName == 'print.examSheet' ? ' active' : '' }}">
-                    <a href="#" id="print_examSheet" style="display: none;" target="_blank" class="sidenav-link"><div>Экзаменационный лист</div></a>
+                    <a href="#" id="print_examSheet" target="_blank" class="sidenav-link"><div>Экзаменационный лист</div></a>
                 </li>
             </ul>
             @endif
+            <ul class="sidenav-menu" id="print_fullReport_menu" style="display: none;">
+                <li class="sidenav-item{{ $routeName == 'print.fullReport' ? ' active' : '' }}">
+                    <a href="#" onclick="fullResult();" id="print_fullReport" class="sidenav-link"><div>Полный отчет тестирования</div></a>
+                </li>
+            </ul>
         </li>
         @endif
         <!-- Основная страница -->
