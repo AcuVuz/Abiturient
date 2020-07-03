@@ -22,7 +22,7 @@
                 let form = document.createElement('form');
                 form.action = 'https://test.ltsu.org/test/start';
                 form.method = 'POST';
-                form.innerHTML = '<input name="ptid" value="' + testPersId + '"><input name="_hash" value="' + hash + '">{{ csrf_field() }}';
+                form.innerHTML = '<input type="hidden" name="ptid" value="' + testPersId + '"><input name="_hash" value="' + hash + '">{{ csrf_field() }}';
                 document.body.append(form);
                 form.submit();
             }
@@ -34,7 +34,7 @@
             form.action = 'https://test.ltsu.org/test/result/short';
             form.method = 'POST';
             form.target = '_blank';
-            form.innerHTML = '<input name="ptid" value="' + testPersId + '"><input name="_hash" value="' + hash + '">{{ csrf_field() }}';
+            form.innerHTML = '<input type="hidden" name="ptid" value="' + testPersId + '"><input name="_hash" value="' + hash + '">{{ csrf_field() }}';
             document.body.append(form);
             form.submit();
         }
@@ -78,7 +78,7 @@
 					form.action = 'https://test.ltsu.org/test/result/full';
 					form.method = 'POST';
 					form.target = '_blank';
-					form.innerHTML = '<input name="ptid" value="' + l_ptid + '"><input name="_hash" value="' + l_hash + '">{{ csrf_field() }}';
+					form.innerHTML = '<input type="hidden" name="ptid" value="' + l_ptid + '"><input name="_hash" value="' + l_hash + '">{{ csrf_field() }}';
 					document.body.append(form);
 					form.submit();
 				}
