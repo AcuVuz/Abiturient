@@ -39,10 +39,11 @@
             form.submit();
         }
 
-		@if($role != 5)
-			function toggle_table(id){
-				//$( ".hidden_card_table" ).toggle();
-				$( ".hidden_card_table" + id ).slideToggle();
+		function toggle_table(id){
+			//$( ".hidden_card_table" ).toggle();
+			$( ".hidden_card_table" + id ).slideToggle();
+			
+			@if($role != 5)
 				$('#print_opis').prop('href', '/print/opis?asid=' + id);
 				$('#print_opis_menu').show();
 				$('#print_statement').prop('href', '/print/statement?asid=' + id);
@@ -51,7 +52,11 @@
 				$('#print_examSheet_menu').show();
 				$('#print_lich_card').prop('href', '/print/lich_card?asid=' + id);
 				$('#print_lich_card_menu').show();
-			}
+			@endif
+		}
+
+		@if($role != 5)
+			
 			var l_ptid = 0;
 			var l_hash = 0;
 			function fullPrint(ptid, status, hash)
@@ -88,6 +93,238 @@
 @endsection
 
 @section('content')
+@if ($role != 5)
+		<menu class="menu">
+			<li class="menu-item" id="menu_orig">
+				<button type="button" class="menu-btn" onclick="set_orig();">
+					<i class="fa fa-check"></i>
+					<span class="menu-text">Оригинал документов</span>
+				</button>
+			</li>
+			<li class="menu-item" id="menu_del_orig">
+				<button type="button" class="menu-btn" onclick="del_orig();">
+					<i class="fa fa-minus"></i>
+					<span class="menu-text">Убрать оригинал документов</span>
+				</button>
+			</li>
+			<li class="menu-separator"></li>
+			<li class="menu-item" id="menu_vozvr">
+				<button type="button" class="menu-btn" onclick="set_vozvr();">
+					<i class="fa fa-ban"></i>
+					<span class="menu-text">Сделать возврат</span>
+				</button>
+			</li>
+			<li class="menu-item" id="menu_del_vozvr">
+				<button type="button" class="menu-btn" onclick="del_vozvr();">
+					<i class="fa fa-reply"></i>
+					<span class="menu-text">Отменить возврат</span>
+				</button>
+			</li>
+		</menu>
+		<style>
+			.container {
+				left: 0;
+				margin: auto;
+				position: absolute;
+				top: 20%;
+				width: 100%;
+				text-align: center;
+			}
+			.menu {
+				position: absolute;
+				width: 250px;
+				padding: 2px;
+				margin: 0;
+				border: 1px solid #bbb;
+				background: #eee;
+				background: -webkit-linear-gradient(to bottom, #fff 0%, #e5e5e5 100px, #e5e5e5 100%);
+				background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100px, #e5e5e5 100%);
+				z-index: 100;
+				border-radius: 3px;
+				box-shadow: 1px 1px 4px rgba(0,0,0,.2);
+				opacity: 0;
+				-webkit-transform: translate(0, 15px) scale(.95);
+				transform: translate(0, 15px) scale(.95);
+				transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+				pointer-events: none;
+			}
+			.menu-item {
+				display: block;
+				position: relative;
+				margin: 0;
+				padding: 0;
+				white-space: nowrap;
+			}
+			.menu-btn {
+				background: none;
+				line-height: normal;
+				overflow: visible;
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				display: block;
+				width: 100%;
+				color: #444;
+				font-family: 'Roboto', sans-serif;
+				font-size: 13px;
+				text-align: left;
+				cursor: pointer;
+				border: 1px solid transparent;
+				white-space: nowrap;
+				padding: 6px 8px;
+				border-radius: 3px;
+			}
+			.menu-btn::-moz-focus-inner,
+			.menu-btn::-moz-focus-inner {
+				border: 0;
+				padding: 0;
+			}
+			.menu-text {
+				margin-left: 25px;
+			}
+			.menu-btn .fa {
+				position: absolute;
+				left: 8px;
+				top: 50%;
+				-webkit-transform: translateY(-50%);
+				transform: translateY(-50%);
+			}
+			.menu-item:hover > .menu-btn {
+				color: #fff;
+				outline: none;
+				background-color: #2E3940;
+				background: -webkit-linear-gradient(to bottom, #5D6D79, #2E3940);
+				background: linear-gradient(to bottom, #5D6D79, #2E3940);
+				border: 1px solid #2E3940;
+			}
+			.menu-item.disabled {
+				opacity: .5;
+				pointer-events: none;
+			}
+			.menu-item.disabled .menu-btn {
+				cursor: default;
+			}
+			.menu-separator {
+				display:block;
+				margin: 7px 5px;
+				height:1px;
+				border-bottom: 1px solid #fff;
+				background-color: #aaa;
+			}
+			.menu-item.submenu::after {
+				content: "";
+				position: absolute;
+				right: 6px;
+				top: 50%;
+				-webkit-transform: translateY(-50%);
+				transform: translateY(-50%);
+				border: 5px solid transparent;
+				border-left-color: #808080;
+			}
+			.menu-item.submenu:hover::after {
+				border-left-color: #fff;
+			}
+			.menu .menu {
+				top: 4px;
+				left: 99%;
+			}
+			.show-menu,
+			.menu-item:hover > .menu {
+				opacity: 1;
+				-webkit-transform: translate(0, 0) scale(1);
+				transform: translate(0, 0) scale(1);
+				pointer-events: auto;
+			}
+			.menu-item:hover > .menu {
+				-webkit-transition-delay: 100ms;
+				transition-delay: 300ms;
+			}
+
+		</style>
+		<script>
+			var menu = document.querySelector('.menu');
+			var sid = 0;
+			var pid = 0;
+			function set_orig()
+			{
+				let form = document.createElement('form');
+				form.action = '/statement/set_orig';
+				form.method = 'GET';
+				form.innerHTML = '<input type="hidden" name="ag" value="' + sid + '"><input type="hidden" name="pid" value="' + pid + '">{{ csrf_field() }}';
+				document.body.append(form);
+				form.submit();
+			}
+
+			function del_orig()
+			{
+				let form = document.createElement('form');
+				form.action = '/statement/del_orig';
+				form.method = 'GET';
+				form.innerHTML = '<input type="hidden" name="ag" value="' + sid + '"><input type="hidden" name="pid" value="' + pid + '">{{ csrf_field() }}';
+				document.body.append(form);
+				form.submit();
+			}
+
+			function set_vozvr()
+			{
+				let form = document.createElement('form');
+				form.action = '/statement/return';
+				form.method = 'GET';
+				form.innerHTML = '<input type="hidden" name="ag" value="' + sid + '"><input type="hidden" name="pid" value="' + pid + '">{{ csrf_field() }}';
+				document.body.append(form);
+				form.submit();
+			}
+
+			function del_vozvr()
+			{
+				let form = document.createElement('form');
+				form.action = '/statement/del_return';
+				form.method = 'GET';
+				form.innerHTML = '<input type="hidden" name="ag" value="' + sid + '"><input type="hidden" name="pid" value="' + pid + '">{{ csrf_field() }}';
+				document.body.append(form);
+				form.submit();
+			}
+
+			function showMenu(x, y){
+				var doc_w = $(document).width();
+				if (x + 250 > doc_w) x -= 250;
+
+				menu.style.left = x + 'px';
+				menu.style.top = y + 'px';
+				menu.classList.add('show-menu');
+			}
+			function hideMenu(){
+				menu.classList.remove('show-menu');
+			}
+			function onContextMenu(e, l_sid, l_pid, is_orig, date_return){
+				e.preventDefault();
+				if (is_orig == 'T') {
+					$('#menu_orig').addClass('disabled');
+					$('#menu_del_orig').removeClass('disabled');
+					$('#menu_del_vozvr').addClass('disabled');
+					$('#menu_vozvr').addClass('disabled');
+				} else {
+					$('#menu_orig').removeClass('disabled');
+					$('#menu_del_orig').addClass('disabled');
+					if (date_return == '') {
+						$('#menu_vozvr').removeClass('disabled');
+						$('#menu_del_vozvr').addClass('disabled');
+					} else {
+						$('#menu_vozvr').addClass('disabled');
+						$('#menu_del_vozvr').removeClass('disabled');
+						$('#menu_orig').addClass('disabled');
+					}
+				}
+				sid = l_sid;
+				pid = l_pid;
+				showMenu(e.pageX, e.pageY);
+			}
+			$(document).click(function(){
+				hideMenu();
+			});
+		</script>
+	@endif
+
 	<div class="media align-items-top py-3 mb-3">
 		<img src="{{ $person->photo_url }}" alt="" class="d-block ui-w-100 rounded-circle" id="photo_main">
 		<div class="media-body ml-4">
@@ -485,236 +722,4 @@
 		</div>
 	</div>
 	<script src="{{ asset('js/timescript.js') }}"></script>
-
-
-	@if ($role != 5)
-		<menu class="menu">
-			<li class="menu-item" id="menu_orig">
-				<button type="button" class="menu-btn" onclick="set_orig();">
-					<i class="fa fa-check"></i>
-					<span class="menu-text">Оригинал документов</span>
-				</button>
-			</li>
-			<li class="menu-item" id="menu_del_orig">
-				<button type="button" class="menu-btn" onclick="del_orig();">
-					<i class="fa fa-minus"></i>
-					<span class="menu-text">Убрать оригинал документов</span>
-				</button>
-			</li>
-			<li class="menu-separator"></li>
-			<li class="menu-item" id="menu_vozvr">
-				<button type="button" class="menu-btn" onclick="set_vozvr();">
-					<i class="fa fa-ban"></i>
-					<span class="menu-text">Сделать возврат</span>
-				</button>
-			</li>
-			<li class="menu-item" id="menu_del_vozvr">
-				<button type="button" class="menu-btn" onclick="del_vozvr();">
-					<i class="fa fa-reply"></i>
-					<span class="menu-text">Отменить возврат</span>
-				</button>
-			</li>
-		</menu>
-		<style>
-			.container {
-				left: 0;
-				margin: auto;
-				position: absolute;
-				top: 20%;
-				width: 100%;
-				text-align: center;
-			}
-			.menu {
-				position: absolute;
-				width: 250px;
-				padding: 2px;
-				margin: 0;
-				border: 1px solid #bbb;
-				background: #eee;
-				background: -webkit-linear-gradient(to bottom, #fff 0%, #e5e5e5 100px, #e5e5e5 100%);
-				background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100px, #e5e5e5 100%);
-				z-index: 100;
-				border-radius: 3px;
-				box-shadow: 1px 1px 4px rgba(0,0,0,.2);
-				opacity: 0;
-				-webkit-transform: translate(0, 15px) scale(.95);
-				transform: translate(0, 15px) scale(.95);
-				transition: transform 0.1s ease-out, opacity 0.1s ease-out;
-				pointer-events: none;
-			}
-			.menu-item {
-				display: block;
-				position: relative;
-				margin: 0;
-				padding: 0;
-				white-space: nowrap;
-			}
-			.menu-btn {
-				background: none;
-				line-height: normal;
-				overflow: visible;
-				-webkit-user-select: none;
-				-moz-user-select: none;
-				-ms-user-select: none;
-				display: block;
-				width: 100%;
-				color: #444;
-				font-family: 'Roboto', sans-serif;
-				font-size: 13px;
-				text-align: left;
-				cursor: pointer;
-				border: 1px solid transparent;
-				white-space: nowrap;
-				padding: 6px 8px;
-				border-radius: 3px;
-			}
-			.menu-btn::-moz-focus-inner,
-			.menu-btn::-moz-focus-inner {
-				border: 0;
-				padding: 0;
-			}
-			.menu-text {
-				margin-left: 25px;
-			}
-			.menu-btn .fa {
-				position: absolute;
-				left: 8px;
-				top: 50%;
-				-webkit-transform: translateY(-50%);
-				transform: translateY(-50%);
-			}
-			.menu-item:hover > .menu-btn {
-				color: #fff;
-				outline: none;
-				background-color: #2E3940;
-				background: -webkit-linear-gradient(to bottom, #5D6D79, #2E3940);
-				background: linear-gradient(to bottom, #5D6D79, #2E3940);
-				border: 1px solid #2E3940;
-			}
-			.menu-item.disabled {
-				opacity: .5;
-				pointer-events: none;
-			}
-			.menu-item.disabled .menu-btn {
-				cursor: default;
-			}
-			.menu-separator {
-				display:block;
-				margin: 7px 5px;
-				height:1px;
-				border-bottom: 1px solid #fff;
-				background-color: #aaa;
-			}
-			.menu-item.submenu::after {
-				content: "";
-				position: absolute;
-				right: 6px;
-				top: 50%;
-				-webkit-transform: translateY(-50%);
-				transform: translateY(-50%);
-				border: 5px solid transparent;
-				border-left-color: #808080;
-			}
-			.menu-item.submenu:hover::after {
-				border-left-color: #fff;
-			}
-			.menu .menu {
-				top: 4px;
-				left: 99%;
-			}
-			.show-menu,
-			.menu-item:hover > .menu {
-				opacity: 1;
-				-webkit-transform: translate(0, 0) scale(1);
-				transform: translate(0, 0) scale(1);
-				pointer-events: auto;
-			}
-			.menu-item:hover > .menu {
-				-webkit-transition-delay: 100ms;
-				transition-delay: 300ms;
-			}
-
-		</style>
-		<script>
-			var menu = document.querySelector('.menu');
-			var sid = 0;
-			var pid = 0;
-			function set_orig()
-			{
-				let form = document.createElement('form');
-				form.action = '/statement/set_orig';
-				form.method = 'GET';
-				form.innerHTML = '<input type="hidden" name="ag" value="' + sid + '"><input type="hidden" name="pid" value="' + pid + '">{{ csrf_field() }}';
-				document.body.append(form);
-				form.submit();
-			}
-
-			function del_orig()
-			{
-				let form = document.createElement('form');
-				form.action = '/statement/del_orig';
-				form.method = 'GET';
-				form.innerHTML = '<input type="hidden" name="ag" value="' + sid + '"><input type="hidden" name="pid" value="' + pid + '">{{ csrf_field() }}';
-				document.body.append(form);
-				form.submit();
-			}
-
-			function set_vozvr()
-			{
-				let form = document.createElement('form');
-				form.action = '/statement/return';
-				form.method = 'GET';
-				form.innerHTML = '<input type="hidden" name="ag" value="' + sid + '"><input type="hidden" name="pid" value="' + pid + '">{{ csrf_field() }}';
-				document.body.append(form);
-				form.submit();
-			}
-
-			function del_vozvr()
-			{
-				let form = document.createElement('form');
-				form.action = '/statement/del_return';
-				form.method = 'GET';
-				form.innerHTML = '<input type="hidden" name="ag" value="' + sid + '"><input type="hidden" name="pid" value="' + pid + '">{{ csrf_field() }}';
-				document.body.append(form);
-				form.submit();
-			}
-
-			function showMenu(x, y){
-				menu.style.left = x + 'px';
-				menu.style.top = y + 'px';
-				menu.classList.add('show-menu');
-			}
-			function hideMenu(){
-				menu.classList.remove('show-menu');
-			}
-			function onContextMenu(e, l_sid, l_pid, is_orig, date_return){
-				e.preventDefault();
-				if (is_orig == 'T') {
-					$('#menu_orig').addClass('disabled');
-					$('#menu_del_orig').removeClass('disabled');
-					$('#menu_del_vozvr').addClass('disabled');
-					$('#menu_vozvr').addClass('disabled');
-				} else {
-					$('#menu_orig').removeClass('disabled');
-					$('#menu_del_orig').addClass('disabled');
-					if (date_return == '') {
-						$('#menu_vozvr').removeClass('disabled');
-						$('#menu_del_vozvr').addClass('disabled');
-					} else {
-						$('#menu_vozvr').addClass('disabled');
-						$('#menu_del_vozvr').removeClass('disabled');
-						$('#menu_orig').addClass('disabled');
-					}
-				}
-				sid = l_sid;
-				pid = l_pid;
-				showMenu(e.pageX, e.pageY);
-			}
-			$(document).click(function(){
-				hideMenu();
-			});
-		</script>
-
-
-	@endif
 @endsection

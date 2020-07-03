@@ -92,9 +92,10 @@ function DiscardPerson(person){
          success: function(data) {
            if(data == 1){
             Swal.fire({
-             title: 'Комментарий успешно добавлен!',
-             icon: 'success',
+                title: 'Комментарий успешно добавлен!',
+                icon: 'success',
             });
+            //location.reload();
            }
          }
         });
