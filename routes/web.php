@@ -127,3 +127,5 @@ Route::get('/statistic', function(){
   'role' => session('role_id')
  ]);
 })->name('Report.dashboards-statistic')->middleware('check');
+
+Route::get('/GetStudentsStamentStatistic', 'DashboardController@PerStatTable');

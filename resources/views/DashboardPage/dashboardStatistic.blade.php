@@ -44,22 +44,24 @@
 <script>
 $(function() {
  /* Formatting function for row details - modify as you need */
-function format ( d ) {
-    // `d` is the original data object for the row
-    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-        '<tr>'+
-            '<td>Full name:</td>'+
-            '<td>'+ d[2] +'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Extension number:</td>'+
-            '<td>'+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Extra info:</td>'+
-            '<td>And any further details here (images etc)...</td>'+
-        '</tr>'+
-    '</table>';
+function format ( data ) {
+ var fio = '';
+ jQuery.each(data.data, function(i, el) {
+               i++;
+    fio+='<tr><td>'+ el[0] + ' ' + el[1] + ' ' + el[2] +'</td></tr>';
+
+  });
+
+ return '<table class="ss">' +
+        '<thead>' +
+        '<th>ФИО</th>' +
+        '<th>Средний балл документа об образовании</th>' +
+        '</thead>' +
+        '<tbody>' +
+         fio +
+        '</tbody>' +
+        '</table>';
+
 }
 
   var groupColumn = 9;
@@ -157,8 +159,21 @@ var dataTable = $('#table_statistic').dataTable({
         }
         else {
             // Open this row
-            row.child( format(row.data()) ).show();
-            tr.addClass('shown');
+            var d = row.data();
+            var ff = '';
+            $.ajax({
+                dataType: 'json',
+                url: '/GetStudentsStamentStatistic',
+                type: 'GET',
+                data: {
+                    gip: d[11]
+                },
+                success: function(data) {
+                  row.child( format(data) ).show();
+                  tr.addClass('shown');
+                },
+            });
+
         }
     } );
 

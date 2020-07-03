@@ -250,22 +250,25 @@ class Persons extends Model
 
 	public static function StaticTable(){
 		$query = AGroup::selectRaw('distinct (abit_stlevel.name) as stname, abit_group.name as groupname, abit_facultet.id as fakid,
-											abit_facultet.name as fakname,
+											abit_facultet.name as fakname, abit_group.id as gip,
 											(select count(s.id) from abit_statements s
 											left join abit_group ag2 on ag2.id = s.group_id
-											where ag2.name = abit_group.name and ag2.fo_id = 1 and ag2.st_id = abit_group.st_id) as ochka,
+											where ag2.name = abit_group.name and ag2.fo_id = 1 and ag2.st_id = abit_group.st_id  and ag2.fk_id = abit_group.fk_id) as ochka,
 											(select count(s.id) from abit_statements s
 											left join abit_group ag2 on ag2.id = s.group_id
-											where ag2.name = abit_group.name and ag2.fo_id = 2 and ag2.st_id = abit_group.st_id) as zaochka,
+											where ag2.name = abit_group.name and ag2.fo_id = 2 and ag2.st_id = abit_group.st_id  and ag2.fk_id = abit_group.fk_id) as zaochka,
 
 											(select count(s.id) from abit_statements s
 											left join abit_group ag2 on ag2.id = s.group_id
-											where ag2.name = abit_group.name and ag2.fo_id = 1 and s.date_return is not null and ag2.st_id = abit_group.st_id) as ochka_vozvr,
+											where ag2.name = abit_group.name and ag2.fo_id = 1 and s.date_return is not null and ag2.st_id = abit_group.st_id  and ag2.fk_id = abit_group.fk_id) as ochka_vozvr,
 											(select count(s.id) from abit_statements s
 											left join abit_group ag2 on ag2.id = s.group_id
-											where ag2.name = abit_group.name and ag2.fo_id = 2 and s.date_return is not null and ag2.st_id = abit_group.st_id) as zaochka_vozvr')
+											where ag2.name = abit_group.name and ag2.fo_id = 2 and s.date_return is not null and ag2.st_id = abit_group.st_id  and ag2.fk_id = abit_group.fk_id) as zaochka_vozvr')
 		->join('abit_stlevel', 'abit_stlevel.id', '=', 'abit_group.st_id')
 		->join('abit_facultet', 'abit_facultet.id', '=', 'abit_group.fk_id')
+		->whereNotIn('abit_group.id', [20, 46, 58, 59, 61, 66, 68, 72, 73, 77, 124, 129, 131, 135, 136, 140, 169, 170, 178,
+					181, 188, 190, 191, 192, 205, 206, 218, 219, 220, 221, 240, 245, 246, 251, 254, 261, 263, 264, 265, 278, 279,
+					319, 335])
 		->get();
 
 		$k = [];
@@ -279,7 +282,9 @@ class Persons extends Model
 						$key->zaochka,
 						$key->ochka_vozvr,
 						$key->zaochka_vozvr,'','',
-						$key->fakname, $key->famil]];
+						$key->fakname,
+						$key->famil,
+						$key->gip]];
 			$i++;
 		}
 
@@ -290,5 +295,25 @@ class Persons extends Model
 
 		return $arr;
 	}
+  public static function PerStatTable($gip){
+			$query = Persons::select('persons.famil', 'persons.name as Pname', 'persons.otch')->leftjoin('abit_statements', 'abit_statements.person_id', '=', 'persons.id')
+												->leftjoin('abit_group', 'abit_group.id', '=','abit_statements.group_id')
+												->where('abit_group.id', $gip)
+												->get();
+												$k = [];
+												$i = 0;
+												foreach ($query as $key) {
 
+													$k +=[$i =>[ $key->famil,
+																										$key->Pname,
+																										$key->otch,		]];
+													$i++;
+												}
+
+												$arr=array
+												(
+													"data" => $k
+												);
+			return $arr;
+		}
 }

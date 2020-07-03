@@ -65,4 +65,11 @@ class DashboardController extends Controller
       header("Content-type: application/json; charset=utf-8");
       return json_encode($arr, true);
     }
+
+    public function PerStatTable(Request $request){
+     $group_id = $request->gip;
+     $arr = Persons::PerStatTable($group_id);
+     header("Content-type: application/json; charset=utf-8");
+     return json_encode($arr, true);
+    }
 }
