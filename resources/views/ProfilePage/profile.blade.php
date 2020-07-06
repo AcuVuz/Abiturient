@@ -251,7 +251,8 @@
 				form.action = '/statement/set_orig';
 				form.method = 'GET';
 				form.innerHTML = '<input type="hidden" name="ag" value="' + sid + '"><input type="hidden" name="pid" value="' + pid + '">{{ csrf_field() }}';
-				document.body.append(form);
+				//document.body.append(form);
+				$('#loadForm').html(form);
 				form.submit();
 			}
 
@@ -261,7 +262,8 @@
 				form.action = '/statement/del_orig';
 				form.method = 'GET';
 				form.innerHTML = '<input type="hidden" name="ag" value="' + sid + '"><input type="hidden" name="pid" value="' + pid + '">{{ csrf_field() }}';
-				document.body.append(form);
+				//document.body.append(form);
+				$('#loadForm').html(form);
 				form.submit();
 			}
 
@@ -271,7 +273,8 @@
 				form.action = '/statement/return';
 				form.method = 'GET';
 				form.innerHTML = '<input type="hidden" name="ag" value="' + sid + '"><input type="hidden" name="pid" value="' + pid + '">{{ csrf_field() }}';
-				document.body.append(form);
+				//document.body.append(form);
+				$('#loadForm').html(form);
 				form.submit();
 			}
 
@@ -281,7 +284,8 @@
 				form.action = '/statement/del_return';
 				form.method = 'GET';
 				form.innerHTML = '<input type="hidden" name="ag" value="' + sid + '"><input type="hidden" name="pid" value="' + pid + '">{{ csrf_field() }}';
-				document.body.append(form);
+				//document.body.append(form);
+				$('#loadForm').html(form);
 				form.submit();
 			}
 
@@ -323,6 +327,7 @@
 				hideMenu();
 			});
 		</script>
+		<div id="loadForm" style="display: none;"></div>
 	@endif
 
 	<div class="media align-items-top py-3 mb-3">
