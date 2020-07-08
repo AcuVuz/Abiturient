@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Facades\DB;
 class Persons extends Model
 {
 	protected $table = 'persons';
@@ -249,42 +249,26 @@ class Persons extends Model
 	}
 
 	public static function StaticTable(){
-		$query = AGroup::selectRaw('distinct (abit_stlevel.name) as stname, abit_group.name as groupname, abit_facultet.id as fakid,
-											abit_facultet.name as fakname, abit_group.id as gip,
-											(select count(s.id) from abit_statements s
-											left join abit_group ag2 on ag2.id = s.group_id
-											where ag2.name = abit_group.name and ag2.fo_id = 1 and ag2.st_id = abit_group.st_id  and ag2.fk_id = abit_group.fk_id) as ochka,
-											(select count(s.id) from abit_statements s
-											left join abit_group ag2 on ag2.id = s.group_id
-											where ag2.name = abit_group.name and ag2.fo_id = 2 and ag2.st_id = abit_group.st_id  and ag2.fk_id = abit_group.fk_id) as zaochka,
-
-											(select count(s.id) from abit_statements s
-											left join abit_group ag2 on ag2.id = s.group_id
-											where ag2.name = abit_group.name and ag2.fo_id = 1 and s.date_return is not null and ag2.st_id = abit_group.st_id  and ag2.fk_id = abit_group.fk_id) as ochka_vozvr,
-											(select count(s.id) from abit_statements s
-											left join abit_group ag2 on ag2.id = s.group_id
-											where ag2.name = abit_group.name and ag2.fo_id = 2 and s.date_return is not null and ag2.st_id = abit_group.st_id  and ag2.fk_id = abit_group.fk_id) as zaochka_vozvr')
-		->join('abit_stlevel', 'abit_stlevel.id', '=', 'abit_group.st_id')
-		->join('abit_facultet', 'abit_facultet.id', '=', 'abit_group.fk_id')
-		->whereNotIn('abit_group.id', [20, 46, 58, 59, 61, 66, 68, 72, 73, 77, 124, 129, 131, 135, 136, 140, 169, 170, 178,
-					181, 188, 190, 191, 192, 205, 206, 218, 219, 220, 221, 240, 245, 246, 251, 254, 261, 263, 264, 265, 278, 279,
-					319, 335])
-		->get();
-
+		$query = DB::select('CALL abit_statistic()');
+		/*->whereNotIn('abit_group.id', [20, 29, 31, 37, 41, 46, 56, 57, 58, 59, 61, 63, 66, 68, 72, 73, 75, 76, 77, 99, 101, 107,
+														111, 124, 126, 129, 131, 135, 136, 138, 139, 140, 169, 170, 171, 178, 181, 183, 187, 188, 190, 193, 191,
+														192, 205, 206, 217, 218, 219, 220, 221, 240, 245, 246, 247, 251, 254, 256, 260, 261, 263,  264, 265, 266,
+														278, 279, 281, 288, 312, 313, 315, 319, 325, 328, 329, 332, 335, 341, 352, 376]);*/
 		$k = [];
 		$i = 0;
 		foreach ($query as $key) {
 
-			$k +=[$i =>[ '',
-						$key->stname,
-						$key->groupname,
-						$key->ochka, //FIO
-						$key->zaochka,
-						$key->ochka_vozvr,
-						$key->zaochka_vozvr,'','',
-						$key->fakname,
-						$key->famil,
-						$key->gip]];
+			$k +=[$i =>[
+						$key->id,
+						$key->name,
+						$key->grname,
+						$key->count_ochka,
+						$key->count_zaochka,
+						$key->return_ochka,
+						$key->return_zaochka,
+						$key->count_statments,
+						$key->count_return_statments,
+						$key->fakname]];
 			$i++;
 		}
 
