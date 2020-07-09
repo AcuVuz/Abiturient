@@ -67,8 +67,9 @@ class DashboardController extends Controller
     }
 
     public function PerStatTable(Request $request){
-     $group_id = $request->gip;
-     $arr = Persons::PerStatTable($group_id);
+     $group_id_o = $request->gip_o;
+     $group_id_z = $request->gip_z;
+     $arr = Persons::PerStatTable($group_id_o,$group_id_z);
      header("Content-type: application/json; charset=utf-8");
      return json_encode($arr, true);
     }

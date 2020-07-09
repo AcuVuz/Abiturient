@@ -131,4 +131,13 @@ Route::get('/statistic', function(){
  ]);
 })->name('Report.dashboards-statistic')->middleware('check');
 
+Route::get('/fullstatistic', function(){
+ return view('DashboardPage.dashboardStatisticFull', [
+  'username' => session('user_name'),
+  'title' => 'Статистика поданных заявлений с учетом абитуриентов',
+  'role' => session('role_id')
+ ]);
+
+})->name('Report.dashboards-statisticFull')->middleware('check');
+
 Route::get('/GetStudentsStamentStatistic', 'DashboardController@PerStatTable');

@@ -71,6 +71,9 @@
                 <li class="sidenav-item{{ $routeName == 'Report.dashboards-statistic' ? ' active' : '' }}">
                     <a href="/statistic" class="sidenav-link"><div>Статистика заявлений</div></a>
                 </li>
+                <li class="sidenav-item{{ $routeName == 'Report.dashboards-statisticFull' ? ' active' : '' }}">
+                    <a href="/fullstatistic" class="sidenav-link"><div>Статистика заявлений(Полная)</div></a>
+                </li>
             </ul>
         </li>
              <!--  Графики данных

@@ -259,6 +259,7 @@ class Persons extends Model
 		foreach ($query as $key) {
 
 			$k +=[$i =>[
+						'',
 						$key->id,
 						$key->name,
 						$key->grname,
@@ -268,7 +269,9 @@ class Persons extends Model
 						$key->return_zaochka,
 						$key->count_statments,
 						$key->count_return_statments,
-						$key->fakname]];
+						$key->fakname,
+						$key->ochka_id,
+						$key->zaochka_id]];
 			$i++;
 		}
 
@@ -279,18 +282,18 @@ class Persons extends Model
 
 		return $arr;
 	}
-  public static function PerStatTable($gip){
-			$query = Persons::select('persons.famil', 'persons.name as Pname', 'persons.otch')->leftjoin('abit_statements', 'abit_statements.person_id', '=', 'persons.id')
-												->leftjoin('abit_group', 'abit_group.id', '=','abit_statements.group_id')
-												->where('abit_group.id', $gip)
-												->get();
+  public static function PerStatTable($gip_o, $gip_z){
+			$query = DB::select('CALL abit_persons_statistic(?,?)',[$gip_o,$gip_z]);
+
 												$k = [];
 												$i = 0;
 												foreach ($query as $key) {
 
 													$k +=[$i =>[ $key->famil,
 																										$key->Pname,
-																										$key->otch,		]];
+																										$key->otch,
+																										$key->srbal
+																											]];
 													$i++;
 												}
 

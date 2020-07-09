@@ -15,6 +15,8 @@
 
 @section('scripts')
     <script src="{{ asset('assets/vendor/libs/datatables/datatables.js') }}"></script>
+    <script src="{{asset('js/statisticks.js')}}"></script>
+    <script>$(function() {statistic_table('F');});</script>
 @endsection
 
 @section('content')
@@ -26,6 +28,7 @@
    <table id="table_statistic" class="clients-table table table-hover m-0">
        <thead>
        <tr>
+           <th></th>
            <th>№</th>
            <th>Образовательный уровень</th>
            <th>Направление</th>
@@ -41,6 +44,7 @@
        <tfoot>
         <tr>
          <th></th>
+         <th></th>
          <th>ВСЕГО:</th>
          <th></th>
          <th></th>
@@ -55,266 +59,4 @@
    </table>
   </div>
 </div>
-<script>
-$(function() {
- /* Formatting function for row details - modify as you need */
-function format ( data ) {
- var fio = '';
- jQuery.each(data.data, function(i, el) {
-               i++;
-    fio+='<tr><td>'+ el[0] + ' ' + el[1] + ' ' + el[2] +'</td></tr>';
-
-  });
-
- return '<table class="ss">' +
-        '<thead>' +
-        '<th>ФИО</th>' +
-        '<th>Средний балл документа об образовании</th>' +
-        '</thead>' +
-        '<tbody>' +
-         fio +
-        '</tbody>' +
-        '</table>';
-
-}
-
-var groupColumn = 9;
-
-var dataTable = $('#table_statistic').dataTable({
-    processing: true,
-    ajax: {
-        url: '/StaticTable'
-    },
-    bSort:false,
-    searching: true,
-    columnDefs: [
-                { "visible": false, "targets": groupColumn }
-            ],
-    lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-    language: {
-        "processing": "Подождите...",
-        "search": "Поиск:",
-        "lengthMenu": "Показать _MENU_ записей",
-        "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
-        "infoEmpty": "Записи с 0 до 0 из 0 записей",
-        "infoFiltered": "(отфильтровано из _MAX_ записей)",
-        "infoPostFix": "",
-        "loadingRecords": "Загрузка записей...",
-        "zeroRecords": "Записи отсутствуют.",
-        "emptyTable": "В таблице отсутствуют данные",
-        "paginate": {
-            "first": "Первая",
-            "previous": "Предыдущая",
-            "next": "Следующая",
-            "last": "Последняя"
-        },
-        "select": {
-            "rows": {
-                "_": "Выбрано записей: %d",
-                "0": "Кликните по записи для выбора",
-                "1": "Выбрана одна запись"
-            }
-        }
-    },
-
-    fnRowCallback: function(oSettings) {
-     /*
-            var table = $('#table_statistic').dataTable(),
-                  rows = table.fnGetNodes();
-
-            $(rows).each(function () {
-                $(this).find('td:first').text(this._DT_RowIndex + 1);
-                var col1 = $(this).find('td:nth-child(4)').text();
-                var col2 = $(this).find('td:nth-child(5)').text();
-
-                var col3 = $(this).find('td:nth-child(6)').text();
-                var col4 = $(this).find('td:nth-child(7)').text();
-
-                $(this).find('td:nth-child(8)').text(parseInt(col1) + parseInt(col2));
-
-                $(this).find('td:nth-child(9)').text(parseInt(col3) + parseInt(col4));
-
-            });
-     */
-    },
-
-    drawCallback: function ( settings, data ) {
-              var api = this.api();
-              var rows = api.rows( {page:'current'} ).nodes();
-              var last=null;
-
-              api.column(groupColumn, {page:'current'} ).data().each( function ( group, i ) {
-                  if ( last !== group ) {
-                      $(rows).eq( i ).before(
-                          '<tr class="group"><td colspan="10" style="text-align:center; background-color:#ddd; font-weight: bold;">'+group+'</td></tr>'
-                      );
-
-                      last = group;
-                  }
-              } );
-          },
-
-          "footerCallback": function ( row, data, start, end, display ) {
-                  var api = this.api(), data;
-
-                  total_ochka = api
-                      .column( 3 )
-                      .data()
-                      .reduce( function (a, b) {
-                          return parseInt(a) + parseInt(b);
-                      }, 0 );
-
-
-                  pageTotal_ochka = api
-                      .column( 3, { page: 'current'} )
-                      .data()
-                      .reduce( function (a, b) {
-                          return parseInt(a) + parseInt(b);
-                      }, 0 );
-
-                  total_zaochka = api
-                      .column( 4 )
-                      .data()
-                      .reduce( function (a, b) {
-                          return parseInt(a) + parseInt(b);
-                      }, 0 );
-
-
-                  pageTotal_zaochka = api
-                      .column( 4, { page: 'current'} )
-                      .data()
-                      .reduce( function (a, b) {
-                          return parseInt(a) + parseInt(b);
-                      }, 0 );
-
-                  total_return_ochka = api
-                      .column( 5 )
-                      .data()
-                      .reduce( function (a, b) {
-                          return parseInt(a) + parseInt(b);
-                      }, 0 );
-
-
-                  pageTotal_return_ochka = api
-                      .column( 5, { page: 'current'} )
-                      .data()
-                      .reduce( function (a, b) {
-                          return parseInt(a) + parseInt(b);
-                      }, 0 );
-
-                  total_return_zaochka = api
-                      .column( 6 )
-                      .data()
-                      .reduce( function (a, b) {
-                          return parseInt(a) + parseInt(b);
-                      }, 0 );
-
-
-                  pageTotal_return_zaochka = api
-                      .column( 6, { page: 'current'} )
-                      .data()
-                      .reduce( function (a, b) {
-                          return parseInt(a) + parseInt(b);
-                      }, 0 );
-
-                 total_return_zaochka = api
-                     .column( 6 )
-                     .data()
-                     .reduce( function (a, b) {
-                         return parseInt(a) + parseInt(b);
-                     }, 0 );
-
-
-                 pageTotal_return_zaochka = api
-                     .column( 6, { page: 'current'} )
-                     .data()
-                     .reduce( function (a, b) {
-                         return parseInt(a) + parseInt(b);
-                     }, 0 );
-
-                 total_statments = api
-                     .column( 7 )
-                     .data()
-                     .reduce( function (a, b) {
-                         return parseInt(a) + parseInt(b);
-                     }, 0 );
-
-
-                 pageTotal_statments = api
-                     .column( 7, { page: 'current'} )
-                     .data()
-                     .reduce( function (a, b) {
-                         return parseInt(a) + parseInt(b);
-                     }, 0 );
-
-                total_return_statments = api
-                    .column( 8 )
-                    .data()
-                    .reduce( function (a, b) {
-                        return parseInt(a) + parseInt(b);
-                    }, 0 );
-
-
-                pageTotal_return_statments = api
-                    .column( 8, { page: 'current'} )
-                    .data()
-                    .reduce( function (a, b) {
-                        return parseInt(a) + parseInt(b);
-                    }, 0 );
-
-                  $( api.column( 3 ).footer() ).html(
-                      pageTotal_ochka + '('+ total_ochka +')'
-                  );
-
-                  $( api.column( 4 ).footer() ).html(
-                      pageTotal_zaochka + '('+ total_zaochka +')'
-                  );
-                  $( api.column( 5 ).footer() ).html(
-                      pageTotal_return_ochka + '('+ total_return_ochka +')'
-                  );
-                  $( api.column( 6 ).footer() ).html(
-                      pageTotal_return_zaochka + '('+ total_return_zaochka +')'
-                  );
-                  $( api.column( 7 ).footer() ).html(
-                      pageTotal_statments + '('+ total_statments +')'
-                  );
-                  $( api.column( 8 ).footer() ).html(
-                      pageTotal_return_statments + '('+ total_return_statments +')'
-                  );
-
-              },
-
- });
-
- $('#table_statistic tbody').on('click', 'td.details-control', function () {
-        var tr = $(this).closest('tr');
-        var row = dataTable.api().row( tr );
-
-        if ( row.child.isShown() ) {
-            // This row is already open - close it
-            row.child.hide();
-            tr.removeClass('shown');
-        }
-        else {
-            // Open this row
-            var d = row.data();
-            var ff = '';
-            $.ajax({
-                dataType: 'json',
-                url: '/GetStudentsStamentStatistic',
-                type: 'GET',
-                data: {
-                    gip: d[11]
-                },
-                success: function(data) {
-                  row.child( format(data) ).show();
-                  tr.addClass('shown');
-                },
-            });
-
-        }
-    } );
-
-});
-</script>
 @endsection
