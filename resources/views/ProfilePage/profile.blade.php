@@ -95,6 +95,13 @@
 @section('content')
 @if ($role != 5)
 		<menu class="menu">
+			<li class="menu-item" id="menu_dop_ball">
+				<button type="button" class="menu-btn" onclick="dop_ball();">
+					<i class="fa fa-plus"></i>
+					<span class="menu-text">Дополнительные баллы</span>
+				</button>
+			</li>
+			<li class="menu-separator"></li>
 			<li class="menu-item" id="menu_orig">
 				<button type="button" class="menu-btn" onclick="set_orig();">
 					<i class="fa fa-check"></i>
@@ -251,6 +258,17 @@
 				form.action = '/statement/set_orig';
 				form.method = 'GET';
 				form.innerHTML = '<input type="hidden" name="ag" value="' + sid + '"><input type="hidden" name="pid" value="' + pid + '">{{ csrf_field() }}';
+				//document.body.append(form);
+				$('#loadForm').html(form);
+				form.submit();
+			}
+
+			function dop_ball()
+			{
+				let form = document.createElement('form');
+				form.action = '/statement/dop_ball';
+				form.method = 'GET';
+				form.innerHTML = '<input type="hidden" name="sid" value="' + sid + '">{{ csrf_field() }}';
 				//document.body.append(form);
 				$('#loadForm').html(form);
 				form.submit();

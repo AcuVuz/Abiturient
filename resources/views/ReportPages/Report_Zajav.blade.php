@@ -71,7 +71,10 @@
 						<td>Пол: {{ $person->gender == 'Муж' ? 'мужской' : 'женский' }}</td>
 					</tr>
 					<tr>
-						<td>Гражданство: {{ $person->citizen }}</td>
+						<td>Гражданство: {{ $person->citizen == "LNR" ? "ЛНР" : "" }} 
+										 {{ $person->citizen == "DNR" ? "ДНР" : "" }}
+										 {{ $person->citizen == "UA" ? "Украина" : "" }}
+										 {{ $person->citizen == "RU" ? "Российская Федерация" : ""  }}</td>
 					</tr>
 					<tr>
 						<td>Дата рождения: {{ date('d.m.Y', strtotime($person->birthday)) }}</td>
@@ -105,7 +108,13 @@
 						<td>Средний балл аттестата/диплома: {{ isset($docObr) ? $docObr->sr_bal : '' }}</td>
 					</tr>
 					<tr>
-						<td>Дополнительные сведения (награды, льготы): </td>
+						<td>
+							Дополнительные сведения (награды, льготы): 
+							@foreach ($allPrivilege as $ap)
+								{{ $ap->name.'; ' }}	
+							@endforeach
+
+						</td>
 					</tr>
 				</table>
 			</div>

@@ -10,6 +10,7 @@ use App\Persons;
 use App\AStatments;
 use App\ADocument;
 use App\ASertificate;
+use App\APersPriv;
 
 class PrintController extends Controller
 {
@@ -31,10 +32,6 @@ class PrintController extends Controller
                 'lgots' => $lgot
             ]
         );
-        /*$pdf = PDF::loadView(
-            'ReportPages.Report_LichKarta'
-        );
-        return $pdf->stream();*/
     }
 
     public function opis(Request $request)
@@ -59,12 +56,14 @@ class PrintController extends Controller
         $person = Persons::GetPerson($statement->person_id);
         $docObr = Persons::GetDocumentObr($statement->person_id);
         $sertificate = ASertificate::GetPersSertificate($statement->person_id);
+        $allPrivilege = APersPriv::GetPersAllPrivilege($statement->person_id);
         return view('ReportPages.Report_Zajav',
             [
-                'statement' => $statement,
-                'person'    => $person,
-                'docObr'    => $docObr,
-                'sertificate' => $sertificate
+                'statement'     => $statement,
+                'person'        => $person,
+                'docObr'        => $docObr,
+                'sertificate'   => $sertificate,
+                'allPrivilege'  => $allPrivilege
             ]
         );
     }

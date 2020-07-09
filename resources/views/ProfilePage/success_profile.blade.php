@@ -5,6 +5,12 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bootstrap-tagsinput/bootstrap-tagsinput.css') }}">
     <!-- Page -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/account.css') }}">
+    <style>
+		.dropdown-menu .show{
+			max-height: 200px;
+			overflow: hidden scroll;
+		}
+	</style>
 @endsection
 
 @section('scripts')
@@ -170,12 +176,9 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
-
             </div>
-
         </div>
         <div class="text-right mt-3">
             <button type="submit" class="btn btn-primary">Сохранить</button>&nbsp;

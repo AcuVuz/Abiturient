@@ -18,21 +18,23 @@ Route::middleware(['timeout'])->group(function () {
 
  //=============== ГРУППА РОУТОВ ДЛЯ ПРОВЕРКИ АВТОРИЗАЦИИ И ВРЕМЕНИ РАБОТЫ ================================//
 Route::middleware(['check','timeout'])->group(function () {
- //=============== Заполнение информации о направлении абитуриента(нового) ================================//
- Route::get('/insert_abit', 'ProfileController@index_InsertAbit');
- //=============== Заполнение информации о направлении абитуриента(уже создан) ================================//
- Route::get('/success_insert_abit', 'ProfileController@index_Success_Abit');
- Route::post('/statement/get_facultet', 'ProfileController@get_facultet');
- Route::post('/statement/get_stlevel', 'ProfileController@get_stlevel');
- Route::post('/statement/get_form_obuch', 'ProfileController@get_form_obuch');
- Route::post('/statement/get_group', 'ProfileController@get_group');
- Route::post('/statement/create', 'ProfileController@statement_create');
- Route::get('/statement/return', 'ProfileController@statement_return');
- Route::get('/statement/del_return', 'ProfileController@statement_del_return');
- Route::get('/statement/set_orig', 'ProfileController@statement_set_orig');
- Route::get('/statement/del_orig', 'ProfileController@statement_del_orig');
- Route::get('/checked_abit', 'ProfileController@checked_abit');
- Route::get('/scanPhoto', 'ScanController@index');
+    //=============== Заполнение информации о направлении абитуриента(нового) ================================//
+    Route::get('/insert_abit', 'ProfileController@index_InsertAbit');
+    //=============== Заполнение информации о направлении абитуриента(уже создан) ================================//
+    Route::get('/success_insert_abit', 'ProfileController@index_Success_Abit');
+    Route::post('/statement/get_facultet', 'ProfileController@get_facultet');
+    Route::post('/statement/get_stlevel', 'ProfileController@get_stlevel');
+    Route::post('/statement/get_form_obuch', 'ProfileController@get_form_obuch');
+    Route::post('/statement/get_group', 'ProfileController@get_group');
+    Route::post('/statement/create', 'ProfileController@statement_create');
+    Route::get('/statement/return', 'ProfileController@statement_return');
+    Route::get('/statement/del_return', 'ProfileController@statement_del_return');
+    Route::get('/statement/set_orig', 'ProfileController@statement_set_orig');
+    Route::get('/statement/del_orig', 'ProfileController@statement_del_orig');
+    Route::get('/checked_abit', 'ProfileController@checked_abit');
+    Route::get('/scanPhoto', 'ScanController@index');
+    Route::get('/statement/dop_ball', 'ProfileController@statement_dop_ball');
+    Route::post('/statement/dop_ball_save', 'ProfileController@statement_dop_ball_save');
 });
 
 Route::get('/', 'LoginController@check');

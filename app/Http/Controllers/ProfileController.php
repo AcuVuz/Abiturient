@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Validator;
 use App\Persons;
+use App\APredmets;
+use App\AStatementDovuz;
+use App\AStatementPrivilege;
+use App\ATypPriv;
 
 class ProfileController extends Controller
 {
@@ -20,7 +24,7 @@ class ProfileController extends Controller
 		$users = session('user_name');
 		$type_education = DB::table('abit_typeEducation')->get();
 		$type_privileges = DB::table('abit_typePrivilege')->where('type', 1)->orderby('name','asc')->get();
-		$predmet_zno = DB::table('abit_predmets')->where('is_zno', 'T')->orderby('name', 'asc')->get();
+		$predmet_zno = APredmets::GetPredmetZNO();;
 		$abit_typeDoc = DB::table('abit_typeDoc')->orderby('name', 'asc')->get();
 
 		if ($request->session()->get('role_id') != 5)
@@ -103,16 +107,16 @@ class ProfileController extends Controller
 	{
 		$role = session('role_id');
 		$users = session('user_name');
+
 		if ($request->session()->get('role_id') != 5)
 		{
 			$pid = $request->session()->has('person_id') ? $request->session()->get('person_id') : $request->pid;
 		}
 		else $pid = $request->session()->get('person_id');
-
 		if ($request->session()->has('branch_id'))
 			$abit_branch = DB::table('abit_branch')->where('id', session('branch_id'))->get();
 		else
-		$abit_branch = DB::table('abit_branch')->get();
+			$abit_branch = DB::table('abit_branch')->get();
 
 		return view('ProfilePage.success_profile',
 			[
@@ -121,6 +125,106 @@ class ProfileController extends Controller
 				'username' 		=> $users,
 				'abit_branch'	=> $abit_branch,
 				'person_id'		=> $pid
+			]);
+	}
+
+	public function statement_dop_ball_save(Request $request)
+	{
+		$predmet_one = $request->dovuz_one;
+		$predmet_one_ball = $request->dovuz_one_ball;
+		$predmet_two = $request->dovuz_two;
+		$predmet_two_ball = $request->dovuz_two_ball;
+		$predmet_three = $request->dovuz_three;
+		$predmet_three_ball = $request->dovuz_three_ball;
+
+		$nagrada = $request->nagrada;
+		$nagrada_ball = $request->nagrada_ball;
+
+		$marafon = $request->marafon;
+
+		AStatementDovuz::delete_all($request->sid);
+		AStatementPrivilege::delete_all($request->sid);
+
+		if (isset($predmet_one) && isset($predmet_one_ball))
+		{
+			if ($predmet_one != -1 && trim($predmet_one_ball))
+			{
+				AStatementDovuz::new_record($request->sid, $predmet_one, $predmet_one_ball);
+			}
+		}
+		if (isset($predmet_two) && isset($predmet_two_ball))
+		{
+			if ($predmet_two != -1 && trim($predmet_two_ball))
+			{
+				AStatementDovuz::new_record($request->sid, $predmet_two, $predmet_two_ball);
+			}
+		}
+		if (isset($predmet_three) && isset($predmet_three_ball))
+		{
+			if ($predmet_three != -1 && trim($predmet_three_ball))
+			{
+				AStatementDovuz::new_record($request->sid, $predmet_three, $predmet_three_ball);
+			}
+		}
+		if (isset($nagrada) && isset($nagrada_ball))
+		{
+			if ($nagrada != -1 && trim($nagrada_ball))
+			{
+				AStatementPrivilege::new_record($request->sid, $nagrada, $nagrada_ball);
+			}
+		}
+		if (isset($marafon))
+		{
+			if (trim($marafon) == 'T')
+			{
+				AStatementPrivilege::new_record($request->sid, 26, 0);
+			}
+		}
+
+		return redirect('/profile?pid='.$request->pid);
+	}
+
+	public function statement_dop_ball(Request $request)
+	{
+		$role = session('role_id');
+		$users = session('user_name');
+		
+		$sid = $request->sid;
+
+		$predmet_dovuz = APredmets::GetPredmetDovuz();
+		$nagrada_list = ATypPriv::GetNagrad();
+
+		$pers_nagrada = AStatementPrivilege::GetStatPriv($sid);
+		$pers_marafon = AStatementPrivilege::GetStatMarafon($sid);
+		$pers_dovuz = AStatementDovuz::GetStatDovuz($sid);
+		$pers_dovuz_arr = [];
+		$i = 0;
+		foreach($pers_dovuz as $pd)
+		{
+			$pers_dovuz_arr += [
+				$i => [
+					'predmet_id' 	=> (int)$pd->predmet_id,
+					'ball'			=> (int)$pd->ball
+				]
+			];	
+			$i++;
+		}
+
+		if ($request->session()->get('role_id') != 5) $pid = $request->session()->has('person_id') ? $request->session()->get('person_id') : $request->pid;
+		else $pid = $request->session()->get('person_id');
+
+		return view('ProfilePage.dopBall',
+			[
+				'title' 		=> 'Дополнительные баллы',
+				'role' 			=> $role,
+				'username' 		=> $users,
+				'pid' 			=> $pid,
+				'sid' 			=> $sid,
+				'predmet_dovuz' => $predmet_dovuz,
+				'nagrada_list'	=> $nagrada_list,
+				'pers_nagrada'	=> $pers_nagrada,
+				'pers_marafon'	=> $pers_marafon,
+				'pers_dovuz_arr'=> $pers_dovuz_arr
 			]);
 	}
 
@@ -190,12 +294,14 @@ class ProfileController extends Controller
 						->where('person_id', $request->pid)
 						->whereNull('date_return');
 					})
-					->whereNotIn('g.id', [20, 29, 31, 37, 41, 46, 56, 57, 58, 59, 61, 63, 66, 68, 72, 73, 75, 76, 77, 99, 101, 107,
-																	111, 124, 126, 129, 131, 135, 136, 138, 139, 140, 169, 170, 171, 178, 181, 183, 187, 188, 190, 193, 191,
-																	192, 205, 206,
-																	217, 218, 219, 220, 221, 240, 245, 246, 247, 251, 254, 256, 260, 261, 263, 264, 265, 266, 278, 279, 281,
-																	288, 312, 313,
-																	315, 319, 325, 328, 329, 332, 335, 341, 352, 376])
+					->whereNotIn('g.id', [ 
+							19, 20, 29, 31, 37, 41, 46, 56, 57, 58, 59, 61, 63, 66, 68, 72, 73, 75, 76, 77, 99, 101, 107,
+							111, 124, 126, 129, 131, 135, 136, 138, 139, 140, 142, 165, 169, 170, 171, 178, 181, 183, 187, 
+							188, 190, 193, 191, 192, 205, 206, 217, 218, 219, 220, 221, 240, 245, 246, 247, 251, 254, 256, 
+							260, 261, 263, 264, 265, 266, 278, 279, 281, 288, 312, 313, 315, 319, 325, 328, 329, 332, 335,
+							341, 352, 376 
+						]
+					)
 					->orderBy('g.name', 'asc')->get();
 		$data = "<option>Выберите элемент</option>";
 		foreach ($group as $g) {

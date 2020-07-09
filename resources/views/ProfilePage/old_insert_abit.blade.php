@@ -118,7 +118,6 @@
 						<a onclick="$('#active_list').val('info-education');"      class="list-group-item list-group-item-action {{ Session::has('active_list') ? Session::get('active_list') == 'info-education' ? 'active' : '' : '' }}" data-toggle="list" href="#info-education">Документы об образовании</a>
 						<a onclick="$('#active_list').val('info-famaly');"         class="list-group-item list-group-item-action {{ Session::has('active_list') ? Session::get('active_list') == 'info-famaly' ? 'active' : '' : '' }}" data-toggle="list" href="#info-famaly">Информация о родителях</a>
 						<a onclick="$('#active_list').val('info-ball');"           class="list-group-item list-group-item-action {{ Session::has('active_list') ? Session::get('active_list') == 'info-ball' ? 'active' : '' : '' }}" data-toggle="list" href="#info-ball">Результаты ЕГЭ/ВНО</a>
-						<!--<a onclick="$('#active_list').val('info-ball');"           class="list-group-item list-group-item-action {{ Session::has('active_list') ? Session::get('active_list') == 'info-ball' ? 'active' : '' : '' }}" data-toggle="list" href="#info-photo">Фотографии документом</a> -->
 					</div>
 				</div>
 				<div class="col-md-9">
