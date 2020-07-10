@@ -294,14 +294,10 @@ class ProfileController extends Controller
 						->where('person_id', $request->pid)
 						->whereNull('date_return');
 					})
-					->whereNotIn('g.id', [ 
-							19, 20, 29, 31, 37, 41, 46, 56, 57, 58, 59, 61, 63, 66, 68, 72, 73, 75, 76, 77, 99, 101, 107,
-							111, 124, 126, 129, 131, 135, 136, 138, 139, 140, 142, 165, 169, 170, 171, 178, 181, 183, 187, 
-							188, 190, 193, 191, 192, 205, 206, 217, 218, 219, 220, 221, 240, 245, 246, 247, 251, 254, 256, 
-							260, 261, 263, 264, 265, 266, 278, 279, 281, 288, 312, 313, 315, 319, 325, 328, 329, 332, 335,
-							341, 352, 376 
-						]
-					)
+					->whereNotIn('g.id', function ($query) {
+						$query->select(DB::raw('group_id'))
+							  ->from('abit_removeGroup');
+					})
 					->orderBy('g.name', 'asc')->get();
 		$data = "<option>Выберите элемент</option>";
 		foreach ($group as $g) {

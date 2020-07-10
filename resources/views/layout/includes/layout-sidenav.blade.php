@@ -64,7 +64,7 @@
         @endif
         <!-- Основная страница -->
         <li class="sidenav-item{{ strpos($routeName, 'Report.') === 0 ?  ' active open' : '' }}">
-            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-document"></i><div>Отчеты</div></a>
+            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-ios-paper"></i><div>Отчеты</div></a>
 
             <ul class="sidenav-menu">
                 <li class="sidenav-item{{ $routeName == 'Report.dashboards-statistic' ? ' active' : '' }}">
