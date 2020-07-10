@@ -407,10 +407,11 @@ class ProfileController extends Controller
 						'group_id'			=> $request->abit_group,
 						'queue_number'		=> $count_in_group,
 						'shifr_statement'	=> $shifr,
-						'user_id'	=> $user_id
+						'user_id'			=> $user_id
 					]);
 
 					$group_exam = DB::table('abit_examenGroup')->where('group_id', $request->abit_group)->get();
+					$person = DB::table('persons')->where('id', $request->pid)->first();
 					foreach ($group_exam as $ge) {
 						$tmp = DB::table('abit_examCard')->where('state_id', $AStatement_id)->where('exam_id', $ge->id)->count();
 						if ($tmp == 0)
@@ -420,7 +421,7 @@ class ProfileController extends Controller
 								DB::table('abit_examCard')->insert(['state_id' => $AStatement_id, 'exam_id' => $ge->id, 'date_exam' => $grafik->date_exam]);
 							else
 								DB::table('abit_examCard')->insert(['state_id' => $AStatement_id, 'exam_id' => $ge->id]);
-
+							
 							$tmp = DB::table('pers_events')->where('pers_id', $request->pid)->where('event_id', '6')->first(); 	// ТУТ СТОИТ ФИКСИРОВАННОЕ ПОЛЕ EVENT_ID = 6, ЭТО КОСТЫЛЬ И ПРИДЕТСЯ МЕНЯТЬ КАЖДЫЙ ГОД ДАННОЕ ЧИСЛО ИЗ ТАБЛИЦЫ EVENTS
 							if ($tmp == null) $event_pers = DB::table('pers_events')->insertGetId([ 'pers_id' => $request->pid, 'event_id' => '6' ]);		// ТУТ СТОИТ ФИКСИРОВАННОЕ ПОЛЕ EVENT_ID = 6, ЭТО КОСТЫЛЬ И ПРИДЕТСЯ МЕНЯТЬ КАЖДЫЙ ГОД ДАННОЕ ЧИСЛО ИЗ ТАБЛИЦЫ EVENTS
 							else $event_pers = $tmp->id;
@@ -430,8 +431,12 @@ class ProfileController extends Controller
 							{
 								if ($grafik != null)
 									DB::table('pers_tests')->insert(['pers_id' => $request->pid, 'test_id' => $tid, 'pers_event_id' => $event_pers, 'start_time' => $grafik->date_exam ]);
-								else
-									DB::table('pers_tests')->insert(['pers_id' => $request->pid, 'test_id' => $tid, 'pers_event_id' => $event_pers ]);
+								else {
+									if ($person->is_checked == 'T')
+										DB::table('pers_tests')->insert(['pers_id' => $request->pid, 'test_id' => $tid, 'pers_event_id' => $event_pers, 'start_time' => date('Y-m-d H', time()) ]);
+									else
+										DB::table('pers_tests')->insert(['pers_id' => $request->pid, 'test_id' => $tid, 'pers_event_id' => $event_pers ]);
+								}
 							}
 						}
 					}
