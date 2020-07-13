@@ -215,3 +215,16 @@
 .st-table-block{
  padding: 20px;
 }
+.shown{
+ background-color: #fc5a5c;
+ color: White;
+}
+.shown:hover{
+ background-color: #fc5a5c !important;
+ color: White !important;
+}
+.st-title-fo{
+ text-align: center;
+ background-color: #ddd;
+ font-weight:  500;
+}

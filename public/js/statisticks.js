@@ -76,7 +76,7 @@ function statistic_table(full){
                api.column(groupColumn, {page:'current'} ).data().each( function ( group, i ) {
                    if ( last !== group ) {
                        $(rows).eq( i ).before(
-                           '<tr class="group"><td colspan="10" style="text-align:center; background-color:#ddd; font-weight: bold;">'+group+'</td></tr>'
+                           '<tr class="group"><td colspan="10" style="text-align:center; background-color:#4E5155; color: White; font-weight: 500;">'+group+'</td></tr>'
                        );
 
                        last = group;

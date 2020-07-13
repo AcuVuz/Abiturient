@@ -292,7 +292,18 @@ class Persons extends Model
 													$k +=[$i =>[ $key->famil,
 																										$key->Pname,
 																										$key->otch,
-																										$key->srbal
+																										$key->srbal,
+																										$key->medal,
+																										$key->lgot,
+																										$key->nagradi,
+																										$key->dovuz,
+																										$key->marafon,
+																										$key->count_exam,
+																										$key->name_exam,
+																										$key->exam_ball,
+																										$key->sum_ex_ball,
+																										$key->original,
+																										$key->foid
 																											]];
 													$i++;
 												}
