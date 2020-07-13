@@ -486,19 +486,19 @@ class ProfileController extends Controller
 				if($state->branch_id == 1)
 				{
 					Mail::send('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test], function ($message) use ($person) {
-						$message->from('abiturient@ltsu.org', 'Информация с abit.ltsu.org');
-						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись прошла проверку');
+						$message->from('abiturient.ltsu@google.com', 'Информация с abit.ltsu.org');
+						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша личная карта прошла проверку!');
 					});
 				} else {
 					Mail::send('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test], function ($message) use ($person) {
-						$message->from('rovfaculty@ltsu.org', 'Информация с abit.ltsu.org');
-						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись прошла проверку');
+						$message->from('abiturient.ltsu@google.com', 'Информация с abit.ltsu.org');
+						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша личная карта прошла проверку!');
 					});
 				}
 			} else {
 				Mail::send('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test], function ($message) use ($person) {
-					$message->from('abiturient@ltsu.org', 'Информация с abit.ltsu.org');
-					$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись прошла проверку');
+					$message->from('abiturient.ltsu@google.com', 'Информация с abit.ltsu.org');
+					$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша личная карта прошла проверку!');
 				});
 			}
 		}
@@ -885,7 +885,7 @@ class ProfileController extends Controller
 			if (isset($request->email_abit))
 			{
 				Mail::send('RegisterPage.email', ['login' => $login, 'pass' => $pass, 'fio' => $famil.' '.$name.' '.$otch], function ($message) use ($request) {
-					$message->from('asu@ltsu.org', 'ЛНУ имени Тараса Шевченко');
+					$message->from('abiturient.ltsu@google.com', 'ЛНУ имени Тараса Шевченко');
 					$message->to($request->email_abit, $request->First_Name.' '.$request->Name.' '.$request->Last_Name)->subject('Создание аккаунта на abit.ltsu.org');
 				});
 			}
@@ -995,19 +995,19 @@ class ProfileController extends Controller
 				if($state->branch_id == 1)
 				{
 					Mail::send('MailsTemplate.MailUnCheckedAbit', ['person' => $person, 'comment' => $request->comment], function ($message) use ($person) {
-						$message->from('abiturient@ltsu.org', 'Информация с abit.ltsu.org');
-						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись не прошла проверку');
+						$message->from('abiturient.ltsu@google.com', 'Приемная комиссия');
+						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша личная карта не прошла проверку!');
 					});
 				} else {
 					Mail::send('MailsTemplate.MailUnCheckedAbit', ['person' => $person, 'comment' => $request->comment], function ($message) use ($person) {
-						$message->from('rovfaculty@ltsu.org', 'Информация с abit.ltsu.org');
-						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись не прошла проверку');
+						$message->from('abiturient.ltsu@google.com', 'Приемная комиссия');
+						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша личная карта не прошла проверку!');
 					});
 				}
 			} else {
 				Mail::send('MailsTemplate.MailUnCheckedAbit', ['person' => $person, 'comment' => $request->comment], function ($message) use ($person) {
-					$message->from('abiturient@ltsu.org', 'Информация с abit.ltsu.org');
-					$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись не прошла проверку');
+					$message->from('abiturient.ltsu@google.com', 'Приемная комиссия');
+					$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша личная карта не прошла проверку!');
 				});
 			}
 		}

@@ -78,7 +78,7 @@ class RegisterController extends Controller
 
             $verificate_link = 'http://abit.ltsu.org/verificate?v='.$secret_string.'&email='.$email;
             Mail::send('RegisterPage.email', ['link' => $verificate_link, 'fio' => $fio], function ($message) use ($request) {
-                $message->from('asu@ltsu.org', 'ЛНУ имени Тараса Шевченко');
+                $message->from('abiturient.ltsu@gmail.com', 'ЛНУ имени Тараса Шевченко');
                 $message->to($request->Email, $request->First_Name.' '.$request->Name.' '.$request->Last_Name)->subject('Регистрация аккаунта на abit.ltsu.org');
             });
             return 0;
