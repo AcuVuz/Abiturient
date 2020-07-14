@@ -23,8 +23,8 @@
                 form.action = 'https://test.ltsu.org/test/start';
                 form.method = 'POST';
                 form.innerHTML = '<input type="hidden" name="ptid" value="' + testPersId + '"><input name="_hash" value="' + hash + '">{{ csrf_field() }}';
-                //document.body.append(form);
-                $('#loadForm').html(form);
+                document.body.append(form);
+                //$('#loadForm').html(form);
 				form.submit();
             }
         }
@@ -36,8 +36,8 @@
             form.method = 'POST';
             form.target = '_blank';
             form.innerHTML = '<input type="hidden" name="ptid" value="' + testPersId + '"><input name="_hash" value="' + hash + '">{{ csrf_field() }}';
-            //document.body.append(form);
-            $('#loadForm').html(form);
+            document.body.append(form);
+            //$('#loadForm').html(form);
 			form.submit();
         }
 
