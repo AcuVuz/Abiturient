@@ -355,6 +355,7 @@
 		<img src="{{ $person->photo_url }}" alt="" class="d-block ui-w-100 rounded-circle" id="photo_main">
 		<div class="media-body ml-4">
 			<h4 class="font-weight-bold mb-0">{{ $person->famil.' '.$person->name.' '.$person->otch }}</h4>
+			<div class="text-muted mb-2">Логин: {{ $person->login }}</div>
 			<div class="text-muted mb-2">E-mail: {{ $person->email }}</div>
 			<span class="profile-time-func">
 				<a href="javascript:void(0)" class="btn btn-primary btn-sm" onclick="FindFile();">

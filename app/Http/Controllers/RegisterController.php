@@ -71,16 +71,16 @@ class RegisterController extends Controller
                     'otch'          => $otch,
                     'user_hash'     => Hash::make($login.Hash::make($pass)),
                     'PIN'           => $pin,
-                    'secret_string' => $secret_string,
+                    //'secret_string' => $secret_string,
                     'pers_type'     => 'a'
                 ]
             );
 
-            $verificate_link = 'http://abit.ltsu.org/verificate?v='.$secret_string.'&email='.$email;
+            /*$verificate_link = 'http://abit.ltsu.org/verificate?v='.$secret_string.'&email='.$email;
             Mail::send('RegisterPage.email', ['link' => $verificate_link, 'fio' => $fio], function ($message) use ($request) {
                 $message->from('abiturient.ltsu@gmail.com', 'ЛНУ имени Тараса Шевченко');
                 $message->to($request->Email, $request->First_Name.' '.$request->Name.' '.$request->Last_Name)->subject('Регистрация аккаунта на abit.ltsu.org');
-            });
+            });*/
             return 0;
         } else if (!$verify['success']) {
             return 1;

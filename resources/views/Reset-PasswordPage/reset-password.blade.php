@@ -3,41 +3,117 @@
 @section('styles')
     <!-- Page -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/authentication.css') }}">
+    <script src="{{ asset('js/jquery.js') }}"></script>
+		<script>
+            var blockedEmail = false;
+            var blockedLogin = false;
+			function check_login() {
+                var log = $("#login").val().trim();
+                $.ajax({
+                    url: '/Check_login',
+                    type: 'POST',
+                    data: {
+                        log: log
+                    },
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(data) {
+                        if (data == -1) {
+                            blockedLogin = true;
+                        } else {
+                            blockedLogin = false;
+                        }
+                        if (blockedEmail && blockedLogin) $('#password').show();
+                        else $('#password').hide();
+                    },
+                    error: function(msg) {
+                        alert('Error, try again');
+                    }
+                });
+            }
+
+            function check_email() {
+                var email = $("#email").val().trim();
+                $.ajax({
+                    url: '/Check_email',
+                    type: 'POST',
+                    data: {
+                        email: email
+                    },
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(data) {
+                        if (data == -1) {
+                            blockedEmail = true;
+                        } else {
+                            blockedEmail = false;
+                        }
+                        if (blockedEmail && blockedLogin) $('#password').show();
+                        else $('#password').hide();
+                    },
+                    error: function(msg) {
+                        alert('Error, try again');
+                    }
+                });
+            }
+
+            function check_pass()
+            {
+                if ($('#password').val().trim() != '') $('#ButtonFormAuth').prop('disabled', false);
+                else $('#ButtonFormAuth').prop('disabled', true);
+            }
+
+            function reset_pwd()
+            {
+                $.ajax({
+                    url: '/reset_pwd/reset',
+                    type: 'GET',
+                    data: $('#resetForm').serialize(),
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(data) {
+                        if (data == -1) {
+                            Alert('Произошла ошибка при смене пароля, повторите попытку!');
+                        } else {
+                            window.location.href = "/";
+                        }
+                    },
+                    error: function(msg) {
+                        alert('Error, try again');
+                    }
+                });
+            }
+		</script>
 @endsection
 
 @section('content')
     <div class="authentication-wrapper authentication-2 px-4">
         <div class="authentication-inner py-5">
-
             <!-- Form -->
-            <form class="card" action="Login-Page.html">
+            <form class="card" action="" method="GET" name="resetForm" id="resetForm">
+                {{ csrf_field() }}
                 <div class="p-4 p-sm-5">
-
                     <!-- Logo -->
-                    <div class="d-flex justify-content-center align-items-center pb-2 mb-4">
-                        <div class="ui-w-60">
-                            <div class="w-100 position-relative" style="padding-bottom: 54%">
-                                <svg class="w-100 h-100 position-absolute" viewBox="0 0 148 80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><linearGradient id="a" x1="46.49" x2="62.46" y1="53.39" y2="48.2" gradientUnits="userSpaceOnUse"><stop stop-opacity=".25" offset="0"></stop><stop stop-opacity=".1" offset=".3"></stop><stop stop-opacity="0" offset=".9"></stop></linearGradient><linearGradient id="e" x1="76.9" x2="92.64" y1="26.38" y2="31.49" xlink:href="#a"></linearGradient><linearGradient id="d" x1="107.12" x2="122.74" y1="53.41" y2="48.33" xlink:href="#a"></linearGradient></defs><path class="fill-primary" transform="translate(-.1)" d="M121.36,0,104.42,45.08,88.71,3.28A5.09,5.09,0,0,0,83.93,0H64.27A5.09,5.09,0,0,0,59.5,3.28L43.79,45.08,26.85,0H.1L29.43,76.74A5.09,5.09,0,0,0,34.19,80H53.39a5.09,5.09,0,0,0,4.77-3.26L74.1,35l16,41.74A5.09,5.09,0,0,0,94.82,80h18.95a5.09,5.09,0,0,0,4.76-3.24L148.1,0Z"></path><path transform="translate(-.1)" d="M52.19,22.73l-8.4,22.35L56.51,78.94a5,5,0,0,0,1.64-2.19l7.34-19.2Z" fill="url(#a)"></path><path transform="translate(-.1)" d="M95.73,22l-7-18.69a5,5,0,0,0-1.64-2.21L74.1,35l8.33,21.79Z" fill="url(#e)"></path><path transform="translate(-.1)" d="M112.73,23l-8.31,22.12,12.66,33.7a5,5,0,0,0,1.45-2l7.3-18.93Z" fill="url(#d)"></path></svg>
-                            </div>
-                        </div>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <img src="{{ asset("images/logo.png") }}" alt="" style="width: 100px; height: auto; margin-bottom: 25px;">
                     </div>
                      <!--/ Logo -->
-
                     <h5 class="text-center text-muted font-weight-normal mb-4">Восстановление пароля</h5>
-
                     <hr class="mt-0 mb-4">
-
-                    <p>
-                        Восстановленный пароль будет отправлен на ваш email
-                    </p>
-
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Введите ваш логин">
+                        <input class="form-control" type="text" name="login" id="login" placeholder="Логин" value="" onkeyup="check_login()" required/>
                     </div>
-
-                    <button type="button" class="btn btn-primary btn-block">Отправить сообщение</button>
-
-                </div>
+                    <div class="form-group">
+                        <input class="form-control" type="email" name="email" id="email" placeholder="Email" value="" onkeyup="check_email()" required/>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="password" name="password" id="password" placeholder="Новый пароль" value="" style="display: none;" onkeyup="check_pass()" required/>
+                    </div>
+                    <input type="button" name="ButtonFormAuth" value="Восстановить пароль" class="btn btn-primary btn-block" id="ButtonFormAuth" onClick="reset_pwd()" disabled />
+				</div>
             </form>
             <!-- / Form -->
 
