@@ -410,6 +410,8 @@ class ProfileController extends Controller
 						'user_id'			=> $user_id
 					]);
 
+					$state = DB::table('abit_statements')->where('id', $AStatement_id)->first();
+
 					$group_exam = DB::table('abit_examenGroup')->where('group_id', $request->abit_group)->get();
 					$person = DB::table('persons')->where('id', $request->pid)->first();
 					foreach ($group_exam as $ge) {
@@ -432,7 +434,7 @@ class ProfileController extends Controller
 								if ($grafik != null)
 									DB::table('pers_tests')->insert(['pers_id' => $request->pid, 'test_id' => $tid, 'pers_event_id' => $event_pers, 'start_time' => $grafik->date_exam ]);
 								else {
-									if ($person->is_checked == 'T')
+									if (($person->is_checked == 'T') && (strtotime($state->date_crt) <= strtotime('2020-07-15 00:00:00')))
 										DB::table('pers_tests')->insert(['pers_id' => $request->pid, 'test_id' => $tid, 'pers_event_id' => $event_pers, 'start_time' => date('Y-m-d H', time()) ]);
 									else
 										DB::table('pers_tests')->insert(['pers_id' => $request->pid, 'test_id' => $tid, 'pers_event_id' => $event_pers ]);
@@ -464,7 +466,9 @@ class ProfileController extends Controller
 							->where('pr.test_id', $pt->test_id)
 							->whereIn('g.st_id', [1, 2])
 							->count();
-			if ($statements == 0)
+			$state = DB::table('abit_statements')->where('person_id', $person->id)->orderby('id', 'desc')->first();
+				
+			if (($statements == 0) && (strtotime($state->date_crt) <= strtotime('2020-07-15 00:00:00')))
 				DB::table('pers_tests')->where('id', $pt->id)->update([ 'start_time' => date('Y-m-d H', time()) ]);
 		}
 		$pers_test = DB::table('pers_tests as pt')
@@ -486,19 +490,19 @@ class ProfileController extends Controller
 				if($state->branch_id == 1)
 				{
 					Mail::send('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test], function ($message) use ($person) {
-						$message->from('abiturient@ltsu.org', 'Информация с abit.ltsu.org');
-						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись прошла проверку');
+						$message->from('abiturient.ltsu@google.com', 'Информация с abit.ltsu.org');
+						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша личная карта прошла проверку!');
 					});
 				} else {
 					Mail::send('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test], function ($message) use ($person) {
-						$message->from('rovfaculty@ltsu.org', 'Информация с abit.ltsu.org');
-						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись прошла проверку');
+						$message->from('abiturient.ltsu@google.com', 'Информация с abit.ltsu.org');
+						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша личная карта прошла проверку!');
 					});
 				}
 			} else {
 				Mail::send('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test], function ($message) use ($person) {
-					$message->from('abiturient@ltsu.org', 'Информация с abit.ltsu.org');
-					$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись прошла проверку');
+					$message->from('abiturient.ltsu@google.com', 'Информация с abit.ltsu.org');
+					$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша личная карта прошла проверку!');
 				});
 			}
 		}
@@ -885,7 +889,7 @@ class ProfileController extends Controller
 			if (isset($request->email_abit))
 			{
 				Mail::send('RegisterPage.email', ['login' => $login, 'pass' => $pass, 'fio' => $famil.' '.$name.' '.$otch], function ($message) use ($request) {
-					$message->from('asu@ltsu.org', 'ЛНУ имени Тараса Шевченко');
+					$message->from('abiturient.ltsu@google.com', 'ЛНУ имени Тараса Шевченко');
 					$message->to($request->email_abit, $request->First_Name.' '.$request->Name.' '.$request->Last_Name)->subject('Создание аккаунта на abit.ltsu.org');
 				});
 			}
@@ -995,19 +999,19 @@ class ProfileController extends Controller
 				if($state->branch_id == 1)
 				{
 					Mail::send('MailsTemplate.MailUnCheckedAbit', ['person' => $person, 'comment' => $request->comment], function ($message) use ($person) {
-						$message->from('abiturient@ltsu.org', 'Информация с abit.ltsu.org');
-						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись не прошла проверку');
+						$message->from('abiturient.ltsu@google.com', 'Приемная комиссия');
+						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша личная карта не прошла проверку!');
 					});
 				} else {
 					Mail::send('MailsTemplate.MailUnCheckedAbit', ['person' => $person, 'comment' => $request->comment], function ($message) use ($person) {
-						$message->from('rovfaculty@ltsu.org', 'Информация с abit.ltsu.org');
-						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись не прошла проверку');
+						$message->from('abiturient.ltsu@google.com', 'Приемная комиссия');
+						$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша личная карта не прошла проверку!');
 					});
 				}
 			} else {
 				Mail::send('MailsTemplate.MailUnCheckedAbit', ['person' => $person, 'comment' => $request->comment], function ($message) use ($person) {
-					$message->from('abiturient@ltsu.org', 'Информация с abit.ltsu.org');
-					$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша учетная запись не прошла проверку');
+					$message->from('abiturient.ltsu@google.com', 'Приемная комиссия');
+					$message->to($person->email, $person->famil.' '.$person->name.' '.$person->otch)->subject('Ваша личная карта не прошла проверку!');
 				});
 			}
 		}

@@ -238,7 +238,7 @@
 									<input name="country" type="text" class="form-control " value="{{ isset($person) ? $person->country : '' }}" >
 								</div>
 								<div class="form-group">
-									<label class="form-label">Обсласть
+									<label class="form-label">Область
 										<span class="text-danger">*</span>
 									</label>
 									<input name="adr_obl" type="text" class="form-control " value="{{ isset($person) ? $person->adr_obl : '' }}" >

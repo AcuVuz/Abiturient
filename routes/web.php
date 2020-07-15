@@ -12,8 +12,9 @@
 */
 //=============== ГРУППА РОУТОВ ДЛЯ ПРОВЕРКИ ВРЕМЕНИ РАБОТЫ ================================//
 Route::get('/timeout', 'Error\ErrorsController@Timeout');
+Route::get('/reset_pwd/reset', 'ResetPasswordController@resetPassword');
 Route::middleware(['timeout'])->group(function () {
- Route::post('register', 'RegisterController@create')->name('register');
+    Route::post('register', 'RegisterController@create')->name('register');
 });
 
  //=============== ГРУППА РОУТОВ ДЛЯ ПРОВЕРКИ АВТОРИЗАЦИИ И ВРЕМЕНИ РАБОТЫ ================================//

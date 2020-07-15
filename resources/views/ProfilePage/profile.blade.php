@@ -24,7 +24,8 @@
                 form.method = 'POST';
                 form.innerHTML = '<input type="hidden" name="ptid" value="' + testPersId + '"><input name="_hash" value="' + hash + '">{{ csrf_field() }}';
                 document.body.append(form);
-                form.submit();
+                //$('#loadForm').html(form);
+				form.submit();
             }
         }
 
@@ -36,7 +37,8 @@
             form.target = '_blank';
             form.innerHTML = '<input type="hidden" name="ptid" value="' + testPersId + '"><input name="_hash" value="' + hash + '">{{ csrf_field() }}';
             document.body.append(form);
-            form.submit();
+            //$('#loadForm').html(form);
+			form.submit();
         }
 
 		function toggle_table(id){
@@ -84,7 +86,8 @@
 					form.method = 'POST';
 					form.target = '_blank';
 					form.innerHTML = '<input type="hidden" name="ptid" value="' + l_ptid + '"><input name="_hash" value="' + l_hash + '">{{ csrf_field() }}';
-					document.body.append(form);
+					//document.body.append(form);
+					$('#loadForm').html(form);
 					form.submit();
 				}
 			}
@@ -352,6 +355,7 @@
 		<img src="{{ $person->photo_url }}" alt="" class="d-block ui-w-100 rounded-circle" id="photo_main">
 		<div class="media-body ml-4">
 			<h4 class="font-weight-bold mb-0">{{ $person->famil.' '.$person->name.' '.$person->otch }}</h4>
+			<div class="text-muted mb-2">Логин: {{ $person->login }}</div>
 			<div class="text-muted mb-2">E-mail: {{ $person->email }}</div>
 			<span class="profile-time-func">
 				<a href="javascript:void(0)" class="btn btn-primary btn-sm" onclick="FindFile();">

@@ -125,7 +125,8 @@ $(document).on('click', '#reg', function(e) {
 function popupShow() {
     Swal.fire({
         showCancelButton: true,
-        text: 'На указанный Вами email отправлено сообщение\n для завершения регистрации!',
+        //text: 'На указанный Вами email отправлено сообщение\n для завершения регистрации!',
+        text: 'Регистрация прошла успешно!',
         inputPlaceholder: '******',
         inputAttributes: {
             maxlength: 10,
