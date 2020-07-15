@@ -112,6 +112,7 @@ Route::get('/support', 'Support\SupportController@index')->middleware('check');
 
 Route::post('/discard_checked_abit', 'ProfileController@DiscardCheckedAbit');
 
+
 Route::get('/repzajav', function(){
  return view('ReportPages.Report_Zajav');
 });
@@ -123,6 +124,10 @@ Route::get('/reprasp', function(){
 Route::get('/replichkart', function(){
  return view('ReportPages.Report_LichKarta');
 });
+Route::get('/repmag', function(){
+ return view('ReportPages.Report_Magistr');
+});
+
 
 
 Route::get('/statistic', function(){
