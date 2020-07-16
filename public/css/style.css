@@ -228,3 +228,8 @@
  background-color: #ddd;
  font-weight:  500;
 }
+.tfix th{
+ background-color: #e8e8e9;
+ position: sticky;
+ top: 0;
+}

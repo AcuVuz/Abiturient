@@ -120,7 +120,7 @@ $(function() {
 
 
   return '<table class="ss">' +
-         '<thead>' +
+         '<thead class="tfix">' +
          '<th>ФИО</th>' +
          '<th>Средний балл документа об образовании</th>' +
          '<th>Медаль</th>' +

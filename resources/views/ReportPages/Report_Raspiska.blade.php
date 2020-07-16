@@ -12,7 +12,7 @@
 			}
 			.wrap-list{
 				width: 297mm;
-				height: 210mm;
+				height: 160mm;
 				font-family: "Times New Roman", Times, serif;
 			}
 			.pr_doc_ol li{
@@ -40,16 +40,16 @@
 	</head>
 	<body class="body-report">
 		<div class="wrap-list">
-			<div class="col" style="width: 145.5mm; height: 100%; float: left;">
-				<div class="row" style="margin: 5mm 10mm 0mm 12mm; font-size: 18px;">
+			<div class="col" style="width: 145.5mm; height: auto; float: left;">
+				<div class="row" style="margin: 5mm 10mm 0mm 5mm; font-size: 18px;">
 					<table>
 						<tr>
 							<td><b>ОПИСЬ ЛИЧНОГО ДЕЛА</b></td>
-							<td style="padding-left: 12mm;"><b>ШИФР {{ $statement->shifr_statement }}</b></td>
+							<td style="padding-left: 8mm;"><b>ШИФР {{ $statement->shifr_statement }}</b></td>
 						</tr>
 					</table>
 				</div>
-				<div class="row" style="margin-left: 12mm; margin-top: 2mm;">
+				<div class="row" style="margin-left: 5mm; margin-top: 2mm;">
 					<table>
 						<tr>
 							<td>
@@ -68,7 +68,7 @@
 						</tr>
 					</table>
 				</div>
-				<div class="row" style="margin-left: 12mm; margin-top: 2mm;">
+				<div class="row" style="margin-left: 5mm; margin-top: 2mm;">
 					<p style="font-size: 18px;"><b>Принятые документы:</b></p>
 					<ol class="pr_doc_ol" style="padding:0; padding-left: 4mm; max-width: 120mm;">
 						<li>Заявление</li>
@@ -81,7 +81,7 @@
 						@endforeach
 					</ol>
 				</div>
-				<div class="row" style="margin-left: 12mm; padding-right: 40px; margin-top: 55mm">
+				<div class="row" style="margin-left: 5mm; padding-right: 40px; margin-top: 45mm">
 					<table class="table_doc_vozr" border="1" cellspacing="0" style="font-size: 14px">
 						<thead>
 							<th colspan="2">Документы приняты</th>
@@ -115,12 +115,12 @@
 					</table>
 				</div>
 			</div>
-			<div class="col" style="width: 3mm; height: 93.5%;  float: left; padding-top: 13mm;">
+			<div class="col" style="width: 3mm; height: 77.5%;  float: left; padding-top: 21mm;">
 				<div style="height: 87%; border-left:1px solid black; border-right:1px solid black;">
 				</div>
 			</div>
-			<div class="col" style="width: 146mm; height: 100%; float: left;">
-				<div class="row" style="margin: 5mm 10mm 0mm 12mm; font-size: 15px;">
+			<div class="col" style="width: 146mm; height: auto; float: left;">
+				<div class="row" style="margin: 5mm 10mm 0mm 5mm; font-size: 15px;">
 					<p style="text-decoration: underline"><b>{{ $statement->branch_name }}</b></p>
 				</div>
 				<div class="row" style="text-align: center;">
@@ -154,7 +154,7 @@
 						@endforeach
 					</ol>
 				</div>
-				<div class="row" style="margin-left: 5mm; max-width: 122mm; padding-top: 50mm;">
+				<div class="row" style="margin-left: 5mm; max-width: 122mm; padding-top: 30mm;">
 					<table>
 						<tr>
 							<td>Печать <p style="margin-top: -4mm;"></p>&nbsp &nbsp Вуза</td>
