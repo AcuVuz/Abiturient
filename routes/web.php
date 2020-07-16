@@ -53,7 +53,6 @@ Route::post('/Check_email', 'RegisterController@check_email');
 Route::get('/verificate', 'RegisterController@verificate');
 //=============== Отображение страницы dashboard ==================================//
 Route::get('/dashboard', 'DashboardController@index')->name('dashboards.dashboard-1')->middleware('check');
-Route::get('/vedomost', 'VedomostController@index')->name('dashboards.dashboard-vedomost')->middleware('check');
 //=============== Вызгрузка данных json в таблицу dashboard ================================//
 Route::get('/loadTable', 'DashboardController@loadTable');
 
@@ -71,6 +70,16 @@ Route::post('/direction/get_facultet', 'DirectionController@get_facultet');
 Route::post('/direction/get_group', 'DirectionController@get_group');
 Route::post('/direction/get_predmet', 'DirectionController@get_predmet');
 Route::post('/direction/search_predmet', 'DirectionController@search_predmet');
+
+Route::get('/vedomost', 'VedomostController@index')->name('dashboards.dashboard-vedomost')->middleware('check');
+Route::post('/vedomost/create', 'VedomostController@create')->middleware('check');
+Route::get('/vedomost/print', 'PrintController@vedomost')->middleware('check');
+Route::post('/vedomost/get_facultet', 'VedomostController@get_facultet')->middleware('check');
+Route::post('/vedomost/get_stlevel', 'VedomostController@get_stlevel')->middleware('check');
+Route::post('/vedomost/get_form_obuch', 'VedomostController@get_form_obuch')->middleware('check');
+Route::post('/vedomost/get_group', 'VedomostController@get_group')->middleware('check');
+Route::post('/vedomost/get_predmet', 'VedomostController@get_predmet')->middleware('check');
+Route::post('/vedomost/get_vedomost', 'VedomostController@get_vedomost')->middleware('check');
 //=============== Сохрание данных направления и теста ================================//
 Route::post('/direction/save', 'DirectionController@save');
 //=============== Отображение шаблона Направления ================================//
@@ -127,7 +136,7 @@ Route::get('/replichkart', function(){
  return view('ReportPages.Report_LichKarta');
 });
 Route::get('/repmag', function(){
- return view('ReportPages.Report_Magistr');
+ return view('ReportPages.Report_vedomost');
 });
 Route::get('/repekzcart', function(){
  return view('ReportPages.Report_Ekzcart');

@@ -53,13 +53,11 @@
                     <a href="#" id="print_statement"target="_blank" class="sidenav-link"><div>Заявление</div></a>
                 </li>
             </ul>
-            @if($role == 1)
-                <ul class="sidenav-menu" id="print_examSheet_menu" style="display: none;">
-                    <li class="sidenav-item{{ $routeName == 'print.examSheet' ? ' active' : '' }}">
-                        <a href="#" id="print_examSheet" target="_blank" class="sidenav-link"><div>Экзаменационный лист</div></a>
-                    </li>
-                </ul>
-            @endif
+            <ul class="sidenav-menu" id="print_examSheet_menu" style="display: none;">
+                <li class="sidenav-item{{ $routeName == 'print.examSheet' ? ' active' : '' }}">
+                    <a href="#" id="print_examSheet" target="_blank" class="sidenav-link"><div>Экзаменационный лист</div></a>
+                </li>
+            </ul>
             <ul class="sidenav-menu" id="print_fullReport_menu" style="display: none;">
                 <li class="sidenav-item{{ $routeName == 'print.fullReport' ? ' active' : '' }}">
                     <a href="#" onclick="fullResult();" id="print_fullReport" class="sidenav-link"><div>Полный отчет тестирования</div></a>

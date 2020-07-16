@@ -47,4 +47,20 @@ class APredmets extends Model
 					->get();
 		return $predmet;
 	}
+
+	static public function GetGroupPredmet($group_id)
+	{
+		$predmet = APredmets::
+					select (
+						'abit_predmets.id',
+						'eg.id as exid',
+						'abit_predmets.name'
+					)
+					->leftjoin('abit_examenGroup as eg', 'eg.predmet_id', 'abit_predmets.id')
+					->where('eg.group_id', $group_id)
+                    ->where('abit_predmets.is_vuz', 'T')
+                    ->orderby('abit_predmets.name', 'asc')
+					->get();
+		return $predmet;
+	}
 }
