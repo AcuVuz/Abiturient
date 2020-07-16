@@ -53,6 +53,7 @@ Route::post('/Check_email', 'RegisterController@check_email');
 Route::get('/verificate', 'RegisterController@verificate');
 //=============== Отображение страницы dashboard ==================================//
 Route::get('/dashboard', 'DashboardController@index')->name('dashboards.dashboard-1')->middleware('check');
+Route::get('/vedomost', 'VedomostController@index')->name('dashboards.dashboard-vedomost')->middleware('check');
 //=============== Вызгрузка данных json в таблицу dashboard ================================//
 Route::get('/loadTable', 'DashboardController@loadTable');
 

@@ -28,6 +28,11 @@
                     <a href="/dashboard" class="sidenav-link"><div>Список абитуриентов</div></a>
                 </li>
             </ul>
+            <ul class="sidenav-menu">
+                <li class="sidenav-item{{ $routeName == 'dashboards.dashboard-vedomost' ? ' active' : '' }}">
+                    <a href="/vedomost" class="sidenav-link"><div>Ведомости</div></a>
+                </li>
+            </ul>
         </li>
         <!-- Печать документов -->
         @if ($routeName == 'profile')
@@ -65,7 +70,6 @@
         <!-- Основная страница -->
         <li class="sidenav-item{{ strpos($routeName, 'Report.') === 0 ?  ' active open' : '' }}">
             <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-ios-paper"></i><div>Отчеты</div></a>
-
             <ul class="sidenav-menu">
                 <li class="sidenav-item{{ $routeName == 'Report.dashboards-statistic' ? ' active' : '' }}">
                     <a href="/statistic" class="sidenav-link"><div>Статистика заявлений</div></a>
