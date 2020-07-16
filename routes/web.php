@@ -129,7 +129,9 @@ Route::get('/replichkart', function(){
 Route::get('/repmag', function(){
  return view('ReportPages.Report_Magistr');
 });
-
+Route::get('/repekzcart', function(){
+ return view('ReportPages.Report_Ekzcart');
+});
 
 
 Route::get('/statistic', function(){
