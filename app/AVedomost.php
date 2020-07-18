@@ -32,6 +32,9 @@ class AVedomost extends Model
 	static public function CountPers($ved_id)
 	{
 		$query = AExamsCard::select('abit_examCard.*')
+					->leftjoin('abit_statements as st', 'st.id', 'abit_examCard.state_id')
+					->whereNull('st.date_return')
+					->whereNotNull('abit_examCard.ball')
 					->where('abit_examCard.ved_id', $ved_id)
 					->count();
 
@@ -55,7 +58,14 @@ class AVedomost extends Model
 	static public function FillVedomost($ved_id, $limit, $actual, $examenGroup_id, $date_exam)
 	{
 		$lim = $limit - $actual;
-		$examCard = AExamsCard::select('id')->whereNull('ved_id')->where('exam_id', $examenGroup_id)->limit($lim)->get();
+		$examCard = AExamsCard::select('abit_examCard.id')
+					->leftjoin('abit_statements as st', 'st.id', 'abit_examCard.state_id')
+					->whereNull('st.date_return')
+					->whereNull('ved_id')
+					->whereNotNull('abit_examCard.ball')
+					->where('exam_id', $examenGroup_id)
+					->limit($lim)
+					->get();
 		
 		foreach ($examCard as $ec) {
 			$ec->ved_id = $ved_id;
@@ -69,6 +79,7 @@ class AVedomost extends Model
 	{
 		$query = AExamsCard::
 						select(
+							'st.id',
 							'st.shifr_statement',
 							'pers.famil',
 							'pers.name',
@@ -80,5 +91,34 @@ class AVedomost extends Model
 						->where('ved_id', $ved_id)
 						->get();
 		return $query;
+	}
+
+	static public function GetInfo($ved_id)
+	{
+		$query = AVedomost::select(
+						'fo.name as fo_name',
+						'st.name as st_name',
+						'te.name as te_name',
+						'p.name as predmet_name',
+						'abit_vedomost.date_vedom',
+						'g.name as group_name',
+						'g.minid',
+						'st.id as st_id'
+					)
+					->leftjoin('abit_examenGroup as eg', 'eg.id', 'abit_vedomost.examenGroup_id')
+					->leftjoin('abit_group as g', 'g.id', 'eg.group_id')
+					->leftjoin('abit_formObuch as fo', 'fo.id', 'g.fo_id')
+					->leftjoin('abit_stlevel as st', 'st.id', 'g.st_id')
+					->leftjoin('abit_typeExam as te', 'te.id', 'abit_vedomost.type_exam_id')
+					->leftjoin('abit_predmets as p', 'p.id', 'eg.predmet_id')
+					->where('abit_vedomost.id', $ved_id)
+					->first();
+		return $query;
+	}
+
+	static public function remove($ved_id)
+	{
+		$query = AVedomost::select('*')->where('id', $ved_id)->first();
+        $query->delete();
 	}
 }

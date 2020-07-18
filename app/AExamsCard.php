@@ -23,4 +23,16 @@ class AExamsCard extends Model
 
 		return $query;
 	}
+
+	static public function GetAllExamCard($examen_id)
+	{
+		$query = AExamsCard::select('abit_examCard.*')
+					->leftjoin('abit_statements as st', 'st.id', 'abit_examCard.state_id')
+					->whereNull('st.date_return')
+					->whereNull('ved_id')
+					->whereNotNull('ball')
+					->where('exam_id', $examen_id)
+					->get();
+		return $query;
+	}
 }

@@ -12,6 +12,7 @@ use App\ADocument;
 use App\ASertificate;
 use App\APersPriv;
 use App\AExamsCard;
+use App\AVedomost;
 
 class PrintController extends Controller
 {
@@ -164,7 +165,22 @@ class PrintController extends Controller
 	}
 	public function vedomost(Request $request)
 	{ 
-		PrintController::numberToRussian(33);
-		return view('ReportPages.Report_vedomost');
+		$vedomost = AVedomost::GetPersVedomost($request->ved_id);   
+		$ved_info = AVedomost::GetInfo($request->ved_id);
+		$text_ball = [];
+
+		foreach ($vedomost as $ved) {
+			$text_ball += [
+				$ved->id => PrintController::numberToRussian($ved->ball)
+			];
+		}
+		
+		return view('ReportPages.Report_vedomost', 
+			[
+				'vedomost' 	=> $vedomost,
+				'text_ball'	=> $text_ball,
+				'ved_info'	=> $ved_info
+			]
+		);
 	}
 }

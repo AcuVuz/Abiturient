@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\ABranch;
+use App\AExamsCard;
 use App\AFormObuch;
 use App\AGroup;
 use App\AFacultet;
@@ -93,35 +94,49 @@ class VedomostController extends Controller
         $i = 1;
 		foreach ($vedomost as $v) {
             $count = AVedomost::CountPers($v->id);
-            $data .= "<tr>";
+            $data .= "<tr onclick='ved_id=".$v->id."'>";
             $data .= "<td>".$i."</td>";
             $data .= "<td>".$v->id."</td>";
             $data .= "<td>".$v->name."</td>";
             $data .= "<td>".$v->date_vedom."</td>";
             $data .= "<td>".$count."</td>";
-            $data .= "</tr>";
+			$data .= "</tr>";
+			$i++;
 		}
 		return $data;
     }
     
     public function create(Request $request)
-    {
-        $predmet = APredmets::GetGroupPredmet($request->abit_group)->where('exid', $request->abit_predmet)->first();
-        $vedomost = AVedomost::GetVedomost($request->abit_predmet, $request->abit_stlevel, $request->abit_formobuch, 
-                                        $predmet->id, $request->abit_typeExam);
-       
-        /*$vedomost = AVedomost::Create($request->abit_predmet, $request->abit_stlevel, $request->abit_formobuch, 
-                                        $predmet->id, $request->abit_typeExam, $request->date_exam);*/
-
+    {  
         $limit = 30;
-        $actual = 0;
-        
-        foreach ($vedomost as $v) {
+		$actual = 0;
+		
+		$predmet = APredmets::GetGroupPredmet($request->abit_group)->where('exid', $request->abit_examenGroup)->first();
+        $vedomost = AVedomost::GetVedomost($request->abit_examenGroup, $request->abit_stlevel, $request->abit_formobuch, 
+                                        $predmet->id, $request->abit_typeExam);   
+		
+		foreach ($vedomost as $v) {
             $actual = AVedomost::CountPers($v->id);
             if ($actual < $limit)
-                AVedomost::FillVedomost($v->id, $limit, $actual, $request->abit_predmet, $request->date_exam); 
+                AVedomost::FillVedomost($v->id, $limit, $actual, $request->abit_examenGroup, $request->date_exam); 
         }
 
+		$examCradCount = AExamsCard::GetAllExamCard($request->abit_examenGroup)->count();
+		$actual = 0;
+		if ($examCradCount > 0) {
+			for ($i = 0; $i <= ($examCradCount / $limit); $i++)
+			{
+				$vedomost = AVedomost::Create($request->abit_examenGroup, $request->abit_stlevel, $request->abit_formobuch, 
+											$predmet->id, $request->abit_typeExam, $request->date_exam);
+				AVedomost::FillVedomost($vedomost->id, $limit, $actual, $request->abit_examenGroup, $request->date_exam); 							
+			}
+		}
         return back();
-    }
+	}
+	
+	public function delete_vedomost(Request $request)
+	{
+		AVedomost::remove($request->ved_id);
+		return back();
+	}
 }

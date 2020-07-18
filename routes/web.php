@@ -73,6 +73,7 @@ Route::post('/direction/search_predmet', 'DirectionController@search_predmet');
 
 Route::get('/vedomost', 'VedomostController@index')->name('dashboards.dashboard-vedomost')->middleware('check');
 Route::post('/vedomost/create', 'VedomostController@create')->middleware('check');
+Route::post('/vedomost/delete', 'VedomostController@delete_vedomost')->middleware('check');
 Route::get('/vedomost/print', 'PrintController@vedomost')->middleware('check');
 Route::post('/vedomost/get_facultet', 'VedomostController@get_facultet')->middleware('check');
 Route::post('/vedomost/get_stlevel', 'VedomostController@get_stlevel')->middleware('check');

@@ -13,6 +13,7 @@
 	<script src="{{ asset('assets/vendor/libs/bootstrap-tagsinput/bootstrap-tagsinput.js') }}"></script>
 	<script src="{{ asset('assets/vendor/libs/datatables/datatables.js') }}"></script>
 	<script>
+		var ved_id = 0;
 		function fill_facult()
 		{
 			var bid = $('#abit_branch').val();
@@ -113,10 +114,12 @@
 					'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
 				},
 				success: function(data) {
-					$('#abit_predmet').html(data);
+					$('#abit_examenGroup').html(data);
+					
+					$('.btn').prop('disabled', '');
 				},
 				error: function(msg) {
-					$('#abit_predmet').html(msg.responseText);
+					$('#abit_examenGroup').html(msg.responseText);
 				}
 			});
 		}
@@ -126,7 +129,7 @@
 			var stid 	= $('#abit_stlevel').val();
 			var foid 	= $('#abit_formobuch').val();
 			var gid 	= $('#abit_group').val();
-			var exid 	= $('#abit_predmet').val();
+			var exid 	= $('#abit_examenGroup').val();
 			var etid 	= $('#abit_typeExam').val();
 
 			$.ajax({
@@ -144,6 +147,70 @@
 				},
 				success: function(data) {
 					$('#table_vedomost').html(data);
+					ved_id = 0;
+				},
+				error: function(msg) {
+					$('#table_vedomost').html(msg.responseText);
+				}
+			});
+		}
+
+		function create()
+		{
+			var stid 		= $('#abit_stlevel').val();
+			var foid 		= $('#abit_formobuch').val();
+			var gid 		= $('#abit_group').val();
+			var exid 		= $('#abit_examenGroup').val();
+			var etid 		= $('#abit_typeExam').val();
+			var dateexam 	= $('#date_exam').val();
+
+			$.ajax({
+				url: '/vedomost/create',
+				method: 'post',
+				data: { 
+					abit_stlevel 		: stid, 
+					abit_formobuch 		: foid, 
+					abit_group  		: gid,
+					abit_examenGroup  	: exid,
+					abit_typeExam		: etid,
+					date_exam			: dateexam
+				},
+				headers: {
+					'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+				},
+				success: function(data) {
+					fill_vedomost();
+				},
+				error: function(msg) {
+					$('#table_vedomost').html(msg.responseText);
+				}
+			});
+		}
+
+		function print()
+		{
+			if (ved_id != 0) {
+				let form = document.createElement('form');
+				form.action = '/vedomost/print';
+				form.method = 'GET';
+				form.target = '_blank'
+				form.innerHTML = '<input type="hidden" name="ved_id" value="' + ved_id + '">{{ csrf_field() }}';
+				//document.body.append(form);
+				$('#loadForm').html(form);
+				form.submit();
+			}
+		}
+		function del()
+		{
+			$.ajax({
+				url: '/vedomost/delete',
+				method: 'post',
+				data: { ved_id : ved_id },
+				headers: {
+					'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+				},
+				success: function(data) {
+					fill_vedomost();
 				},
 				error: function(msg) {
 					$('#table_vedomost').html(msg.responseText);
@@ -157,14 +224,16 @@
 	<h4 class="font-weight-bold py-3 mb-4">
 		 Ведомости
 	</h4>
+	<div id="loadForm" style="display: none;"></div>
 	<div class="card mb-4">
 		<div class="card-body">
-			<form action="/vedomost/create" method="POST">
+			<form action="#" method="POST">
 				{{ csrf_field() }}
 				<div class="form-group">
-					<input type="button" onclick="fill_vedomost();" class="btn btn-success" value="Отобразить">
-					<input type="submit" class="btn btn-secondary" value="Сформировать">
-					<input type="button" class="btn btn-primary" value="Распечатать">
+					<input type="button" onclick="create();" class="btn btn-success" value="Сформировать" disabled>
+					<input type="button" onclick="fill_vedomost();" class="btn btn-secondary" value="Отобразить" disabled>
+					<input type="button" onclick="print();" class="btn btn-secondary" value="Распечатать" disabled>
+					<input type="button" onclick="del();" class="btn btn-danger" value="Удалить" disabled>
 				</div>
 				<div class="form-group">
 					<label class="form-label">Выбор структуры</label>
@@ -204,7 +273,7 @@
 					</div>
 					<div class="form-group col-md-6">
 						<label class="form-label">Предмет</label>
-						<select id="abit_predmet" name="abit_predmet" class="form-control " data-style="btn-default" data-icon-base="ion" data-tick-icon="ion-md-checkmark">
+						<select id="abit_examenGroup" name="abit_examenGroup" class="form-control " data-style="btn-default" data-icon-base="ion" data-tick-icon="ion-md-checkmark">
 							<option>Выберите элемент</option>
 						</select>
 					</div>
