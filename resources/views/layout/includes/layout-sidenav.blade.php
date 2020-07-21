@@ -33,6 +33,11 @@
                     <a href="/vedomost" class="sidenav-link"><div>Ведомости</div></a>
                 </li>
             </ul>
+            <ul class="sidenav-menu">
+                <li class="sidenav-item{{ $routeName == 'dashboards.dashboard-reitmag' ? ' active' : '' }}">
+                    <a href="/reitmag" class="sidenav-link"><div>Рейтинг магистратура</div></a>
+                </li>
+            </ul>
         </li>
         <!-- Печать документов -->
         @if ($routeName == 'profile')

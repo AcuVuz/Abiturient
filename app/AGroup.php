@@ -23,4 +23,8 @@ class AGroup extends Model
 					->get();
 		return $query;
 	}
+	static public function GetGroupName($id){
+			$query = AGroup::where('id',$id)->first();
+			return $query;
+	}
 }

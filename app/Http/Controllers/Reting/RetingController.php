@@ -3,6 +3,13 @@
 namespace App\Http\Controllers\Reting;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\AExamsCard;
+use App\ABranch;
+use App\AFacultet;
+use App\AGroup;
+use App\AFormObuch;
 
 class RetingController extends Controller
 {
@@ -19,5 +26,31 @@ class RetingController extends Controller
                 'role' => $role,
                 'username' => $users
             ]);
+    }
+    public function reitmag(){
+
+     $role = session('role_id');
+     $users = session('user_name');
+     $abit_branch = ABranch::GetBranch();
+
+     return view('ReitingPage.reting_magistr',
+         [
+             'title' => 'Рейтинг магистратура',
+             'role' => $role,
+             'username' => $users,
+             'abit_branch' => $abit_branch
+         ]);
+    }
+    public function PrepareReport(Request $request){
+
+       $query = DB::select('CALL abit_reit_mag(?)',[$request->gid]);
+       $facultet = AFacultet::GetFacultetName($request->fkid);
+       $group = AGroup::GetGroupName($request->gid);
+       $formobuch = AFormObuch::GetFormObuchName($request->foid);
+       
+       return view('ReportPages.Report_Reit_Mag',['query' => $query,
+       'facultet' => $facultet,
+       'group_name' => $group->name,
+       'foname' => $formobuch->name]);
     }
 }

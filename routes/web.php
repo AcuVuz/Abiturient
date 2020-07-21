@@ -72,6 +72,9 @@ Route::post('/direction/get_predmet', 'DirectionController@get_predmet');
 Route::post('/direction/search_predmet', 'DirectionController@search_predmet');
 
 Route::get('/vedomost', 'VedomostController@index')->name('dashboards.dashboard-vedomost')->middleware('check');
+Route::get('/reitmag', 'Reting\RetingController@reitmag')->name('dashboards.dashboard-reitmag')->middleware('check');
+Route::get('/reitmag/report_reit_mag', 'Reting\RetingController@PrepareReport')->middleware('check');
+
 Route::post('/vedomost/create', 'VedomostController@create')->middleware('check');
 Route::post('/vedomost/delete', 'VedomostController@delete_vedomost')->middleware('check');
 Route::get('/vedomost/print', 'PrintController@vedomost')->middleware('check');

@@ -35,7 +35,7 @@
 			$('#abit_formobuch').html('<option>Выберите элемент</option>');
 			$('#abit_group').html('<option>Выберите элемент</option>');
 		}
-		
+
 		function fill_stlevel()
 		{
 			var fkid = $('#abit_facultet').val();
@@ -86,9 +86,9 @@
 			$.ajax({
 				url: '/vedomost/get_group',
 				method: 'post',
-				data: { 
-					fkid : fkid, 
-					stid : stid, 
+				data: {
+					fkid : fkid,
+					stid : stid,
 					foid : foid
 				},
 				headers: {
@@ -115,7 +115,7 @@
 				},
 				success: function(data) {
 					$('#abit_examenGroup').html(data);
-					
+
 					$('.btn').prop('disabled', '');
 				},
 				error: function(msg) {
@@ -135,9 +135,9 @@
 			$.ajax({
 				url: '/vedomost/get_vedomost',
 				method: 'post',
-				data: { 
-					stid 	: stid, 
-					foid 	: foid, 
+				data: {
+					stid 	: stid,
+					foid 	: foid,
 					gid  	: gid,
 					exid  	: exid,
 					etid	: etid
@@ -167,9 +167,9 @@
 			$.ajax({
 				url: '/vedomost/create',
 				method: 'post',
-				data: { 
-					abit_stlevel 		: stid, 
-					abit_formobuch 		: foid, 
+				data: {
+					abit_stlevel 		: stid,
+					abit_formobuch 		: foid,
 					abit_group  		: gid,
 					abit_examenGroup  	: exid,
 					abit_typeExam		: etid,

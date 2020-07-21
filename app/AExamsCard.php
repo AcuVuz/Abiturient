@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class AExamsCard extends Model
 {
@@ -35,4 +36,32 @@ class AExamsCard extends Model
 					->get();
 		return $query;
 	}
+	static public function GetReitMag($gid){
+			$query = DB::select('CALL abit_reit_mag(?)',[$gid]);
+			$k = [];
+			$i = 0;
+
+			foreach ($query as $key) {
+
+				$k +=[$i =>[ $key->number,
+																	$key->famil,
+																	$key->Pname,
+																	$key->otch,
+																	$key->srbal,
+																	$key->count_exam,
+																	$key->name_exam,
+																	$key->exam_ball,
+																	$key->sum_all_ball
+																		]];
+				$i++;
+			}
+
+			$arr=array
+			(
+				"data" => $k
+			);
+
+			return $arr;
+	}
+
 }

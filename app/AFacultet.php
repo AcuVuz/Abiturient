@@ -17,4 +17,12 @@ class AFacultet extends Model
                         ->get();
 		return $query;
 	}
+
+	static public function GetFacultetName($id)
+	{
+		$query = AFacultet::where('id', $id)->first();
+
+		return $query->name;
+	}
+
 }

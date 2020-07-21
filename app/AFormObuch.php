@@ -21,4 +21,8 @@ class AFormObuch extends Model
 					->get();
 		return $query;
 	}
+		static public function GetFormObuchName($id){
+			 $query = AFormObuch::where('id', $id)->first();
+				return $query;
+		}
 }
