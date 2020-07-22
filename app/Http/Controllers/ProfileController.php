@@ -446,9 +446,9 @@ class ProfileController extends Controller
 								if ($grafik != null)
 									DB::table('pers_tests')->insert(['pers_id' => $request->pid, 'test_id' => $tid, 'pers_event_id' => $event_pers, 'start_time' => $grafik->date_exam ]);
 								else {
-									if (($person->is_checked == 'T') && (strtotime($state->date_crt) <= strtotime('2020-07-15 00:00:00')))
+									/*if (($person->is_checked == 'T') && (strtotime($state->date_crt) <= strtotime('2020-07-15 00:00:00')))
 										DB::table('pers_tests')->insert(['pers_id' => $request->pid, 'test_id' => $tid, 'pers_event_id' => $event_pers, 'start_time' => date('Y-m-d H', time()) ]);
-									else
+									else*/
 										DB::table('pers_tests')->insert(['pers_id' => $request->pid, 'test_id' => $tid, 'pers_event_id' => $event_pers ]);
 								}
 							}
@@ -480,8 +480,8 @@ class ProfileController extends Controller
 							->count();
 			$state = DB::table('abit_statements')->where('person_id', $person->id)->orderby('id', 'desc')->first();
 				
-			if (($statements == 0) && (strtotime($state->date_crt) <= strtotime('2020-07-15 00:00:00')))
-				DB::table('pers_tests')->where('id', $pt->id)->update([ 'start_time' => date('Y-m-d H', time()) ]);
+			/*if (($statements == 0) && (strtotime($state->date_crt) <= strtotime('2020-07-15 00:00:00')))
+				DB::table('pers_tests')->where('id', $pt->id)->update([ 'start_time' => date('Y-m-d H', time()) ]);*/
 		}
 		$pers_test = DB::table('pers_tests as pt')
 						->leftjoin('tests as t', 't.id', 'pt.test_id')
