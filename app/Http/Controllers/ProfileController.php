@@ -13,6 +13,7 @@ use App\Persons;
 use App\APredmets;
 use App\AStatementDovuz;
 use App\AStatementPrivilege;
+use App\AStatementLgot;
 use App\ATypPriv;
 
 class ProfileController extends Controller
@@ -80,8 +81,6 @@ class ProfileController extends Controller
 				'person' 		=> $person,
 				'typeEducation' => $type_education,
 				'doc_pers'		=> $doc_pers,
-				'privileges'    => $type_privileges,
-				'pers_privilage'=> $pers_privilage,
 				'predmet_zno'	=> $predmet_zno,
 				'pers_zno'		=> $pers_zno,
 				'abit_typeDoc'	=> $abit_typeDoc
@@ -95,7 +94,6 @@ class ProfileController extends Controller
 				'role' 			=> $role,
 				'username' 		=> $users,
 				'typeEducation' => $type_education,
-                'privileges'    => $type_privileges,
                 'predmet_zno'	=> $predmet_zno,
 				'abit_typeDoc'	=> $abit_typeDoc
 			]);
@@ -140,10 +138,13 @@ class ProfileController extends Controller
 		$nagrada = $request->nagrada;
 		$nagrada_ball = $request->nagrada_ball;
 
+		$lgota = $request->lgota;
+		
 		$marafon = $request->marafon;
 
 		AStatementDovuz::delete_all($request->sid);
 		AStatementPrivilege::delete_all($request->sid);
+		AStatementLgot::delete_all($request->sid);
 
 		if (isset($predmet_one) && isset($predmet_one_ball))
 		{
@@ -173,6 +174,13 @@ class ProfileController extends Controller
 				AStatementPrivilege::new_record($request->sid, $nagrada, $nagrada_ball);
 			}
 		}
+		if (isset($lgota))
+		{
+			if ($lgota != -1)
+			{
+				AStatementLgot::new_record($request->sid, $lgota);
+			}
+		}
 		if (isset($marafon))
 		{
 			if (trim($marafon) == 'T')
@@ -193,8 +201,10 @@ class ProfileController extends Controller
 
 		$predmet_dovuz = APredmets::GetPredmetDovuz();
 		$nagrada_list = ATypPriv::GetNagrad();
+		$lgota_list = ATypPriv::GetLgot();
 
 		$pers_nagrada = AStatementPrivilege::GetStatPriv($sid);
+		$pers_lgota = AStatementLgot::GetStatLgot($sid);
 		$pers_marafon = AStatementPrivilege::GetStatMarafon($sid);
 		$pers_dovuz = AStatementDovuz::GetStatDovuz($sid);
 		$pers_dovuz_arr = [];
@@ -222,7 +232,9 @@ class ProfileController extends Controller
 				'sid' 			=> $sid,
 				'predmet_dovuz' => $predmet_dovuz,
 				'nagrada_list'	=> $nagrada_list,
+				'lgota_list'	=> $lgota_list,
 				'pers_nagrada'	=> $pers_nagrada,
+				'pers_lgota'	=> $pers_lgota,
 				'pers_marafon'	=> $pers_marafon,
 				'pers_dovuz_arr'=> $pers_dovuz_arr
 			]);
@@ -928,20 +940,6 @@ class ProfileController extends Controller
 					'doc_vidan'	=> $doc_vidan
 				]
 			);
-		}
-
-		/**** Льготы ****/
-		DB::table('abit_persPrivilege')
-					->leftjoin('abit_typePrivilege', 'abit_typePrivilege.id', 'abit_persPrivilege.priv_id')
-					->where('pers_id', $pid)
-					->where('type', 1)->delete();
-		if(isset($request->type_priv))
-		{
-			foreach ($request->type_priv as $p)
-				DB::table('abit_persPrivilege')->insert([
-					'pers_id' => $pid,
-					'priv_id' => $p
-				]);
 		}
 
 		/**** ЕГЭ/ВНО ****/

@@ -29,7 +29,7 @@
 				width: 100%;
 			}
 			.ztable td{
-					padding: 14px;
+					padding: 5px;
 					font-size: 16px;
 			}
 			.ztable th{
@@ -41,7 +41,7 @@
 		<div class="wrap-list" id="wrap-list">
 			<div class="list-header" style="margin-left: 77px;">
 				<h2 style="font-size: 22px;">ГОУ ВПО ЛНР «ЛУГАНСКИЙ НАЦИОНАЛЬНЫЙ</br>
-				УНИВЕРСИТЕТ ИМЕНИ ТАРАСА ШЕВЧЕНКО »</h2>
+				УНИВЕРСИТЕТ ИМЕНИ ТАРАСА ШЕВЧЕНКО»</h2>
 			</div>
 			<div class="row" style="text-align:center; font-size: 20px; margin-left: 60px;">Форма обучения: <? echo $ved_info->fo_name == 'Очная' ? '<u>очная</u>, заочная' : 'очная, <u>заочная</u>' ?></div>
 			<div class="row" style="text-align:center; font-size: 14px;margin-left: 130px;">(подчеркнуть)</div>
@@ -52,9 +52,9 @@
 				<div style="font-size: 18px; border-bottom: 1px solid black; width: 90mm;float:right;  margin-right: 35mm; text-align:center;">{{ $ved_info->st_name }}</div>
 			</div>
 			<div class="row" style="text-align:center; margin-left: 114mm; margin-top: 2mm; font-size: 14px; width: auto;">(бакалавриат, бакалавриат на основе СПО, магистратура)</div>
-			<div class="row" style="max-width: 166mm;margin-left: 42mm; font-size: 18px; border-bottom: 1px solid black; margin-top: 5mm; text-align:center;">{{ $ved_info->te_name }}</div>
+			<div class="row" style="max-width: 176mm; margin-left: 32mm; font-size: 18px; border-bottom: 1px solid black; margin-top: 5mm; text-align:center;">{{ $ved_info->te_name }}</div>
 			<div class="row" style="text-align:center; font-size: 14px; margin-left: 20mm;">(форма вступительного экзамена)</div>
-			<div class="row" style="font-size: 18px; max-width: 176mm; margin-left: 32mm;border-bottom: 1px solid black; margin-top: 5mm;">{{ $ved_info->predmet_name }}</div>
+			<div class="row" style="font-size: 18px; max-width: 176mm; margin-left: 32mm; border-bottom: 1px solid black; margin-top: 5mm;">{{ $ved_info->predmet_name }}</div>
 			<div class="row" style="text-align:center; font-size: 14px; margin-left: 18mm;">(название экзамена)</div>
 
 <div class="row" style="border-bottom: 1px solid black;max-width: 176mm; font-size: 18px; margin-top: 5mm; margin-left: 32mm;">{{ '('.$ved_info->minid.') '.$ved_info->group_name }}</div>
@@ -77,8 +77,10 @@
 			<div class="row" style="padding-left: 32mm; margin-top: 5mm; font-size: 18px;">
 				Фамилии и инициалы экзаменаторов
 				<!-- Если будешь тянуть сюда данные из БД убери &nbsp, если данные приходят пустые, то вставляй  &nbsp -->
-				<div style="border-bottom: 1px solid black; width: 90mm;float:right;  margin-right: 44mm;"> &nbsp &nbsp &nbsp</div>
+				<div style="border-bottom: 1px solid black; width: 100mm;float:right;  margin-right: 34mm;"> &nbsp &nbsp &nbsp</div>
 			</div>
+			<div class="row" style="font-size: 18px; max-width: 176mm; margin-left: 32mm; border-bottom: 1px solid black; ">&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp  &nbsp&nbsp&nbsp</div>
+			
 			<table class="ztable"border="1" cellspacing="0" style="margin-left: 20mm; margin-top: 3mm; width: 204mm; max-width: 204mm;">
 				<thead>
 					<tr>

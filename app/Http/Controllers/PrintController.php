@@ -175,6 +175,15 @@ class PrintController extends Controller
 			];
 		}
 		
+		/*$pdf = PDF::loadView('ReportPages.Report_vedomost', 
+			[
+				'vedomost' 	=> $vedomost,
+				'text_ball'	=> $text_ball,
+				'ved_info'	=> $ved_info
+			]
+		);
+		return $pdf->stream();*/
+		
 		return view('ReportPages.Report_vedomost', 
 			[
 				'vedomost' 	=> $vedomost,

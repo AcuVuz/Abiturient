@@ -34,7 +34,7 @@
             <div class="row no-gutters row-bordered row-border-light">
                 <div class="col-md-3 pt-0">
                     <div class="list-group list-group-flush account-settings-links">
-                        <a class="list-group-item list-group-item-action active" data-toggle="list" href="#info-dop-ball">Дополнительные баллы</a>
+                        <a class="list-group-item list-group-item-action active" data-toggle="list" href="#info-dop-ball">Дополнительные баллы / льготы</a>
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -101,6 +101,15 @@
                                             <label class="form-label">Балл</label>
                                             <input type="text" class="form-control required" name="nagrada_ball" id="nagrada_ball" value="{{ isset($pers_nagrada) ? $pers_nagrada->ball : '' }}">
                                         </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Льгота</label>
+                                        <select class="form-control" data-style="btn-default" data-icon-base="ion" data-tick-icon="ion-md-checkmark" name="lgota" id="lgota">
+                                            <option value="-1"></option>
+                                            @foreach ($lgota_list as $lgot)
+                                                <option value="{{ $lgot->id }}" {{ isset($pers_lgota) ? $lgot->id == $pers_lgota->lgot_id ? 'selected' : '' : '' }}>{{ $lgot->name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                                 <label class="custom-control custom-checkbox">

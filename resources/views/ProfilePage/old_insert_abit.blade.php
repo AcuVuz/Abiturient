@@ -210,16 +210,6 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="form-label">Тип льготы
-										<span class="text-danger">*</span>
-									</label>
-									<select class="selectpicker" data-style="btn-default" multiple data-icon-base="ion" data-tick-icon="ion-md-checkmark" name="type_priv[]">
-										@foreach ($privileges as $type)
-											<option value="{{ $type->id }}" {{ isset($pers_privilage[$type->id]) ? 'selected' : '' }}>{{ $type->name }}</option>
-										@endforeach
-									</select>
-								</div>
-								<div class="form-group">
 									<label class="custom-control custom-checkbox">
 										<input type="checkbox" class="custom-control-input" value="1" name="hostel_need" {{ isset($person) ? $person->hostel_need == '1' ? 'checked' : '' : ''}}>
 										<span class="custom-control-label">Требуется общежитие</span>

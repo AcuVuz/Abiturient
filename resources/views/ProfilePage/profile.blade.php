@@ -101,7 +101,7 @@
 			<li class="menu-item" id="menu_dop_ball">
 				<button type="button" class="menu-btn" onclick="dop_ball();">
 					<i class="fa fa-plus"></i>
-					<span class="menu-text">Дополнительные баллы</span>
+					<span class="menu-text">Дополнительные баллы / льготы</span>
 				</button>
 			</li>
 			<li class="menu-separator"></li>
