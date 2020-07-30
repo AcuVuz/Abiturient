@@ -130,7 +130,7 @@
 								<td>{{ $loop->iteration + 1 }}.</td>
 								<td>{{ $ec->pred_name }}</td>
 								<td></td>
-								<td>{{ date('d.m.Y', strtotime($ec->date_exam)) }}</td>
+								<td>{{ isset($ec->date_exam) ? date('d.m.Y', strtotime($ec->date_exam)) : '' }}</td>
 								<td style="text-align: center;">{{ $ec->ball }}</td>
 								<td></td>
 								<td></td>

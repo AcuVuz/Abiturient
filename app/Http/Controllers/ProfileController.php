@@ -310,6 +310,7 @@ class ProfileController extends Controller
 						$query->select(DB::raw('group_id'))
 							  ->from('abit_removeGroup');
 					})
+					->whereNotIn('g.id', [53, 123, 224, 326, 342])
 					->orderBy('g.name', 'asc')->get();
 		$data = "<option>Выберите элемент</option>";
 		foreach ($group as $g) {
