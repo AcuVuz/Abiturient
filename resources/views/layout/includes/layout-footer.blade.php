@@ -5,6 +5,7 @@
             <span class="footer-text font-weight-bolder">Абитуриент</span> ©
         </div>
         <div>
+            <span>{{ isset($ip) ? $ip : '' }}</span>
         </div>
     </div>
 </nav>

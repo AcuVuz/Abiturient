@@ -85,7 +85,6 @@
 		}
 		function select_zno(type_sertificate,ser_sert,num_sert,predmet_id,ball_sert,date_sert)
 		{
-			//$('#type_sertificate').val(type_sertificate);
 			$("#type_sertificate option[value=" + type_sertificate + "]").attr('selected', 'true')
 			$('#ser_sert').val(ser_sert);
 			$('#num_sert').val(num_sert);
@@ -93,9 +92,6 @@
 			$('#ball_sert').val(ball_sert);
 			$('#date_sert').val(date_sert);
 		}
-
-
-
 
 	</script>
 @endsection

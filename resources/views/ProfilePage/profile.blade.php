@@ -7,6 +7,7 @@
 	<link href="{{ asset('css/toastr.min.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/sweetalert2.min.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
 @endsection
 
 @section('scripts')
@@ -347,6 +348,20 @@
 			$(document).click(function(){
 				hideMenu();
 			});
+
+			function upd_is_home()
+			{
+				var is_home = $('#is_home').is(':checked') ? 'T' : 'F';
+				var pid = $('#pid').val();
+				$.ajax({
+					url: '/profile/is_home/update',
+					method: 'post',
+					data: { is_home : is_home, pid : pid},
+					headers: {
+						'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+					}
+				});
+			}
 		</script>
 		<div id="loadForm" style="display: none;"></div>
 	@endif
@@ -364,7 +379,7 @@
 				</a>
 				<form action="#" method="POST" enctype="multipart/form-data" id="loadPhoto" style="position:absolute;overflow: hidden;display:block;height:0px;width:0px;">
 					<input type="file"   id="FindFile" accept="image/jpeg,image/png,image/gif" name="FindFile" onchange="LoadFile();" style="display: none">
-					<input type="hidden" name="pid" value="{{ $person->id }}">
+					<input type="hidden" name="pid" id="pid" value="{{ $person->id }}">
 					<input type="submit" id="loadFile" style="display: none" value='Загрузить'>
 				</form>
 				<iframe id="rFrame" name="rFrame" style="display: none"> </iframe>
@@ -428,11 +443,17 @@
 						<td>Оригинал документов:</td>
 						<td>@if($person->is_orig == 'T')<span class="badge badge-outline-success"> Да @else <span class="badge badge-outline-danger"> Нет @endif</span></td>
 					</tr>
-					<!--<tr>
-						<td>Количество фотографий:</td>
-						<td><span class="badge badge-outline-success">{{ $person->count_photo }}</span></td>
-					</tr>
-					-->
+					@if ($role == 2)
+						<tr>
+							<td>Прохождение тестирование дома:</td>
+							<td>
+								<label class="custom-control custom-checkbox">
+									<input type="checkbox" onchange="upd_is_home();" class="custom-control-input" value="T" name="is_home" id="is_home" {{ isset($person) ? $person->is_home == 'T' ? 'checked' : '' : ''}}>
+									<span class="custom-control-label">&nbsp;&nbsp;&nbsp;</span>
+								</label>
+							</td>
+						</tr>
+					@endif
 				</tbody>
 			</table>
 		</div>

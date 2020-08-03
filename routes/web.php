@@ -36,6 +36,7 @@ Route::middleware(['check','timeout'])->group(function () {
     Route::get('/scanPhoto', 'ScanController@index');
     Route::get('/statement/dop_ball', 'ProfileController@statement_dop_ball');
     Route::post('/statement/dop_ball_save', 'ProfileController@statement_dop_ball_save');
+    Route::post('/profile/is_home/update', 'ProfileController@is_home_upd');
 });
 
 Route::get('/', 'LoginController@check');
@@ -161,7 +162,12 @@ Route::get('/fullstatistic', function(){
   'title' => 'Статистика поданных заявлений с учетом абитуриентов',
   'role' => session('role_id')
  ]);
-
 })->name('Report.dashboards-statisticFull')->middleware('check');
+
+Route::get('/stats', function(){
+ return view('DashboardPage.dashboardStatisticFullPublic', [
+    'title' => 'Статистика поданных заявлений'
+ ]);
+});
 
 Route::get('/GetStudentsStamentStatistic', 'DashboardController@PerStatTable');

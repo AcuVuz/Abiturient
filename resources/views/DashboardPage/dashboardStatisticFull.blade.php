@@ -60,7 +60,7 @@
 </div>
 <script>
 $(function() {
- statistic_table('T');
+ statistic_table('T', true);
  var dataTable = $('#table_statistic').dataTable();
  function format ( data ) {
   var tr = '',

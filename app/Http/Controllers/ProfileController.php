@@ -15,6 +15,7 @@ use App\AStatementDovuz;
 use App\AStatementPrivilege;
 use App\AStatementLgot;
 use App\ATypPriv;
+use Faker\Provider\ar_JO\Person;
 
 class ProfileController extends Controller
 {
@@ -560,7 +561,7 @@ class ProfileController extends Controller
 								->leftjoin('abit_formObuch as fo', 'fo.id', 'g.fo_id')
 								->leftjoin('abit_stlevel as st', 'st.id', 'g.st_id')
 								->where('abit_statements.person_id', $person->id)
-								->select('af.name as fac_name', 'g.name as spec_name', 'abit_statements.shifr_statement', 'fo.name as form_obuch', 'abit_statements.date_return', 'abit_statements.id', 'st.name as stlevel_name', 'abit_statements.is_original')
+								->select('af.branch_id', 'af.name as fac_name', 'g.name as spec_name', 'abit_statements.shifr_statement', 'fo.name as form_obuch', 'abit_statements.date_return', 'abit_statements.id', 'st.name as stlevel_name', 'abit_statements.is_original')
 								->get();
 		$person_tests = [];
 		$persTests = [];
@@ -644,10 +645,16 @@ class ProfileController extends Controller
 					{
 						switch ($test->status) {
 							case 0:
-								$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;background-color: forestgreen;' class='badge badge-primary'>Готов к прохождению</span>";
+								if ($person->is_home == 'T' || $request->ip == '195.189.44.155' || $person_statements->first()->branch_id == 2)
+									$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;background-color: forestgreen;' class='badge badge-primary'>Готов к прохождению</span>";
+								else 
+									$status = "<span class='badge badge-danger'>Тест не доступен</span>";
 								break;
 							case 1:
-								$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-warning'>Продолжить</span>";
+								if ($person->is_home == 'T' || $request->ip == '195.189.44.155' || $person_statements->first()->branch_id == 2)
+									$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-warning'>Продолжить</span>";
+								else 
+									$status = "<span class='badge badge-danger'>Тест не доступен</span>";
 								break;
 							case 2:
 								$status = $test->test_ball_correct >= $test->min_ball ?
@@ -655,12 +662,16 @@ class ProfileController extends Controller
 											"<span onclick='shortResult(".$test->id.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-danger'>Не пройден</span>";
 								break;
 							case 3:
-								$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-warning'>Продолжить</span>";
+								if ($person->is_home == 'T' || $request->ip == '195.189.44.155' || $person_statements->first()->branch_id == 2)
+									$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-warning'>Продолжить</span>";
+								else 
+									$status = "<span class='badge badge-danger'>Тест не доступен</span>";
 								break;
 						}
-						$successTest += [
-							$test->id => "true"
-						];
+						if ($person->is_home == 'T' || $request->ip == '195.189.44.155' || $person_statements->first()->branch_id == 2)
+							$successTest += [ $test->id => "true"];
+						else 
+							$successTest += [ $test->id => "false"];
 					}
 					else
 					{
@@ -675,7 +686,7 @@ class ProfileController extends Controller
 				}
 			}
 		}
-
+		$ip = $request->ip();
 		$person_count_statements = DB::table('abit_statements')->where('person_id', $person->id)->whereNull('date_return')->count();
 		return view('ProfilePage.profile',
 			[
@@ -689,7 +700,8 @@ class ProfileController extends Controller
 				'statusTest'    => $statusTest,
 				'successTest'   => $successTest,
 				'doc_obr'		=> $doc_obr,
-				'pers_zno'		=> $pers_zno
+				'pers_zno'		=> $pers_zno,
+				'ip'			=> $ip
 			]);
 	}
 
@@ -1015,5 +1027,10 @@ class ProfileController extends Controller
 			}
 		}
 		return Persons::AddDiscComment($request->comment, $request->person);
+	}
+
+	public function is_home_upd(Request $request)
+	{
+		Persons::where('id', $request->pid)->update([ 'is_home' => $request->is_home ]);
 	}
 }
