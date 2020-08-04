@@ -447,7 +447,7 @@
 						<tr>
 							<td>Прохождение тестирование дома:</td>
 							<td>
-								<label class="custom-control custom-checkbox">
+								<label class="custom-control custom-checkbox" style="width: 40px;">
 									<input type="checkbox" onchange="upd_is_home();" class="custom-control-input" value="T" name="is_home" id="is_home" {{ isset($person) ? $person->is_home == 'T' ? 'checked' : '' : ''}}>
 									<span class="custom-control-label">&nbsp;&nbsp;&nbsp;</span>
 								</label>
