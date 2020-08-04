@@ -13,6 +13,10 @@ use App\ASertificate;
 use App\APersPriv;
 use App\AExamsCard;
 use App\AVedomost;
+use App\Tests;
+use App\TestScatter;
+use App\Questions;
+use App\QuestionDetails;
 
 class PrintController extends Controller
 {
@@ -163,6 +167,7 @@ class PrintController extends Controller
 			]
 		);
 	}
+
 	public function vedomost(Request $request)
 	{ 
 		$vedomost = AVedomost::GetPersVedomost($request->ved_id);   
@@ -175,20 +180,38 @@ class PrintController extends Controller
 			];
 		}
 		
-		/*$pdf = PDF::loadView('ReportPages.Report_vedomost', 
+		return view('ReportPages.Report_vedomost', 
 			[
 				'vedomost' 	=> $vedomost,
 				'text_ball'	=> $text_ball,
 				'ved_info'	=> $ved_info
 			]
 		);
-		return $pdf->stream();*/
-		
-		return view('ReportPages.Report_vedomost', 
+	}
+
+	public function test(Request $request)
+	{ 
+		$test_head = Tests::GetTestHead($request->tid); 
+		$test_scatter = TestScatter::GetTestScatter($test_head->id);  
+		$test_body = [];
+		foreach ($test_scatter as $sc) {
+			$question = Questions::GetQuestions($test_head->id, $sc->ball, $sc->ball_count);
+			foreach($question as $q)
+			{
+				$test_body += [
+					$q->id => [
+						'question' 		=> QuestionDetails::GetQuestionsDetails($q->id),
+						'question_text'	=> QuestionDetails::GetQuestionText($q->id),
+						'ball'			=> $q->ball
+					]
+				];
+			}
+		}
+		shuffle($test_body);
+		return view('ReportPages.Print_test', 
 			[
-				'vedomost' 	=> $vedomost,
-				'text_ball'	=> $text_ball,
-				'ved_info'	=> $ved_info
+				'test_head' => $test_head,
+				'test_body'	=> $test_body
 			]
 		);
 	}

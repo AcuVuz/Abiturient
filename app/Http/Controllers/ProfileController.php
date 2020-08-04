@@ -956,7 +956,7 @@ class ProfileController extends Controller
 		}
 
 		/**** ЕГЭ/ВНО ****/
-		if($zno_num != '' && $zno_ser != '' && $zno_date != '' && $zno_ball != '' && $zno_vidan != '')
+		if($zno_date != '' && $zno_ball != '')
 		{
 			$tmp = DB::table('abit_sertificate')->where('person_id', $pid)->where('predmet_id', $zno_id)->first();
 			if (isset($tmp))
