@@ -443,7 +443,7 @@
 						<td>Оригинал документов:</td>
 						<td>@if($person->is_orig == 'T')<span class="badge badge-outline-success"> Да @else <span class="badge badge-outline-danger"> Нет @endif</span></td>
 					</tr>
-					@if ($role == 2)
+					@if ($role == 1 || $role == 2)
 						<tr>
 							<td>Прохождение тестирование дома:</td>
 							<td>
