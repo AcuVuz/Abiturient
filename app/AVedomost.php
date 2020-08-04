@@ -9,7 +9,7 @@ class AVedomost extends Model
 	protected $table = 'abit_vedomost';
 	public $timestamps = false;
 
-	static public function GetVedomost($ex_id, $st_id, $fo_id, $predmet_id, $typeExam_id)
+	static public function GetVedomost($ex_id, $st_id, $fo_id, $predmet_id, $typeExam_id, $date_exam)
 	{
 		
 		if (isset($ex_id)) {
@@ -24,6 +24,7 @@ class AVedomost extends Model
 						->where('abit_vedomost.fo_id', $fo_id)
 						->where('abit_vedomost.predmet_id', $predmet_id)
 						->where('abit_vedomost.type_exam_id', $typeExam_id)
+						->where('abit_vedomost.date_vedom', $date_exam)
 						->get();
 		}
 		return $query;

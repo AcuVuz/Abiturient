@@ -87,7 +87,7 @@ class VedomostController extends Controller
 	public function get_vedomost(Request $request)
 	{
         $predmet = APredmets::GetGroupPredmet($request->gid)->where('exid', $request->exid)->first();
-		$vedomost = AVedomost::GetVedomost($request->exid, $request->stid, $request->foid, $predmet->id, $request->etid);
+		$vedomost = AVedomost::GetVedomost($request->exid, $request->stid, $request->foid, $predmet->id, $request->etid, $request->date_exam);
         
         if (count($vedomost) == 0) $data = "<tr><td class='text-center' colspan='5'>Нет записей</td></tr>";
         else $data = "";
@@ -113,7 +113,7 @@ class VedomostController extends Controller
 		
 		$predmet = APredmets::GetGroupPredmet($request->abit_group)->where('exid', $request->abit_examenGroup)->first();
         $vedomost = AVedomost::GetVedomost($request->abit_examenGroup, $request->abit_stlevel, $request->abit_formobuch, 
-                                        $predmet->id, $request->abit_typeExam);   
+                                        $predmet->id, $request->abit_typeExam, $request->date_exam);   
 		
 		foreach ($vedomost as $v) {
             $actual = AVedomost::CountPers($v->id);
