@@ -38,8 +38,8 @@
 			<div class="col" style=" margin-left: 120mm;  margin-top: 10mm;">
 				<p>
 					Ректору</br>
-					Луганского национального университета</br>
-					имени Тараса Шевченко</br>
+					Луганского государственного
+					педагогического университета</br>
 				</p>
 			</div>
 			<div class="col"  style="width: 100%; padding-left: 12mm; margin-top: 10mm;">

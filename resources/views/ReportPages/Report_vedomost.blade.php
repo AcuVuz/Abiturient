@@ -40,8 +40,8 @@
 	<body class="body-report">
 		<div class="wrap-list" id="wrap-list">
 			<div class="list-header" style="margin-left: 77px;">
-				<h2 style="font-size: 22px;">ГОУ ВПО ЛНР «ЛУГАНСКИЙ НАЦИОНАЛЬНЫЙ</br>
-				УНИВЕРСИТЕТ ИМЕНИ ТАРАСА ШЕВЧЕНКО»</h2>
+				<h2 style="font-size: 22px;">ГОУ ВО ЛНР «ЛУГАНСКИЙ ГОСУДАРСТВЕННЫЙ</br>
+				ПЕДАГОГИЧЕСКИЙ УНИВЕРСИТЕТ»</h2>
 			</div>
 			<div class="row" style="text-align:center; font-size: 20px; margin-left: 60px;">Форма обучения: <? echo $ved_info->fo_name == 'Очная' ? '<u>очная</u>, заочная' : 'очная, <u>заочная</u>' ?></div>
 			<div class="row" style="text-align:center; font-size: 14px;margin-left: 130px;">(подчеркнуть)</div>

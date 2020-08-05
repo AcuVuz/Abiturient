@@ -17,7 +17,7 @@
 <body>
     <div style="width: 100%; max-width: 170mm; margin: auto">
         <header style="text-align: center;">
-            <h2 style="font-size: 18px;">ГОУ ВПО ЛНР "Луганский государственный педагогический университет"</h2>
+            <h2 style="font-size: 18px;">ГОУ ВО ЛНР "Луганский государственный педагогический университет"</h2>
             <h3>Вступительный экзамен</h3>
         </header>
         <div class="content">

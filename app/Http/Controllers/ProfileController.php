@@ -914,7 +914,7 @@ class ProfileController extends Controller
 			if (isset($request->email_abit))
 			{
 				Mail::send('RegisterPage.email', ['login' => $login, 'pass' => $pass, 'fio' => $famil.' '.$name.' '.$otch], function ($message) use ($request) {
-					$message->from('abiturient.ltsu@google.com', 'ЛНУ имени Тараса Шевченко');
+					$message->from('abiturient.ltsu@google.com', 'Луганский государственный педагогический университет');
 					$message->to($request->email_abit, $request->First_Name.' '.$request->Name.' '.$request->Last_Name)->subject('Создание аккаунта на abit.ltsu.org');
 				});
 			}
