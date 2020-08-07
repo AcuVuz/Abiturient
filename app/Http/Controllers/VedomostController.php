@@ -116,7 +116,7 @@ class VedomostController extends Controller
                                         $predmet->id, $request->abit_typeExam, $request->date_exam);   
 		
 		foreach ($vedomost as $v) {
-            $actual = AVedomost::CountPers($v->id);
+            $actual = AVedomost::CountPers($v->id, $request->abit_typeExam);
             if ($actual < $limit)
                 AVedomost::FillVedomost($v->id, $limit, $actual, $request->abit_examenGroup, $request->date_exam); 
         }
