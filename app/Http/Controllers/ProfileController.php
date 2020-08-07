@@ -14,8 +14,8 @@ use App\APredmets;
 use App\AStatementDovuz;
 use App\AStatementPrivilege;
 use App\AStatementLgot;
+use App\AStatments;
 use App\ATypPriv;
-use Faker\Provider\ar_JO\Person;
 
 class ProfileController extends Controller
 {
@@ -143,6 +143,8 @@ class ProfileController extends Controller
 		
 		$marafon = $request->marafon;
 
+		$celevoe = $request->celevoe;
+
 		AStatementDovuz::delete_all($request->sid);
 		AStatementPrivilege::delete_all($request->sid);
 		AStatementLgot::delete_all($request->sid);
@@ -189,6 +191,16 @@ class ProfileController extends Controller
 				AStatementPrivilege::new_record($request->sid, 26, 0);
 			}
 		}
+		if (isset($celevoe))
+		{
+			if (trim($celevoe) == 'T')
+			{
+				AStatments::where('id', '=', $request->sid)->update(["celevoe" => 'T']);
+			}
+			else {
+				AStatments::where('id', '=', $request->sid)->update(["celevoe" => 'F']);
+			}
+		}
 
 		return redirect('/profile?pid='.$request->pid);
 	}
@@ -208,6 +220,7 @@ class ProfileController extends Controller
 		$pers_lgota = AStatementLgot::GetStatLgot($sid);
 		$pers_marafon = AStatementPrivilege::GetStatMarafon($sid);
 		$pers_dovuz = AStatementDovuz::GetStatDovuz($sid);
+		$pers_celevoe = AStatments::where('id', '=', $sid)->first()->celevoe;
 		$pers_dovuz_arr = [];
 		$i = 0;
 		foreach($pers_dovuz as $pd)
@@ -237,6 +250,7 @@ class ProfileController extends Controller
 				'pers_nagrada'	=> $pers_nagrada,
 				'pers_lgota'	=> $pers_lgota,
 				'pers_marafon'	=> $pers_marafon,
+				'pers_celevoe'	=> $pers_celevoe,
 				'pers_dovuz_arr'=> $pers_dovuz_arr
 			]);
 	}

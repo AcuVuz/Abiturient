@@ -38,6 +38,13 @@
                     <a href="/reitmag" class="sidenav-link"><div>Рейтинг магистратура</div></a>
                 </li>
             </ul>
+            @if ($role == 1 || $role == 2)
+                <ul class="sidenav-menu">
+                    <li class="sidenav-item{{ $routeName == 'dashboards.dashboard-printtest' ? ' active' : '' }}">
+                        <a href="/print/test/form" class="sidenav-link"><div>Распечатать тесты</div></a>
+                    </li>
+                </ul>
+            @endif
         </li>
         <!-- Печать документов -->
         @if ($routeName == 'profile')

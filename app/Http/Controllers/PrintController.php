@@ -189,6 +189,45 @@ class PrintController extends Controller
 		);
 	}
 
+	public function printtest_show(Request $request)
+	{
+		$role = session('role_id');
+		$users = session('user_name');
+		$predmet = DB::table('abit_predmets as ap')
+					->leftjoin('abit_stlevel as ast', 'ast.id', 'ap.stlevel_id')
+					->where('ap.is_vuz', 'T')
+					->whereNotNull('ap.test_id')
+					->whereNotIn('ap.test_id', [198, 199])
+					->select('ap.*', 'ast.name as StName')
+					->orderby('ap.name', 'asc')
+					->get();
+		return view('DashboardPage.Print_test_show', 
+			[
+				'title'     => 'Печать тестов',
+				'role'      => $role,
+				'username'  => $users,
+				'predmet'	=> $predmet
+			]
+		); 
+	}
+
+	public function search_predmet(Request $request)
+    {
+        $predmet = DB::table('abit_predmets as ap')
+                        ->leftjoin('abit_stlevel as ast', 'ast.id', 'ap.stlevel_id')
+                        ->where('ap.is_vuz', 'T')
+						->where('ap.name', 'LIKE', '%'.$request->text.'%')
+						->whereNotNull('ap.test_id')
+						->whereNotIn('ap.test_id', [198, 199])
+                        ->select('ap.*', 'ast.name as StName')
+                        ->orderby('ap.name', 'asc')->get();
+        $data = '';
+        foreach ($predmet as $p) {
+            $data .= '<tr onclick="toggle_tr('.$p->test_id.');"><td class="text-left">'.$p->name.'</td><td class="text-left">'.$p->StName.'</td></tr>';
+        }
+        return $data;
+	}
+	
 	public function test(Request $request)
 	{ 
 		$test_head = Tests::GetTestHead($request->tid); 
