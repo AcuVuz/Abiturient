@@ -93,7 +93,7 @@ class VedomostController extends Controller
         else $data = "";
         $i = 1;
 		foreach ($vedomost as $v) {
-            $count = AVedomost::CountPers($v->id);
+            $count = AVedomost::CountPers($v->id, $request->etid);
             $data .= "<tr onclick='ved_id=".$v->id."'>";
             $data .= "<td>".$i."</td>";
             $data .= "<td>".$v->id."</td>";
@@ -118,7 +118,7 @@ class VedomostController extends Controller
 		foreach ($vedomost as $v) {
             $actual = AVedomost::CountPers($v->id, $request->abit_typeExam);
             if ($actual < $limit)
-                AVedomost::FillVedomost($v->id, $limit, $actual, $request->abit_examenGroup, $request->date_exam); 
+                AVedomost::FillVedomost($v->id, $limit, $actual, $request->abit_examenGroup, $request->date_exam, $request->abit_typeExam); 
         }
 
 		$examCradCount = AExamsCard::GetAllExamCard($request->abit_examenGroup)->count();
@@ -128,7 +128,7 @@ class VedomostController extends Controller
 			{
 				$vedomost = AVedomost::Create($request->abit_examenGroup, $request->abit_stlevel, $request->abit_formobuch, 
 											$predmet->id, $request->abit_typeExam, $request->date_exam);
-				AVedomost::FillVedomost($vedomost->id, $limit, $actual, $request->abit_examenGroup, $request->date_exam); 							
+				AVedomost::FillVedomost($vedomost->id, $limit, $actual, $request->abit_examenGroup, $request->date_exam, $request->abit_typeExam); 							
 			}
 		}
         return back();
