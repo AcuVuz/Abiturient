@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<meta content="width=device-width, initial-scale=1" name="viewport">
 		<meta content="telephone=no" name="format-detection">
-		<title>ЛНУ имени Тараса Шевченко</title>
+		<title>Луганский государственный педагогический университет</title>
 	</head>
 	<body>
 		<div>

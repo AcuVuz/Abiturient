@@ -116,6 +116,10 @@
                                     <input type="checkbox" class="custom-control-input" name="marafon" id="marafon" value="T" {{ isset($pers_marafon) ? 'checked' : '' }} >
                                     <span class="custom-control-label">Участие в марафоне</span>
                                 </label>
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" name="celevoe" id="celevoe" value="T" {{ isset($pers_celevoe) ? 'checked' : '' }} >
+                                    <span class="custom-control-label">Целевое место</span>
+                                </label>
                             </div>
                         </div>
                     </div>

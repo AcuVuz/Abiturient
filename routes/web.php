@@ -74,6 +74,8 @@ Route::post('/direction/search_predmet', 'DirectionController@search_predmet');
 
 Route::get('/vedomost', 'VedomostController@index')->name('dashboards.dashboard-vedomost')->middleware('check');
 Route::get('/reitmag', 'Reting\RetingController@reitmag')->name('dashboards.dashboard-reitmag')->middleware('check');
+Route::get('/print/test/form', 'PrintController@printtest_show')->name('dashboards.dashboard-printtest')->middleware('check');
+Route::post('/print/test/search_predmet', 'PrintController@search_predmet')->name('dashboards.dashboard-printtest')->middleware('check');
 Route::get('/reitmag/report_reit_mag', 'Reting\RetingController@PrepareReport')->middleware('check');
 
 Route::post('/vedomost/create', 'VedomostController@create')->middleware('check');
@@ -95,7 +97,7 @@ Route::get('/print/lich_card', 'PrintController@lich_card')->name('print.lich_ca
 Route::get('/print/opis', 'PrintController@opis')->name('print.opis')->middleware('check');
 Route::get('/print/statement', 'PrintController@statement')->name('print.statement')->middleware('check');
 Route::get('/print/examSheet', 'PrintController@examSheet')->name('print.examSheet')->middleware('check');
-Route::get('/print/test', 'PrintController@test')->name('print.test')/*->middleware('check')*/;
+Route::post('/print/test', 'PrintController@test')->name('print.test')/*->middleware('check')*/;
 
 //=============== Разрыв сессии ================================//
 Route::get('logout', 'DashboardController@logout')->name('logout');

@@ -7,7 +7,7 @@
     <title>Печать теста</title>
     <style>
         @media print {
-            table { page-break-after:auto }
+            .table_main { page-break-after:auto; page-break-inside: avoid; }
         }
         p {
             margin : 0;
@@ -17,7 +17,7 @@
 <body>
     <div style="width: 100%; max-width: 170mm; margin: auto">
         <header style="text-align: center;">
-            <h2 style="font-size: 18px;">ГОУ ВПО ЛНР "Луганский государственный педагогический университет"</h2>
+            <h2 style="font-size: 18px;">ГОУ ВО ЛНР "Луганский государственный педагогический университет"</h2>
             <h3>Вступительный экзамен</h3>
         </header>
         <div class="content">
@@ -41,24 +41,37 @@
             </table>
             @foreach ($test_body as $tb_array)
             <hr>
-                <table style="border-spacing: 0px; border-collapse: collapse; width:100%">
+                <table style="border-spacing: 0px; border-collapse: collapse; width:100%" class="table_main">
                     <tbody>
                         <tr>
-                            <td style="width: 150px;"><b>{{ '('.$tb_array['ball'].' б.) ' }}Вопрос № {{ $loop->iteration }}:</b></td>
-                            <td ><? echo str_replace('<p><br></p>', '', htmlspecialchars_decode($tb_array['question_text']->text)) ?></td>
+                            <td>
+                                <table style="border-spacing: 0px; border-collapse: collapse; width:100%">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 150px;"><b>{{ '('.$tb_array['ball'].' б.) ' }}Вопрос № {{ $loop->iteration }}:</b></td>
+                                            <td ><? echo str_replace('<p class="ql-align-justify"><br></p>', '', str_replace('<p><br></p>', '', htmlspecialchars_decode($tb_array['question_text']->text))) ?></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table style="border-spacing: 0px; border-collapse: collapse; width:100%">
+                                    <tbody>
+                                        @foreach ($tb_array['question'] as $quest)
+                                            <tr>
+                                                <td style="width: 10px;" ><div style="width: 10px; height: 10px;border: 1px solid black; border-radius: 25%; margin: 2px;"></div></td>
+                                                <td style="text-align: justify;"><? echo str_replace('<p class="ql-align-justify"><br></p>', '', str_replace('<p><br></p>', '', htmlspecialchars_decode($quest->text))) ?></td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
-                <table style="border-spacing: 0px; border-collapse: collapse; width:100%">
-                    <tbody>
-                        @foreach ($tb_array['question'] as $quest)
-                            <tr>
-                                <td style="width: 10px;" ><div style="width: 10px; height: 10px;border: 1px solid black; border-radius: 25%; margin: 2px;"></div></td>
-                                <td style="text-align: justify;"><? echo str_replace('<p><br></p>', '', htmlspecialchars_decode($quest->text)) ?></td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                
             @endforeach
             <table style="margin-top:20px;">
                 <tr>

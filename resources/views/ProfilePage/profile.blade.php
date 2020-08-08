@@ -16,6 +16,9 @@
 	<script src="{{ asset('js/profile.js') }}"></script>
 	<script>
 		var role = {{ $role }};
+		BrowserDetect.init(); 
+		console.log(BrowserDetect.browser);
+		console.log(BrowserDetect.version);
         function startTest(testPersId, status, hash)
         {
             if (testPersId != 0 && status != 2)
@@ -24,8 +27,9 @@
                 form.action = 'https://test.ltsu.org/test/start';
                 form.method = 'POST';
                 form.innerHTML = '<input type="hidden" name="ptid" value="' + testPersId + '"><input name="_hash" value="' + hash + '">{{ csrf_field() }}';
-                document.body.append(form);
-                //$('#loadForm').html(form);
+				if (BrowserDetect.version <= 49) $('#loadForm').html(form);
+				else document.body.append(form);
+                //
 				form.submit();
             }
         }
@@ -37,8 +41,8 @@
             form.method = 'POST';
             form.target = '_blank';
             form.innerHTML = '<input type="hidden" name="ptid" value="' + testPersId + '"><input name="_hash" value="' + hash + '">{{ csrf_field() }}';
-            document.body.append(form);
-            //$('#loadForm').html(form);
+            if (BrowserDetect.version <= 49) $('#loadForm').html(form);
+			else document.body.append(form);
 			form.submit();
         }
 
@@ -87,8 +91,8 @@
 					form.method = 'POST';
 					form.target = '_blank';
 					form.innerHTML = '<input type="hidden" name="ptid" value="' + l_ptid + '"><input name="_hash" value="' + l_hash + '">{{ csrf_field() }}';
-					//document.body.append(form);
-					$('#loadForm').html(form);
+					if (BrowserDetect.version <= 49) $('#loadForm').html(form);
+					else document.body.append(form);
 					form.submit();
 				}
 			}
