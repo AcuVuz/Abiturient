@@ -121,7 +121,7 @@ class VedomostController extends Controller
                 AVedomost::FillVedomost($v->id, $limit, $actual, $request->abit_examenGroup, $request->date_exam, $request->abit_typeExam); 
         }
 
-		$examCradCount = AExamsCard::GetAllExamCard($request->abit_examenGroup)->count();
+		$examCradCount = AExamsCard::GetAllExamCard($request->abit_examenGroup, $request->abit_typeExam)->count();
 		$actual = 0;
 		if ($examCradCount > 0) {
 			for ($i = 0; $i <= ($examCradCount / $limit); $i++)
