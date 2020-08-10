@@ -659,13 +659,13 @@ class ProfileController extends Controller
 					{
 						switch ($test->status) {
 							case 0:
-								if ($person->is_home == 'T' || $request->ip == '195.189.44.155' || $person_statements->first()->branch_id == 2)
+								if ($person->is_home == 'T'/* || $request->ip == '195.189.44.155' || $person_statements->first()->branch_id == 2*/)
 									$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;background-color: forestgreen;' class='badge badge-primary'>Готов к прохождению</span>";
 								else 
 									$status = "<span class='badge badge-danger'>Тест не доступен</span>";
 								break;
 							case 1:
-								if ($person->is_home == 'T' || $request->ip == '195.189.44.155' || $person_statements->first()->branch_id == 2)
+								if ($person->is_home == 'T'/* || $request->ip == '195.189.44.155' || $person_statements->first()->branch_id == 2*/)
 									$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-warning'>Продолжить</span>";
 								else 
 									$status = "<span class='badge badge-danger'>Тест не доступен</span>";
@@ -676,13 +676,13 @@ class ProfileController extends Controller
 											"<span onclick='shortResult(".$test->id.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-danger'>Не пройден</span>";
 								break;
 							case 3:
-								if ($person->is_home == 'T' || $request->ip == '195.189.44.155' || $person_statements->first()->branch_id == 2)
+								if ($person->is_home == 'T'/* || $request->ip == '195.189.44.155' || $person_statements->first()->branch_id == 2*/)
 									$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-warning'>Продолжить</span>";
 								else 
 									$status = "<span class='badge badge-danger'>Тест не доступен</span>";
 								break;
 						}
-						if ($person->is_home == 'T' || $request->ip == '195.189.44.155' || $person_statements->first()->branch_id == 2)
+						if ($person->is_home == 'T'/* || $request->ip == '195.189.44.155' || $person_statements->first()->branch_id == 2*/)
 							$successTest += [ $test->id => "true"];
 						else 
 							$successTest += [ $test->id => "false"];
