@@ -33,6 +33,7 @@ Route::middleware(['check','timeout'])->group(function () {
     Route::get('/statement/set_orig', 'ProfileController@statement_set_orig');
     Route::get('/statement/del_orig', 'ProfileController@statement_del_orig');
     Route::get('/checked_abit', 'ProfileController@checked_abit');
+    Route::get('/checked_all_abit', 'ProfileController@checked_all_abit');
     Route::get('/scanPhoto', 'ScanController@index');
     Route::get('/statement/dop_ball', 'ProfileController@statement_dop_ball');
     Route::post('/statement/dop_ball_save', 'ProfileController@statement_dop_ball_save');
@@ -72,6 +73,9 @@ Route::post('/direction/get_group', 'DirectionController@get_group');
 Route::post('/direction/get_predmet', 'DirectionController@get_predmet');
 Route::post('/direction/search_predmet', 'DirectionController@search_predmet');
 
+Route::get('/grafik', 'GrafikController@index')->name('dashboards.dashboard-grafik')->middleware('check');
+Route::post('/grafik/get_predmet', 'GrafikController@get_predmet')->middleware('check');
+Route::post('/grafik/save', 'GrafikController@save')->middleware('check');
 Route::get('/vedomost', 'VedomostController@index')->name('dashboards.dashboard-vedomost')->middleware('check');
 Route::get('/reitmag', 'Reting\RetingController@reitmag')->name('dashboards.dashboard-reitmag')->middleware('check');
 Route::get('/print/test/form', 'PrintController@printtest_show')->name('dashboards.dashboard-printtest')->middleware('check');

@@ -538,6 +538,50 @@ class ProfileController extends Controller
 		//return view('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test]);
 	}
 
+	public function checked_all_abit()
+	{
+		$person = DB::table('persons')->where('pers_type', '=', 'a')->where('is_checked', '=', 'F')->get();
+		
+		foreach($person as $p)
+		{
+			DB::table('persons')->where('id', '=', $p->id)->update(['is_checked' => 'T', 'Comment' => null]);
+			$pers_test = DB::table('pers_tests as pt')
+							->leftjoin('tests as t', 't.id', 'pt.test_id')
+							->leftjoin('target_audience as ta', 'ta.id', 't.targetAudience_id')
+							->leftjoin('pers_events as pe', 'pe.id', 'pt.pers_event_id')
+							->select('pt.*', 't.discipline', 'ta.name as targetAudience_name')
+							->where('pe.event_id', '6')->where('pt.pers_id', $p->id)->get(); // ТУТ СТАТИЧЕСКОЕ ЗНАЧЕНИЕ, КОТОРОЕ НУЖНО БУДЕТ МЕНЯТЬ КАЖДЫЙ ГОД EVENT_ID
+
+			$state = DB::table('abit_statements as s')
+							->leftjoin('abit_group as g', 'g.id', 's.group_id')
+							->leftjoin('abit_facultet as f', 'f.id', 'g.fk_id')
+							->where('s.person_id', $p->id)
+							->select('f.branch_id')
+							->first();
+			if ($p->email != '')
+			{
+				if (isset($state)) {
+					if($state->branch_id == 1)
+					{
+						Mail::send('MailsTemplate.MailCheckedAbit', ['person' => $p, 'pers_test' => $pers_test], function ($message) use ($p) {
+							$message->from('abiturient.ltsu@google.com', 'Информация с abit.ltsu.org');
+							$message->to($p->email, $p->famil.' '.$p->name.' '.$p->otch)->subject('Ваша личная карта прошла проверку!');
+						});
+					}
+				} else {
+					Mail::send('MailsTemplate.MailCheckedAbit', ['person' => $p, 'pers_test' => $pers_test], function ($message) use ($p) {
+						$message->from('abiturient.ltsu@google.com', 'Информация с abit.ltsu.org');
+						$message->to($p->email, $p->famil.' '.$p->name.' '.$p->otch)->subject('Ваша личная карта прошла проверку!');
+					});
+				}
+			}
+			
+			sleep(3);
+		}
+		echo "Good!";
+		//return view('MailsTemplate.MailCheckedAbit', ['person' => $person, 'pers_test' => $pers_test]);
+	}
+
 	//Личная карточка куда попадает после регистрации (Абитуриент)
 	public function index_Profile(Request $request)
 	{

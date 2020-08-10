@@ -176,7 +176,7 @@ class PrintController extends Controller
 
 		foreach ($vedomost as $ved) {
 			$text_ball += [
-				$ved->id => PrintController::numberToRussian($ved->ball)
+				$ved->id => isset($ved->ball) ? PrintController::numberToRussian($ved->ball) : ''
 			];
 		}
 		

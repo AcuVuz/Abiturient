@@ -436,6 +436,10 @@
 						</tr>
 					@endif
 					<tr>
+						<td>PIN:</td>
+						<td style="font-size: 14pt;"><span class="badge badge-outline-info">{{ $person->PIN }}</span></td>
+					</tr>
+					<tr>
 						<td>Регистрация:</td>
 						<td>{{ date('d/m/Y', strtotime($person->date_crt)) }}</td>
 					</tr>

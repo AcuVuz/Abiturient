@@ -25,15 +25,27 @@ class AExamsCard extends Model
 		return $query;
 	}
 
-	static public function GetAllExamCard($examen_id)
+	static public function GetAllExamCard($examen_id, $exType = 0)
 	{
-		$query = AExamsCard::select('abit_examCard.*')
-					->leftjoin('abit_statements as st', 'st.id', 'abit_examCard.state_id')
-					->whereNull('st.date_return')
-					->whereNull('ved_id')
-					->whereNotNull('ball')
-					->where('exam_id', $examen_id)
-					->get();
+		if ($exType == 3)
+		{
+			$query = AExamsCard::select('abit_examCard.*')
+						->leftjoin('abit_statements as st', 'st.id', 'abit_examCard.state_id')
+						->whereNull('st.date_return')
+						->whereNull('ved_id')
+						->whereNotNull('ball')
+						->where('exam_id', $examen_id)
+						->get();
+		}
+		else
+		{
+			$query = AExamsCard::select('abit_examCard.*')
+			->leftjoin('abit_statements as st', 'st.id', 'abit_examCard.state_id')
+			->whereNull('st.date_return')
+			->whereNull('ved_id')
+			->where('exam_id', $examen_id)
+			->get();
+		}
 		return $query;
 	}
 	static public function GetReitMag($gid){
@@ -44,15 +56,15 @@ class AExamsCard extends Model
 			foreach ($query as $key) {
 
 				$k +=[$i =>[ $key->number,
-																	$key->famil,
-																	$key->Pname,
-																	$key->otch,
-																	$key->srbal,
-																	$key->count_exam,
-																	$key->name_exam,
-																	$key->exam_ball,
-																	$key->sum_all_ball
-																		]];
+							$key->famil,
+							$key->Pname,
+							$key->otch,
+							$key->srbal,
+							$key->count_exam,
+							$key->name_exam,
+							$key->exam_ball,
+							$key->sum_all_ball
+						]];
 				$i++;
 			}
 

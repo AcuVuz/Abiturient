@@ -63,4 +63,25 @@ class APredmets extends Model
 					->get();
 		return $predmet;
 	}
+
+	static public function GetGroupByPredmet($predmet_id)
+	{
+		$predmet = AExamenGroup::where('predmet_id', $predmet_id)->get();
+		return $predmet;
+	}
+
+	static public function GetStlevelPredmet($st_id)
+	{
+		$predmet = APredmets::
+					select (
+						'id',
+						'name'
+					)
+					->where('stlevel_id', $st_id)
+                    ->where('abit_predmets.is_vuz', 'T')
+					->orderby('abit_predmets.name', 'asc')
+					->distinct()
+					->get();
+		return $predmet;
+	}
 }

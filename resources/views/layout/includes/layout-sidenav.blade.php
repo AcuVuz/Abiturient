@@ -44,6 +44,11 @@
                         <a href="/print/test/form" class="sidenav-link"><div>Распечатать тесты</div></a>
                     </li>
                 </ul>
+                <ul class="sidenav-menu">
+                    <li class="sidenav-item{{ $routeName == 'dashboards.dashboard-grafik' ? ' active' : '' }}">
+                        <a href="/grafik" class="sidenav-link"><div>График экзаменов</div></a>
+                    </li>
+                </ul>
             @endif
         </li>
         <!-- Печать документов -->

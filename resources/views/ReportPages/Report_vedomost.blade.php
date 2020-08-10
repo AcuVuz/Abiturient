@@ -57,8 +57,8 @@
 			<div class="row" style="font-size: 18px; max-width: 176mm; margin-left: 32mm; border-bottom: 1px solid black; margin-top: 5mm;">{{ $ved_info->predmet_name }}</div>
 			<div class="row" style="text-align:center; font-size: 14px; margin-left: 18mm;">(название экзамена)</div>
 
-<div class="row" style="border-bottom: 1px solid black;max-width: 176mm; font-size: 18px; margin-top: 5mm; margin-left: 32mm;">{{ '('.$ved_info->minid.') '.$ved_info->group_name }}</div>
-<div class="row" style="text-align:center; font-size: 14px;margin-left: 78px;">	Направление подготовки (специальность)</div>
+			<div class="row" style="border-bottom: 1px solid black;max-width: 176mm; font-size: 18px; margin-top: 5mm; margin-left: 32mm;">{{ '('.$ved_info->minid.') '.$ved_info->group_name }}</div>
+			<div class="row" style="text-align:center; font-size: 14px;margin-left: 78px;">	Направление подготовки (специальность)</div>
 			<div class="row" style="padding-left: 32mm; margin-top: 5mm; font-size: 18px;">
 				Дата проведения вступительного экзамена
 				<div style="float:right; margin-right: 50mm;">
