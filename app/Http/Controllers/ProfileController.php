@@ -277,6 +277,7 @@ class ProfileController extends Controller
 
 	public function get_form_obuch(Request $request)
 	{
+		$role = session('role_id');
 		$ochka = DB::table('abit_statements')
 				->leftjoin('abit_group as g', 'g.id', 'abit_statements.group_id')
 				->where('abit_statements.person_id', $request->pid)
@@ -290,7 +291,7 @@ class ProfileController extends Controller
 				->whereNull('date_return')
 				->count();
 		$fo = [];
-		if ($ochka < 3) $fo += [ 1 => 1];
+		if ($ochka < 3 && ($role == 1 || $role == 2)) $fo += [ 1 => 1];
 		if ($zaochka < 3) $fo += [ 2 => 2];
 		//dd($fo);
 		$formobuch = DB::table('abit_group as g')
@@ -446,7 +447,7 @@ class ProfileController extends Controller
 						$tmp = DB::table('abit_examCard')->where('state_id', $AStatement_id)->where('exam_id', $ge->id)->count();
 						if ($tmp == 0)
 						{
-							$grafik = DB::table('abit_grafikExam')->where('predmet_id', $ge->predmet_id)->where('fo_id', $group->fo_id)->where('st_id', $group->st_id)->first();
+							$grafik = DB::table('abit_grafikExam')->where('predmet_id', $ge->predmet_id)->where('st_id', $group->st_id)->first();
 							if ($grafik != null)
 								DB::table('abit_examCard')->insert(['state_id' => $AStatement_id, 'exam_id' => $ge->id, 'date_exam' => $grafik->date_exam]);
 							else
@@ -649,7 +650,8 @@ class ProfileController extends Controller
 									'tests.min_ball',
 									'tests.count_question',
 									'pt.minuts_spent',
-									'pt.pers_event_id'
+									'pt.pers_event_id',
+									'tests.type_id'
 								)
 								->where('pe.event_id', '6') 								// ТУТ ФИКСИРОВАННОЕ ЗНАЧЕНИЕ - КОСТЫЛЬ, ПОНАДОБИТСЯ КАЖДЫЙ ГОД МЕНЯТЬ EVENT_ID НА НУЖНЫЙ
 								->get();
@@ -703,37 +705,57 @@ class ProfileController extends Controller
 					{
 						switch ($test->status) {
 							case 0:
-								if ($person->is_home == 'T'/* || $request->ip == '195.189.44.155' || $person_statements->first()->branch_id == 2*/)
-									$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;background-color: forestgreen;' class='badge badge-primary'>Готов к прохождению</span>";
+								if ($person->is_home == 'T' || $request->ip() == '195.189.44.155' || $person_statements->first()->branch_id == 2)
+								{
+									if ($test->type_id != 5)
+										$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;background-color: forestgreen;' class='badge badge-primary'>Готов к прохождению</span>";
+									else
+										$status = "<span style='cursor:default;background-color: forestgreen;' class='badge badge-primary'>Готов к прохождению</span>";
+								}
 								else 
-									$status = "<span class='badge badge-danger'>Тест не доступен</span>";
+									$status = "<span style='cursor:default;' class='badge badge-danger'>Тест не доступен</span>";
 								break;
 							case 1:
-								if ($person->is_home == 'T'/* || $request->ip == '195.189.44.155' || $person_statements->first()->branch_id == 2*/)
-									$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-warning'>Продолжить</span>";
+								if ($person->is_home == 'T' || $request->ip() == '195.189.44.155' || $person_statements->first()->branch_id == 2)
+								{
+									if ($test->type_id != 5)
+										$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-warning'>Продолжить</span>";
+									else
+										$status = "<span style='cursor:default;' class='badge badge-warning'>Продолжить</span>";
+								}
 								else 
-									$status = "<span class='badge badge-danger'>Тест не доступен</span>";
+									$status = "<span style='cursor:default;' class='badge badge-danger'>Тест не доступен</span>";
 								break;
 							case 2:
-								$status = $test->test_ball_correct >= $test->min_ball ?
+								if ($test->type_id != 5)
+									$status = $test->test_ball_correct >= $test->min_ball ?
 											"<span onclick='shortResult(".$test->id.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-success'>Пройден</span>" :
 											"<span onclick='shortResult(".$test->id.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-danger'>Не пройден</span>";
+								else
+									$status = $test->test_ball_correct >= $test->min_ball ?
+											"<span style='cursor:default;' class='badge badge-success'>Пройден</span>" :
+											"<span style='cursor:default;' class='badge badge-danger'>Не пройден</span>";
 								break;
 							case 3:
-								if ($person->is_home == 'T'/* || $request->ip == '195.189.44.155' || $person_statements->first()->branch_id == 2*/)
-									$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-warning'>Продолжить</span>";
+								if ($person->is_home == 'T' || $request->ip() == '195.189.44.155' || $person_statements->first()->branch_id == 2)
+								{
+									if ($test->type_id != 5)
+										$status = "<span onclick='startTest(".$test->id.",".$test->status.",\"".$person->user_hash."\");' style='cursor:pointer;' class='badge badge-warning'>Продолжить</span>";
+									else
+										$status = "<span style='cursor:default;' class='badge badge-warning'>Продолжить</span>";
+								}
 								else 
-									$status = "<span class='badge badge-danger'>Тест не доступен</span>";
+									$status = "<span style='cursor:default;' class='badge badge-danger'>Тест не доступен</span>";
 								break;
 						}
-						if ($person->is_home == 'T'/* || $request->ip == '195.189.44.155' || $person_statements->first()->branch_id == 2*/)
+						if ($person->is_home == 'T' || $request->ip() == '195.189.44.155' || $person_statements->first()->branch_id == 2)
 							$successTest += [ $test->id => "true"];
 						else 
 							$successTest += [ $test->id => "false"];
 					}
 					else
 					{
-						$status = "<span class='badge badge-danger'>Тест не доступен</span>";
+						$status = "<span style='cursor:default;' class='badge badge-danger'>Тест не доступен</span>";
 						$successTest += [
 							$test->id => "false"
 						];

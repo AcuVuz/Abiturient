@@ -91,6 +91,8 @@ Route::post('/vedomost/get_form_obuch', 'VedomostController@get_form_obuch')->mi
 Route::post('/vedomost/get_group', 'VedomostController@get_group')->middleware('check');
 Route::post('/vedomost/get_predmet', 'VedomostController@get_predmet')->middleware('check');
 Route::post('/vedomost/get_vedomost', 'VedomostController@get_vedomost')->middleware('check');
+Route::get('/vedomost/fill_vedomost', 'VedomostController@fill_vedomost')->middleware('check');
+Route::post('/vedomost/get_vedPers', 'VedomostController@get_vedPers')->middleware('check');
 //=============== Сохрание данных направления и теста ================================//
 Route::post('/direction/save', 'DirectionController@save');
 //=============== Отображение шаблона Направления ================================//

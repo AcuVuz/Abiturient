@@ -233,7 +233,8 @@
 					<input type="button" onclick="create();" class="btn btn-success" value="Сформировать" disabled>
 					<input type="button" onclick="fill_vedomost();" class="btn btn-secondary" value="Отобразить" disabled>
 					<input type="button" onclick="print();" class="btn btn-secondary" value="Распечатать" disabled>
-					<input type="button" onclick="del();" class="btn btn-danger" value="Удалить" disabled>
+					<input type="button" onclick="document.location.href = '/vedomost/fill_vedomost'" class="btn btn-danger" value="Заполнить">
+					@if($role == 1) <input type="button" onclick="del();" class="btn btn-danger" value="Удалить" disabled> @endif
 				</div>
 				<div class="form-group">
 					<label class="form-label">Выбор структуры</label>

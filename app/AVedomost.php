@@ -124,6 +124,7 @@ class AVedomost extends Model
 	static public function GetInfo($ved_id)
 	{
 		$query = AVedomost::select(
+						'abit_vedomost.id',
 						'fo.name as fo_name',
 						'st.name as st_name',
 						'te.name as te_name',
@@ -148,5 +149,14 @@ class AVedomost extends Model
 	{
 		$query = AVedomost::select('*')->where('id', $ved_id)->first();
         $query->delete();
+	}
+
+	static public function GetPersFromVedom($ved_id)
+	{
+		$query = AExamsCard::select('abit_examCard.*', 'p.famil', 'p.name', 'p.otch')
+					->leftjoin('abit_statements as ast', 'ast.id', 'abit_examCard.state_id')
+					->leftjoin('persons as p', 'p.id', 'ast.person_id')
+					->where('ved_id', '=', $ved_id)->orderBy('p.famil')->get();
+		return $query;
 	}
 }

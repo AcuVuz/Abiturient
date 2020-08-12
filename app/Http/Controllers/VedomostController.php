@@ -139,4 +139,40 @@ class VedomostController extends Controller
 		AVedomost::remove($request->ved_id);
 		return back();
 	}
+
+	public function fill_vedomost()
+	{
+		$role = session('role_id');
+		$users = session('user_name');
+		$vedList = AVedomost::All();
+        return view('VedomostPage.fillVedom', [
+                'title'         => 'Заполнение ведомости',
+				'role' 			=> $role,
+				'username' 		=> $users,
+				'vedList'		=> $vedList
+            ]
+        );
+	}
+
+	public function get_vedPers(Request $request)
+	{
+		$vedPed = AVedomost::GetPersFromVedom($request->vid);
+		
+        $vedInfo = AVedomost::GetInfo($request->vid);
+		$data[0] = '';
+		$data[1] = $vedInfo->id.' - '.$vedInfo->predmet_name;
+		$i = 1;
+		foreach ($vedPed as $vp)
+		{
+			$data[0] .= '<tr>
+				<td style="width: 50px; text-align: center">'.$i.'</td>
+				<td>'.$vp->famil.' '.$vp->name.' '.$vp->otch.'</td>
+				<td style="display: flex;justify-content: center;align-items: center; ">
+					<input type="text" name="ball['.$vp->id.']" id="ball['.$vp->id.']" class="form-control" style="width: 60px" value="'.$vp->ball.'">
+				</td>
+			</tr>';
+			$i++;
+		}
+		return $data;
+	}
 }
