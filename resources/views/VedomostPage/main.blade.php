@@ -5,6 +5,17 @@
 	<link rel="stylesheet" href="{{ asset('assets/vendor/libs/bootstrap-tagsinput/bootstrap-tagsinput.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables/datatables.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/style.css') }}">
+	<style>
+		.create_from_spec {
+			display: none;
+		}
+		.create_from_predmet {
+			display: none;
+		}
+		.activ{
+			display: block;
+		}
+	</style>
 @endsection
 
 @section('scripts')
@@ -14,6 +25,7 @@
 	<script src="{{ asset('assets/vendor/libs/datatables/datatables.js') }}"></script>
 	<script>
 		var ved_id = 0;
+		var s_method_l = 'spec';
 		function fill_facult()
 		{
 			var bid = $('#abit_branch').val();
@@ -31,6 +43,7 @@
 					$('#abit_facultet').html(msg.responseText);
 				}
 			});
+			
 			$('#abit_stlevel').html('<option>Выберите элемент</option>');
 			$('#abit_formobuch').html('<option>Выберите элемент</option>');
 			$('#abit_group').html('<option>Выберите элемент</option>');
@@ -115,7 +128,6 @@
 				},
 				success: function(data) {
 					$('#abit_examenGroup').html(data);
-
 					$('.btn').prop('disabled', '');
 				},
 				error: function(msg) {
@@ -126,54 +138,108 @@
 
 		function fill_vedomost()
 		{
-			var stid 	= $('#abit_stlevel').val();
-			var foid 	= $('#abit_formobuch').val();
-			var gid 	= $('#abit_group').val();
-			var exid 	= $('#abit_examenGroup').val();
-			var etid 	= $('#abit_typeExam').val();
+			if (s_method_l == 'spec') {
+				var stid 	= $('#abit_stlevel').val();
+				var foid 	= $('#abit_formobuch').val();
+				var gid 	= $('#abit_group').val();
+				var exid 	= $('#abit_examenGroup').val();
+				var etid 	= $('#abit_typeExam').val();
 
-			$.ajax({
-				url: '/vedomost/get_vedomost',
-				method: 'post',
-				data: {
-					stid 	: stid,
-					foid 	: foid,
-					gid  	: gid,
-					exid  	: exid,
-					etid	: etid
-				},
-				headers: {
-					'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-				},
-				success: function(data) {
-					$('#table_vedomost').html(data);
-					ved_id = 0;
-				},
-				error: function(msg) {
-					$('#table_vedomost').html(msg.responseText);
-				}
-			});
+				$.ajax({
+					url: '/vedomost/get_vedomost',
+					method: 'post',
+					data: {
+						stid 	: stid,
+						foid 	: foid,
+						gid  	: gid,
+						exid  	: exid,
+						etid	: etid
+					},
+					headers: {
+						'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: function(data) {
+						$('#table_vedomost').html(data);
+						ved_id = 0;
+					},
+					error: function(msg) {
+						$('#table_vedomost').html(msg.responseText);
+					}
+				});
+			} else {
+				var predid 		= $('#abit_predmet').val();
+				var etid 		= $('#abit_typeExam').val();
+				var stid 		= $('#abit_stlevel_all').val();
+				var dateexam 	= $('#date_exam').val();
+
+				$.ajax({
+					url: '/vedomost/get_vedomost',
+					method: 'post',
+					data: {
+						predid  	: predid,
+						etid		: etid,
+						stid 		: stid,
+						date_exam 	: dateexam
+					},
+					headers: {
+						'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: function(data) {
+						$('#table_vedomost').html(data);
+						ved_id = 0;
+					},
+					error: function(msg) {
+						$('#table_vedomost').html(msg.responseText);
+					}
+				});
+			}
 		}
 
 		function create()
 		{
-			var stid 		= $('#abit_stlevel').val();
-			var foid 		= $('#abit_formobuch').val();
-			var gid 		= $('#abit_group').val();
-			var exid 		= $('#abit_examenGroup').val();
-			var etid 		= $('#abit_typeExam').val();
-			var dateexam 	= $('#date_exam').val();
+			if (s_method_l == 'spec') {
+				var stid 		= $('#abit_stlevel').val();
+				var foid 		= $('#abit_formobuch').val();
+				var gid 		= $('#abit_group').val();
+				var exid 		= $('#abit_examenGroup').val();
+				var etid 		= $('#abit_typeExam').val();
+				var dateexam 	= $('#date_exam').val();
 
-			$.ajax({
-				url: '/vedomost/create',
-				method: 'post',
-				data: {
-					abit_stlevel 		: stid,
-					abit_formobuch 		: foid,
-					abit_group  		: gid,
-					abit_examenGroup  	: exid,
-					abit_typeExam		: etid,
-					date_exam			: dateexam
+				$.ajax({
+					url: '/vedomost/create',
+					method: 'post',
+					data: {
+						abit_stlevel 		: stid,
+						abit_formobuch 		: foid,
+						abit_group  		: gid,
+						abit_examenGroup  	: exid,
+						abit_typeExam		: etid,
+						date_exam			: dateexam
+					},
+					headers: {
+						'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: function(data) {
+						fill_vedomost();
+					},
+					error: function(msg) {
+						$('#table_vedomost').html(msg.responseText);
+					}
+				});
+			} else {
+				var predid 		= $('#abit_predmet').val();
+				var etid 		= $('#abit_typeExam').val();
+				var stid 		= $('#abit_stlevel_all').val();
+				var dateexam 	= $('#date_exam').val();
+
+				$.ajax({
+					url: '/vedomost/create',
+					method: 'post',
+					data: {
+						abit_stlevel 		: stid,
+						abit_predmet  		: predid,
+						abit_typeExam		: etid,
+						date_exam			: dateexam
 				},
 				headers: {
 					'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
@@ -185,6 +251,7 @@
 					$('#table_vedomost').html(msg.responseText);
 				}
 			});
+		}
 		}
 
 		function print()
@@ -200,6 +267,7 @@
 				form.submit();
 			}
 		}
+
 		function del()
 		{
 			$.ajax({
@@ -214,6 +282,45 @@
 				},
 				error: function(msg) {
 					$('#table_vedomost').html(msg.responseText);
+				}
+			});
+		}
+
+		function switch_method(s_method)
+		{
+			$('.rad').removeClass('btn-success');
+			$('.rad').removeClass('btn-secondary');
+			if (s_method == 'spec') {
+				$('.spec').addClass('btn-success');
+				$('.pred').addClass('btn-secondary');
+				$('.create_from_predmet').removeClass('activ');
+				$('.create_from_spec').addClass('activ');
+				s_method_l = 'spec';
+			} else {
+				$('.pred').addClass('btn-success');
+				$('.spec').addClass('btn-secondary');
+				$('.create_from_spec').removeClass('activ');
+				$('.create_from_predmet').addClass('activ');
+				s_method_l = 'pred';
+			}
+		}
+		
+		function fill_pred_no_spec()
+		{
+			var stlvl = $('#abit_stlevel_all').val();
+			$.ajax({
+				url: '/vedomost/get_predmet_no_spec',
+				method: 'post',
+				data: { stlvl : stlvl },
+				headers: {
+					'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+				},
+				success: function(data) {
+					$('#abit_predmet').html(data);
+					$('.btn').prop('disabled', '');
+				},
+				error: function(msg) {
+					$('#abit_predmet').html(msg.responseText);
 				}
 			});
 		}
@@ -237,6 +344,12 @@
 					@if($role == 1) <input type="button" onclick="del();" class="btn btn-danger" value="Удалить" disabled> @endif
 				</div>
 				<div class="form-group">
+					<div class="btn-group" role="group">
+						<button type="button" class="btn btn-success rad spec" onclick="switch_method('spec');">Ведомость на основе специальности</button>
+						<button type="button" class="btn btn-secondary rad pred" onclick="switch_method('pred');">Ведомость на основе предмета</button>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="form-label">Выбор структуры</label>
 					<select onchange="fill_facult();" class="form-control" data-style="btn-default" data-icon-base="ion" data-tick-icon="ion-md-checkmark" name="abit_branch" id="abit_branch">
 						<option value="-1">Выберите элемент</option>
@@ -245,38 +358,59 @@
 						@endforeach
 					</select>
 				</div>
-				<div class="form-row" id="abit_facultet_block">
-					<div class="form-group col-md-6">
-						<label class="form-label">Институт/Факультет</label>
-						<select id="abit_facultet" name="abit_facultet" onchange="fill_stlevel();" class="form-control " data-style="btn-default" data-icon-base="ion" data-tick-icon="ion-md-checkmark">
-							<option>Выберите элемент</option>
-						</select>
+				<div class="create_from_spec activ">
+					<div class="form-row" id="abit_facultet_block">
+						<div class="form-group col-md-6">
+							<label class="form-label">Институт/Факультет</label>
+							<select id="abit_facultet" name="abit_facultet" onchange="fill_stlevel();" class="form-control " data-style="btn-default" data-icon-base="ion" data-tick-icon="ion-md-checkmark">
+								<option>Выберите элемент</option>
+							</select>
+						</div>
+						<div class="form-group col-md-3">
+							<label class="form-label">Образовательный уровень</label>
+							<select id="abit_stlevel" name="abit_stlevel" onchange="fill_formobuch();" class="form-control " data-style="btn-default" data-icon-base="ion" data-tick-icon="ion-md-checkmark" >
+								<option>Выберите элемент</option>
+							</select>
+						</div>
+						<div class="form-group col-md-3">
+							<label class="form-label">Форма обучения</label>
+							<select id="abit_formobuch" name="abit_formobuch" onchange="fill_group();" class="form-control " data-style="btn-default" data-icon-base="ion" data-tick-icon="ion-md-checkmark" >
+								<option>Выберите элемент</option>
+							</select>
+						</div>
 					</div>
-					<div class="form-group col-md-3">
-						<label class="form-label">Образовательный уровень</label>
-						<select id="abit_stlevel" name="abit_stlevel" onchange="fill_formobuch();" class="form-control " data-style="btn-default" data-icon-base="ion" data-tick-icon="ion-md-checkmark" >
-							<option>Выберите элемент</option>
-						</select>
-					</div>
-					<div class="form-group col-md-3">
-						<label class="form-label">Форма обучения</label>
-						<select id="abit_formobuch" name="abit_formobuch" onchange="fill_group();" class="form-control " data-style="btn-default" data-icon-base="ion" data-tick-icon="ion-md-checkmark" >
-							<option>Выберите элемент</option>
-						</select>
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label class="form-label">Направление подготовки</label>
+							<select id="abit_group" name="abit_group" onchange="fill_predmet();" class="form-control " data-style="btn-default" data-icon-base="ion" data-tick-icon="ion-md-checkmark">
+								<option>Выберите элемент</option>
+							</select>
+						</div>
+						<div class="form-group col-md-6">
+							<label class="form-label">Предмет</label>
+							<select id="abit_examenGroup" name="abit_examenGroup" class="form-control " data-style="btn-default" data-icon-base="ion" data-tick-icon="ion-md-checkmark">
+								<option>Выберите элемент</option>
+							</select>
+						</div>
 					</div>
 				</div>
-				<div class="form-row">
-					<div class="form-group col-md-6">
-						<label class="form-label">Направление подготовки</label>
-						<select id="abit_group" name="abit_group" onchange="fill_predmet();" class="form-control " data-style="btn-default" data-icon-base="ion" data-tick-icon="ion-md-checkmark">
-							<option>Выберите элемент</option>
-						</select>
-					</div>
-					<div class="form-group col-md-6">
-						<label class="form-label">Предмет</label>
-						<select id="abit_examenGroup" name="abit_examenGroup" class="form-control " data-style="btn-default" data-icon-base="ion" data-tick-icon="ion-md-checkmark">
-							<option>Выберите элемент</option>
-						</select>
+				<div class="create_from_predmet ">
+					<div class="form-row">
+						<div class="form-group col-md-3">
+							<label class="form-label">Образовательный уровень</label>
+							<select id="abit_stlevel_all" name="abit_stlevel_all" onchange="fill_pred_no_spec();" class="form-control " data-style="btn-default" data-icon-base="ion" data-tick-icon="ion-md-checkmark" >
+								<option>Выберите элемент</option>
+								@foreach ($stlvl as $st)
+									<option value="{{ $st->id }}">{{ $st->name }}</option>
+								@endforeach
+							</select>
+						</div>
+						<div class="form-group col-md-9">
+							<label class="form-label">Предмет</label>
+							<select id="abit_predmet" name="abit_predmet" class="form-control " data-style="btn-default" data-icon-base="ion" data-tick-icon="ion-md-checkmark">
+								<option>Выберите элемент</option>
+							</select>
+						</div>
 					</div>
 				</div>
 				<div class="form-row">

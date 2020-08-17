@@ -14,37 +14,37 @@ class Persons extends Model
 		//$tkt = APersPriv::select('id as ctt')->whereRaw('abit_persPrivilege.pers_id', 'persons.id')->count();
 		session('role_id') != 1 ? $pers_test = '1079' : $pers_test = '';
 		if($stxt == ''){
-		$item_abit = Persons::
-		selectRaw(
-		'distinct(persons.id) as id_Abit, persons.famil as FirstName,
-		persons.name as Name, persons.otch as LastName,
-		persons.email, persons.phone_one as PhoneOne, persons.phone_two as PhoneTwo,
-		(select count(ap.id) from abit_persPrivilege ap
-			where ap.pers_id = persons.id) as countPriv, persons.is_checked as Checked'
-		)
-		->join('abit_statements', 'abit_statements.person_id', '=', 'persons.id')
-		->join('abit_group', 'abit_group.id', '=', 'abit_statements.group_id')
-		->join('abit_facultet', 'abit_facultet.id', '=', 'abit_group.fk_id')
-		->join('user_roles', 'user_roles.abit_branch_id', '=', 'abit_facultet.branch_id')
-		->where('persons.pers_type', 'a')
-		->where('persons.famil','<>', '')
-		->where('persons.id','<>', $pers_test)
-		->where('user_roles.user_id', session('user_id'))
-		//->whereNull('abit_statements.date_return')
-		->orderBy('FirstName', 'ASC')
-		->get();
+			$item_abit = Persons::
+			selectRaw(
+				'distinct(persons.id) as id_Abit, persons.famil as FirstName,
+				persons.name as Name, persons.otch as LastName,
+				persons.email, persons.phone_one as PhoneOne, persons.phone_two as PhoneTwo,
+				(select count(ap.id) from abit_persPrivilege ap
+					where ap.pers_id = persons.id) as countPriv, persons.is_checked as Checked'
+			)
+			->join('abit_statements', 'abit_statements.person_id', '=', 'persons.id')
+			->join('abit_group', 'abit_group.id', '=', 'abit_statements.group_id')
+			->join('abit_facultet', 'abit_facultet.id', '=', 'abit_group.fk_id')
+			->join('user_roles', 'user_roles.abit_branch_id', '=', 'abit_facultet.branch_id')
+			->where('persons.pers_type', 'a')
+			->where('persons.famil','<>', '')
+			->where('persons.id','<>', $pers_test)
+			->where('user_roles.user_id', session('user_id'))
+			//->whereNull('abit_statements.date_return')
+			->orderBy('FirstName', 'ASC')
+			->get();
 		}else{
-		$item_abit = Persons::selectRaw(
-		'distinct(persons.id) as id_Abit, persons.famil as FirstName,
-		persons.name as Name, persons.otch as LastName,
-		persons.email, persons.phone_one as PhoneOne, persons.phone_two as PhoneTwo,
-		persons.is_checked as Checked'
-		)
-		->where('persons.famil', 'like', '%'.$stxt.'%')
-		->where('persons.pers_type', 'a')
-		->where('persons.famil','<>', '')
-		->where('persons.id','<>', $pers_test)
-		->get();
+			$item_abit = Persons::selectRaw(
+				'distinct(persons.id) as id_Abit, persons.famil as FirstName,
+				persons.name as Name, persons.otch as LastName,
+				persons.email, persons.phone_one as PhoneOne, persons.phone_two as PhoneTwo,
+				persons.is_checked as Checked'
+			)
+			->where('persons.famil', 'like', '%'.$stxt.'%')
+			->where('persons.pers_type', 'a')
+			->where('persons.famil','<>', '')
+			->where('persons.id','<>', $pers_test)
+			->get();
 		}
 
 

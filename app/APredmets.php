@@ -48,6 +48,20 @@ class APredmets extends Model
 		return $predmet;
 	}
 
+	static public function GetPredmetLNUWithStlevel($stlvl)
+	{
+		$predmet = APredmets::
+					select (
+						'id',
+						'name'
+					)
+					->where('is_vuz', 'T')
+					->where('stlevel_id', '=', $stlvl)
+                    ->orderby('name', 'asc')
+					->get();
+		return $predmet;
+	}
+
 	static public function GetGroupPredmet($group_id)
 	{
 		$predmet = APredmets::

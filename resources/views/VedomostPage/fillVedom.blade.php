@@ -13,6 +13,24 @@
 	<script src="{{ asset('assets/vendor/libs/bootstrap-tagsinput/bootstrap-tagsinput.js') }}"></script>
 	<script src="{{ asset('assets/vendor/libs/datatables/datatables.js') }}"></script>
 	<script>
+		function save_vedomost()
+		{
+			$.ajax({
+				url: '/vedomost/save_vedPers',
+				method: 'post',
+				data:  $('#ff').serialize(),
+				headers: {
+					'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+				},
+				success: function(data) {
+					fill_vedomost()
+				},
+				error: function(msg) {
+					$('#table_vedomost').html(msg.responseText);
+				}
+			});
+		}
+
 		function fill_vedomost()
 		{
 			var vid = $('#ved').val();
@@ -45,10 +63,10 @@
 	<div id="loadForm" style="display: none;"></div>
 	<div class="card mb-4">
 		<div class="card-body">
-			<form action="#" method="POST">
+			<form action="#" method="POST" id="ff">
 				{{ csrf_field() }}
 				<div class="form-group">
-					<input type="button" class="btn btn-success" value="Сохранить">
+					<input type="button" class="btn btn-success" onclick="save_vedomost();" value="Сохранить">
 				</div>
 				<div class="row">
 					<div class="col"></div>

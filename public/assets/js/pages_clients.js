@@ -165,9 +165,11 @@ $(function() {
         });
     }
 
-    $('#custserach').keyup(function() {
-        $('#table').DataTable().destroy();
-        abit_table();
+    $('#custserach').keyup(function(event) {
+        if (event.keyCode === 13) {
+            $('#table').DataTable().destroy();
+            abit_table();
+        }
     });
 
 });

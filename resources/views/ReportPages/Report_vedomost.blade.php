@@ -43,8 +43,10 @@
 				<h2 style="font-size: 22px;">ГОУ ВО ЛНР «ЛУГАНСКИЙ ГОСУДАРСТВЕННЫЙ</br>
 				ПЕДАГОГИЧЕСКИЙ УНИВЕРСИТЕТ»</h2>
 			</div>
-			<div class="row" style="text-align:center; font-size: 20px; margin-left: 60px;">Форма обучения: <? echo $ved_info->fo_name == 'Очная' ? '<u>очная</u>, заочная' : 'очная, <u>заочная</u>' ?></div>
-			<div class="row" style="text-align:center; font-size: 14px;margin-left: 130px;">(подчеркнуть)</div>
+			@if (isset($ved_info->group_name))
+				<div class="row" style="text-align:center; font-size: 20px; margin-left: 60px;">Форма обучения: <? echo $ved_info->fo_name == 'Очная' ? '<u>очная</u>, заочная' : 'очная, <u>заочная</u>' ?></div>
+				<div class="row" style="text-align:center; font-size: 14px;margin-left: 130px;">(подчеркнуть)</div>
+			@endif
 			<div class="row" style="text-align:center; font-size: 20px; margin-left: 77px;"><h3>ВЕДОМОСТЬ ВСТУПИТЕЛЬНОГО ЭКЗАМЕНА</h3></div>
 			<div class="row" style="padding-left: 32mm; font-size: 18px;">
 				Уровень профессионального образования
@@ -56,9 +58,10 @@
 			<div class="row" style="text-align:center; font-size: 14px; margin-left: 20mm;">(форма вступительного экзамена)</div>
 			<div class="row" style="font-size: 18px; max-width: 176mm; margin-left: 32mm; border-bottom: 1px solid black; margin-top: 5mm;">{{ $ved_info->predmet_name }}</div>
 			<div class="row" style="text-align:center; font-size: 14px; margin-left: 18mm;">(название экзамена)</div>
-
-			<div class="row" style="border-bottom: 1px solid black;max-width: 176mm; font-size: 18px; margin-top: 5mm; margin-left: 32mm;">{{ '('.$ved_info->minid.') '.$ved_info->group_name }}</div>
-			<div class="row" style="text-align:center; font-size: 14px;margin-left: 78px;">	Направление подготовки (специальность)</div>
+			@if (isset($ved_info->group_name))
+				<div class="row" style="border-bottom: 1px solid black;max-width: 176mm; font-size: 18px; margin-top: 5mm; margin-left: 32mm;">{{ '('.$ved_info->minid.') '.$ved_info->group_name }}</div>
+				<div class="row" style="text-align:center; font-size: 14px;margin-left: 78px;">	Направление подготовки (специальность)</div>
+			@endif
 			<div class="row" style="padding-left: 32mm; margin-top: 5mm; font-size: 18px;">
 				Дата проведения вступительного экзамена
 				<div style="float:right; margin-right: 50mm;">

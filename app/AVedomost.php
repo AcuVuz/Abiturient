@@ -29,6 +29,19 @@ class AVedomost extends Model
 		}
 		return $query;
 	}
+
+	static public function GetVedomostFromPredmet($st_id, $predmet_id, $typeExam_id, $date_exam)
+	{
+		$query = AVedomost::select('abit_vedomost.*', 'te.name')
+					->leftjoin('abit_typeExam as te', 'te.id', 'abit_vedomost.type_exam_id')
+					->where('abit_vedomost.st_id', $st_id)
+					->where('abit_vedomost.predmet_id', $predmet_id)
+					->where('abit_vedomost.type_exam_id', $typeExam_id)
+					->where('abit_vedomost.date_vedom', $date_exam)
+					->get();
+		
+		return $query;
+	}
 	
 	static public function CountPers($ved_id, $typeExam_id)
 	{
@@ -66,39 +79,76 @@ class AVedomost extends Model
 		return $query;
 	}
 
-	static public function FillVedomost($ved_id, $limit, $actual, $examenGroup_id, $date_exam, $typeExam_id)
+	static public function FillVedomost($ved_id, $limit, $actual, $examenGroup_id, $date_exam, $typeExam_id, $predmet_id)
 	{
 		$lim = $limit - $actual;
-		if ($typeExam_id == 3) {
-			$examCard = AExamsCard::select('abit_examCard.id')
-						->leftjoin('abit_statements as st', 'st.id', 'abit_examCard.state_id')
-						->whereNull('st.date_return')
-						->whereNull('ved_id')
-						->whereNotNull('abit_examCard.ball')
-						->where('exam_id', $examenGroup_id)
-						->limit($lim)
-						->get();
-			
-			foreach ($examCard as $ec) {
-				$ec->ved_id = $ved_id;
-				$ec->date_exam = $date_exam;
-				$ec->save();
+		if (isset($examenGroup_id)) {
+			if ($typeExam_id == 3) {
+				$examCard = AExamsCard::select('abit_examCard.id')
+							->leftjoin('abit_statements as st', 'st.id', 'abit_examCard.state_id')
+							->whereNull('st.date_return')
+							->whereNull('ved_id')
+							->whereNotNull('abit_examCard.ball')
+							->where('exam_id', $examenGroup_id)
+							->limit($lim)
+							->get();
+				
+				foreach ($examCard as $ec) {
+					$ec->ved_id = $ved_id;
+					$ec->date_exam = $date_exam;
+					$ec->save();
+				}
 			}
-		}
-		else
-		{
-			$examCard = AExamsCard::select('abit_examCard.id')
-						->leftjoin('abit_statements as st', 'st.id', 'abit_examCard.state_id')
-						->whereNull('st.date_return')
-						->whereNull('ved_id')
-						->where('exam_id', $examenGroup_id)
-						->limit($lim)
-						->get();
-			
-			foreach ($examCard as $ec) {
-				$ec->ved_id = $ved_id;
-				$ec->date_exam = $date_exam;
-				$ec->save();
+			else
+			{
+				$examCard = AExamsCard::select('abit_examCard.id')
+							->leftjoin('abit_statements as st', 'st.id', 'abit_examCard.state_id')
+							->whereNull('st.date_return')
+							->whereNull('ved_id')
+							->where('exam_id', $examenGroup_id)
+							->limit($lim)
+							->get();
+				
+				foreach ($examCard as $ec) {
+					$ec->ved_id = $ved_id;
+					$ec->date_exam = $date_exam;
+					$ec->save();
+				}
+			}
+		} else {
+			if ($typeExam_id == 3) {
+				$examCard = AExamsCard::select('abit_examCard.id')
+							->leftjoin('abit_statements as st', 'st.id', 'abit_examCard.state_id')
+							->leftjoin('abit_examenGroup as eg', 'eg.id', 'abit_examCard.exam_id')
+							->whereNull('st.date_return')
+							->whereNull('ved_id')
+							->whereNotNull('abit_examCard.ball')
+							->where('eg.predmet_id', $predmet_id)
+							->limit($lim)
+							->get();
+				
+				foreach ($examCard as $ec) {
+					$ec->ved_id = $ved_id;
+					$ec->date_exam = $date_exam;
+					$ec->save();
+				}
+			}
+			else
+			{
+				$examCard = AExamsCard::select('abit_examCard.id')
+							->leftjoin('abit_statements as st', 'st.id', 'abit_examCard.state_id')
+							->leftjoin('abit_examenGroup as eg', 'eg.id', 'abit_examCard.exam_id')
+							->whereNull('st.date_return')
+							->whereNull('ved_id')
+							->where('eg.predmet_id', $predmet_id)
+							->limit($lim)
+							->get();
+				
+				foreach ($examCard as $ec) {
+					$ec->ved_id = $ved_id;
+					$ec->date_exam = $date_exam;
+					$ec->save();
+				}
 			}
 		}
 	}
@@ -137,9 +187,9 @@ class AVedomost extends Model
 					->leftjoin('abit_examenGroup as eg', 'eg.id', 'abit_vedomost.examenGroup_id')
 					->leftjoin('abit_group as g', 'g.id', 'eg.group_id')
 					->leftjoin('abit_formObuch as fo', 'fo.id', 'g.fo_id')
-					->leftjoin('abit_stlevel as st', 'st.id', 'g.st_id')
+					->leftjoin('abit_stlevel as st', 'st.id', 'abit_vedomost.st_id')
 					->leftjoin('abit_typeExam as te', 'te.id', 'abit_vedomost.type_exam_id')
-					->leftjoin('abit_predmets as p', 'p.id', 'eg.predmet_id')
+					->leftjoin('abit_predmets as p', 'p.id', 'abit_vedomost.predmet_id')
 					->where('abit_vedomost.id', $ved_id)
 					->first();
 		return $query;
@@ -153,8 +203,10 @@ class AVedomost extends Model
 
 	static public function GetPersFromVedom($ved_id)
 	{
-		$query = AExamsCard::select('abit_examCard.*', 'p.famil', 'p.name', 'p.otch')
+		$query = AExamsCard::select('abit_examCard.*', 'p.famil', 'p.name', 'p.otch', 'p.id as pid', 'pr.test_id as tid')
 					->leftjoin('abit_statements as ast', 'ast.id', 'abit_examCard.state_id')
+					->leftjoin('abit_examenGroup as eg', 'eg.id', 'abit_examCard.exam_id')
+					->leftjoin('abit_predmets as pr', 'pr.id', 'eg.predmet_id')
 					->leftjoin('persons as p', 'p.id', 'ast.person_id')
 					->where('ved_id', '=', $ved_id)->orderBy('p.famil')->get();
 		return $query;

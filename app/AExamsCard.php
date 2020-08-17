@@ -25,26 +25,50 @@ class AExamsCard extends Model
 		return $query;
 	}
 
-	static public function GetAllExamCard($examen_id, $exType = 0)
+	static public function GetAllExamCard($examen_id, $exType = 0, $predmet_id)
 	{
-		if ($exType == 3)
-		{
-			$query = AExamsCard::select('abit_examCard.*')
-						->leftjoin('abit_statements as st', 'st.id', 'abit_examCard.state_id')
-						->whereNull('st.date_return')
-						->whereNull('ved_id')
-						->whereNotNull('ball')
-						->where('exam_id', $examen_id)
-						->get();
-		}
-		else
-		{
-			$query = AExamsCard::select('abit_examCard.*')
-			->leftjoin('abit_statements as st', 'st.id', 'abit_examCard.state_id')
-			->whereNull('st.date_return')
-			->whereNull('ved_id')
-			->where('exam_id', $examen_id)
-			->get();
+		if (isset($examen_id)) {
+			if ($exType == 3)
+			{
+				$query = AExamsCard::select('abit_examCard.*')
+							->leftjoin('abit_statements as st', 'st.id', 'abit_examCard.state_id')
+							->whereNull('st.date_return')
+							->whereNull('ved_id')
+							->whereNotNull('ball')
+							->where('exam_id', $examen_id)
+							->get();
+			}
+			else
+			{
+				$query = AExamsCard::select('abit_examCard.*')
+				->leftjoin('abit_statements as st', 'st.id', 'abit_examCard.state_id')
+				->whereNull('st.date_return')
+				->whereNull('ved_id')
+				->where('exam_id', $examen_id)
+				->get();
+			}
+		} else {
+			if ($exType == 3)
+			{
+				$query = AExamsCard::select('abit_examCard.*')
+							->leftjoin('abit_statements as st', 'st.id', 'abit_examCard.state_id')
+							->leftjoin('abit_examenGroup as eg', 'eg.id', 'abit_examCard.exam_id')
+							->whereNull('st.date_return')
+							->whereNull('ved_id')
+							->whereNotNull('ball')
+							->where('eg.predmet_id', $predmet_id)
+							->get();
+			}
+			else
+			{
+				$query = AExamsCard::select('abit_examCard.*')
+							->leftjoin('abit_statements as st', 'st.id', 'abit_examCard.state_id')
+							->leftjoin('abit_examenGroup as eg', 'eg.id', 'abit_examCard.exam_id')
+							->whereNull('st.date_return')
+							->whereNull('ved_id')
+							->where('eg.predmet_id', $predmet_id)
+							->get();
+			}
 		}
 		return $query;
 	}

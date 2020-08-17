@@ -90,9 +90,11 @@ Route::post('/vedomost/get_stlevel', 'VedomostController@get_stlevel')->middlewa
 Route::post('/vedomost/get_form_obuch', 'VedomostController@get_form_obuch')->middleware('check');
 Route::post('/vedomost/get_group', 'VedomostController@get_group')->middleware('check');
 Route::post('/vedomost/get_predmet', 'VedomostController@get_predmet')->middleware('check');
+Route::post('/vedomost/get_predmet_no_spec', 'VedomostController@get_predmet_no_spec')->middleware('check');
 Route::post('/vedomost/get_vedomost', 'VedomostController@get_vedomost')->middleware('check');
 Route::get('/vedomost/fill_vedomost', 'VedomostController@fill_vedomost')->middleware('check');
 Route::post('/vedomost/get_vedPers', 'VedomostController@get_vedPers')->middleware('check');
+Route::post('/vedomost/save_vedPers', 'VedomostController@save_vedPers')->middleware('check');
 //=============== Сохрание данных направления и теста ================================//
 Route::post('/direction/save', 'DirectionController@save');
 //=============== Отображение шаблона Направления ================================//

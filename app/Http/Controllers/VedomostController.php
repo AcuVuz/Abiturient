@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\ABranch;
 use App\AExamsCard;
@@ -15,6 +13,7 @@ use App\ASTLevel;
 use App\APredmets;
 use App\AVedomost;
 use App\ATypExam;
+use App\PersTest;
 
 class VedomostController extends Controller
 {
@@ -23,13 +22,15 @@ class VedomostController extends Controller
         $role = session('role_id');
 		$users = session('user_name');
         $abit_branch = ABranch::GetBranch();
-        $type_exam = ATypExam::GetTypExam();
+		$type_exam = ATypExam::GetTypExam();
+		$stlvl = ASTLevel::All();
         return view('VedomostPage.main', [
                 'title'         => 'Ведомости',
 				'role' 			=> $role,
 				'username' 		=> $users,
                 'abit_branch'   => $abit_branch,
-                'type_exam'     => $type_exam
+                'type_exam'     => $type_exam,
+                'stlvl'     	=> $stlvl
             ]
         );
     }
@@ -76,32 +77,63 @@ class VedomostController extends Controller
 
 	public function get_predmet(Request $request)
 	{
-		$predmet = APredmets::GetGroupPredmet($request->gid);
 		$data = "<option>Выберите элемент</option>";
+		$predmet = APredmets::GetGroupPredmet($request->gid);
 		foreach ($predmet as $p) {
 			$data .= "<option value='".$p->exid."'>".$p->name."</option>";
 		}
+
+		return $data;
+	}
+
+	public function get_predmet_no_spec(Request $request)
+	{
+		$data = "<option>Выберите элемент</option>";
+		$predmet = APredmets::GetPredmetLNUWithStlevel($request->stlvl);
+		foreach ($predmet as $p) {
+			$data .= "<option value='".$p->id."'>".$p->name."</option>";
+		}
+		
 		return $data;
 	}
 
 	public function get_vedomost(Request $request)
 	{
-        $predmet = APredmets::GetGroupPredmet($request->gid)->where('exid', $request->exid)->first();
-		$vedomost = AVedomost::GetVedomost($request->exid, $request->stid, $request->foid, $predmet->id, $request->etid, $request->date_exam);
-        
-        if (count($vedomost) == 0) $data = "<tr><td class='text-center' colspan='5'>Нет записей</td></tr>";
-        else $data = "";
-        $i = 1;
-		foreach ($vedomost as $v) {
-            $count = AVedomost::CountPers($v->id, $request->etid);
-            $data .= "<tr onclick='ved_id=".$v->id."'>";
-            $data .= "<td>".$i."</td>";
-            $data .= "<td>".$v->id."</td>";
-            $data .= "<td>".$v->name."</td>";
-            $data .= "<td>".$v->date_vedom."</td>";
-            $data .= "<td>".$count."</td>";
-			$data .= "</tr>";
-			$i++;
+		if (isset($request->gid)) {
+			$predmet = APredmets::GetGroupPredmet($request->gid)->where('exid', $request->exid)->first();
+			$vedomost = AVedomost::GetVedomost($request->exid, $request->stid, $request->foid, $predmet->id, $request->etid, $request->date_exam);
+			
+			if (count($vedomost) == 0) $data = "<tr><td class='text-center' colspan='5'>Нет записей</td></tr>";
+			else $data = "";
+			$i = 1;
+			foreach ($vedomost as $v) {
+				$count = AVedomost::CountPers($v->id, $request->etid);
+				$data .= "<tr onclick='ved_id=".$v->id."'>";
+				$data .= "<td>".$i."</td>";
+				$data .= "<td>".$v->id."</td>";
+				$data .= "<td>".$v->name."</td>";
+				$data .= "<td>".$v->date_vedom."</td>";
+				$data .= "<td>".$count."</td>";
+				$data .= "</tr>";
+				$i++;
+			}
+		} else {
+			$vedomost = AVedomost::GetVedomostFromPredmet($request->stid, $request->predid, $request->etid, $request->date_exam);
+			
+			if (count($vedomost) == 0) $data = "<tr><td class='text-center' colspan='5'>Нет записей</td></tr>";
+			else $data = "";
+			$i = 1;
+			foreach ($vedomost as $v) {
+				$count = AVedomost::CountPers($v->id, $request->etid);
+				$data .= "<tr onclick='ved_id=".$v->id."'>";
+				$data .= "<td>".$i."</td>";
+				$data .= "<td>".$v->id."</td>";
+				$data .= "<td>".$v->name."</td>";
+				$data .= "<td>".$v->date_vedom."</td>";
+				$data .= "<td>".$count."</td>";
+				$data .= "</tr>";
+				$i++;
+			}
 		}
 		return $data;
     }
@@ -111,24 +143,43 @@ class VedomostController extends Controller
         $limit = 30;
 		$actual = 0;
 		
-		$predmet = APredmets::GetGroupPredmet($request->abit_group)->where('exid', $request->abit_examenGroup)->first();
-        $vedomost = AVedomost::GetVedomost($request->abit_examenGroup, $request->abit_stlevel, $request->abit_formobuch, 
-                                        $predmet->id, $request->abit_typeExam, $request->date_exam);   
-		
-		foreach ($vedomost as $v) {
-            $actual = AVedomost::CountPers($v->id, $request->abit_typeExam);
-            if ($actual < $limit)
-                AVedomost::FillVedomost($v->id, $limit, $actual, $request->abit_examenGroup, $request->date_exam, $request->abit_typeExam); 
-        }
+		if (isset($request->abit_group)) {
+			$predmet = APredmets::GetGroupPredmet($request->abit_group)->where('exid', $request->abit_examenGroup)->first();
+			$vedomost = AVedomost::GetVedomost($request->abit_examenGroup, $request->abit_stlevel, $request->abit_formobuch, 
+											$predmet->id, $request->abit_typeExam, $request->date_exam);   
+			
+			foreach ($vedomost as $v) {
+				$actual = AVedomost::CountPers($v->id, $request->abit_typeExam);
+				if ($actual < $limit)
+					AVedomost::FillVedomost($v->id, $limit, $actual, $request->abit_examenGroup, $request->date_exam, $request->abit_typeExam, null); 
+			}
 
-		$examCradCount = AExamsCard::GetAllExamCard($request->abit_examenGroup, $request->abit_typeExam)->count();
-		$actual = 0;
-		if ($examCradCount > 0) {
-			for ($i = 0; $i <= ($examCradCount / $limit); $i++)
-			{
-				$vedomost = AVedomost::Create($request->abit_examenGroup, $request->abit_stlevel, $request->abit_formobuch, 
-											$predmet->id, $request->abit_typeExam, $request->date_exam);
-				AVedomost::FillVedomost($vedomost->id, $limit, $actual, $request->abit_examenGroup, $request->date_exam, $request->abit_typeExam); 							
+			$examCradCount = AExamsCard::GetAllExamCard($request->abit_examenGroup, $request->abit_typeExam, null)->count();
+			$actual = 0;
+			if ($examCradCount > 0) {
+				for ($i = 0; $i <= ($examCradCount / $limit); $i++)
+				{
+					$vedomost = AVedomost::Create($request->abit_examenGroup, $request->abit_stlevel, $request->abit_formobuch, 
+												$predmet->id, $request->abit_typeExam, $request->date_exam);
+					AVedomost::FillVedomost($vedomost->id, $limit, $actual, $request->abit_examenGroup, $request->date_exam, $request->abit_typeExam, null); 							
+				}
+			}
+		} else {
+			$vedomost = AVedomost::GetVedomostFromPredmet($request->abit_stlevel, $request->abit_predmet, $request->abit_typeExam, $request->date_exam);
+			foreach ($vedomost as $v) {
+				$actual = AVedomost::CountPers($v->id, $request->abit_typeExam);
+				if ($actual < $limit)
+					AVedomost::FillVedomost($v->id, $limit, $actual, null, $request->date_exam, $request->abit_typeExam, $request->abit_predmet); 
+			}
+			$examCradCount = AExamsCard::GetAllExamCard(null, $request->abit_typeExam, $request->abit_predmet)->count();
+			$actual = 0;
+			if ($examCradCount > 0) {
+				for ($i = 0; $i <= ($examCradCount / $limit); $i++)
+				{
+					$vedomost = AVedomost::Create(null, $request->abit_stlevel, null, 
+									$request->abit_predmet, $request->abit_typeExam, $request->date_exam);
+					AVedomost::FillVedomost($vedomost->id, $limit, $actual, null, $request->date_exam, $request->abit_typeExam, $request->abit_predmet); 							
+				}
 			}
 		}
         return back();
@@ -174,5 +225,20 @@ class VedomostController extends Controller
 			$i++;
 		}
 		return $data;
+	}
+
+	public function save_vedPers(Request $request)
+	{
+		$vedPed = AVedomost::GetPersFromVedom($request->ved);
+		foreach ($vedPed as $vp)
+		{
+			$abit = AExamsCard::find($vp->id);
+			$abit->ball = isset($request->ball[$vp->id]) ? $request->ball[$vp->id] : null;
+			$abit->save();
+			$pt = PersTest::where('pers_id', '=', $vp->pid)->where('test_id', '=', $vp->tid)->first();
+			$pt->test_ball_correct = isset($request->ball[$vp->id]) ? $request->ball[$vp->id] : null;
+			$pt->status = 2;
+			$pt->save();
+		}
 	}
 }
