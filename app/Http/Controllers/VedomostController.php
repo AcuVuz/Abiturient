@@ -236,9 +236,11 @@ class VedomostController extends Controller
 			$abit->ball = isset($request->ball[$vp->id]) ? $request->ball[$vp->id] : null;
 			$abit->save();
 			$pt = PersTest::where('pers_id', '=', $vp->pid)->where('test_id', '=', $vp->tid)->first();
-			$pt->test_ball_correct = isset($request->ball[$vp->id]) ? $request->ball[$vp->id] : null;
-			$pt->status = 2;
-			$pt->save();
+			if (isset($pt)) {
+				$pt->test_ball_correct = isset($request->ball[$vp->id]) ? $request->ball[$vp->id] : null;
+				$pt->status = 2;
+				$pt->save();
+			}
 		}
 	}
 }
