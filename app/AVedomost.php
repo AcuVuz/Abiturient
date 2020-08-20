@@ -171,6 +171,30 @@ class AVedomost extends Model
 		return $query;
 	}
 
+	static public function GetAll()
+	{
+		$query = AVedomost::select(
+						'abit_vedomost.id',
+						'fo.name as fo_name',
+						'st.name as st_name',
+						'te.name as te_name',
+						'p.name as predmet_name',
+						'abit_vedomost.date_vedom',
+						'g.name as group_name',
+						'g.minid',
+						'st.id as st_id'
+					)
+					->leftjoin('abit_examenGroup as eg', 'eg.id', 'abit_vedomost.examenGroup_id')
+					->leftjoin('abit_group as g', 'g.id', 'eg.group_id')
+					->leftjoin('abit_formObuch as fo', 'fo.id', 'g.fo_id')
+					->leftjoin('abit_stlevel as st', 'st.id', 'abit_vedomost.st_id')
+					->leftjoin('abit_typeExam as te', 'te.id', 'abit_vedomost.type_exam_id')
+					->leftjoin('abit_predmets as p', 'p.id', 'abit_vedomost.predmet_id')
+					->orderby('abit_vedomost.id')
+					->get();
+		return $query;
+	}
+
 	static public function GetInfo($ved_id)
 	{
 		$query = AVedomost::select(

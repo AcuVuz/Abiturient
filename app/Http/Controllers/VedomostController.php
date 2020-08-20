@@ -195,7 +195,7 @@ class VedomostController extends Controller
 	{
 		$role = session('role_id');
 		$users = session('user_name');
-		$vedList = AVedomost::All();
+		$vedList = AVedomost::GetAll();
         return view('VedomostPage.fillVedom', [
                 'title'         => 'Заполнение ведомости',
 				'role' 			=> $role,
