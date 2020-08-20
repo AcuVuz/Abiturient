@@ -37,9 +37,11 @@
                 </div>
             </form>
             <!-- / Form -->
-            <div class="text-center text-muted text-reg-func">
-                Перейти на <a href="{{ url('/register') }}">Регистрацию</a>
-            </div>
+            @if(isset($close))
+                <div class="text-center text-muted text-reg-func">
+                    Перейти на <a href="{{ url('/register') }}">Регистрацию</a>
+                </div>
+            @endif
         </div>
     </div>
 <script src="{{ asset('js/timescript.js') }}"></script>

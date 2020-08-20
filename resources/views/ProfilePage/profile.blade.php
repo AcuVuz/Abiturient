@@ -376,52 +376,49 @@
 			<h4 class="font-weight-bold mb-0">{{ $person->famil.' '.$person->name.' '.$person->otch }}</h4>
 			<div class="text-muted mb-2">Логин: {{ $person->login }}</div>
 			<div class="text-muted mb-2">E-mail: {{ $person->email }}</div>
-			<span class="profile-time-func">
-				<a href="javascript:void(0)" class="btn btn-primary btn-sm" onclick="FindFile();">
-					<i class="ion ion-md-photos"></i>
-					Фото
-				</a>
-				<form action="#" method="POST" enctype="multipart/form-data" id="loadPhoto" style="position:absolute;overflow: hidden;display:block;height:0px;width:0px;">
-					<input type="file"   id="FindFile" accept="image/jpeg,image/png,image/gif" name="FindFile" onchange="LoadFile();" style="display: none">
-					<input type="hidden" name="pid" id="pid" value="{{ $person->id }}">
-					<input type="submit" id="loadFile" style="display: none" value='Загрузить'>
-				</form>
-				<iframe id="rFrame" name="rFrame" style="display: none"> </iframe>
-				@if($person_count_statements > 0)<a href="{{ url('/scanPhoto') }}" class="btn btn-default btn-sm"><i class="ion ion-md-images "></i> Скан фото</a>@endif
-				@if($person->is_checked == 'F' || $role != 5)
-				<a href="{{ url('/insert_abit') }}" class="btn btn-default btn-sm"><i class="ion ion-md-person "></i> Данные</a>
-					<div class="demo-paragraph-spacing mt-3">
-					@if($person_count_statements < 6)
-						<a href="{{ url('/success_insert_abit') }}" class="btn btn-primary">
-							<i class="ion ion-md-add"></i>
-								Добавить заявление
+			@if(isset($close) || $role != 5)
+				<span class="profile-time-func">
+					<a href="javascript:void(0)" class="btn btn-primary btn-sm" onclick="FindFile();">
+						<i class="ion ion-md-photos"></i>
+						Фото
+					</a>
+					<form action="#" method="POST" enctype="multipart/form-data" id="loadPhoto" style="position:absolute;overflow: hidden;display:block;height:0px;width:0px;">
+						<input type="file"   id="FindFile" accept="image/jpeg,image/png,image/gif" name="FindFile" onchange="LoadFile();" style="display: none">
+						<input type="hidden" name="pid" id="pid" value="{{ $person->id }}">
+						<input type="submit" id="loadFile" style="display: none" value='Загрузить'>
+					</form>
+					<iframe id="rFrame" name="rFrame" style="display: none"> </iframe>
+					@if($person_count_statements > 0)<a href="{{ url('/scanPhoto') }}" class="btn btn-default btn-sm"><i class="ion ion-md-images "></i> Скан фото</a>@endif
+					@if($person->is_checked == 'F' || $role != 5)
+					<a href="{{ url('/insert_abit') }}" class="btn btn-default btn-sm"><i class="ion ion-md-person "></i> Данные</a>
+						<div class="demo-paragraph-spacing mt-3">
+						@if($person_count_statements < 6)
+							<a href="{{ url('/success_insert_abit') }}" class="btn btn-primary">
+								<i class="ion ion-md-add"></i>
+									Добавить заявление
+								</a>
+							@endif
+						@if($role != 5 && $person->is_checked == 'F')
+							<a href="#" onClick="CheckedPerson('{{$person->id}}')" class="btn btn-success">
+								<i class="ion ion-md-checkmark"></i>
+								Проверено
+							</a>
+							<a href="#" onClick="DiscardPerson('{{$person->id}}')" class="btn btn-cancel">
+								<i class="fa fa-times" aria-hidden="true"></i>
+								Отказать
 							</a>
 						@endif
-					@if($role != 5 && $person->is_checked == 'F')
-						<a href="#" onClick="CheckedPerson('{{$person->id}}')" class="btn btn-success">
-							<i class="ion ion-md-checkmark"></i>
-							Проверено
-						</a>
-						<a href="#" onClick="DiscardPerson('{{$person->id}}')" class="btn btn-cancel">
-							<i class="fa fa-times" aria-hidden="true"></i>
-							Отказать
-						</a>
-					@elseif($role != 5)
-						@if($person->is_checked == 'T')
-							<p class="profile-status">Статус: <b>Проверен</b></p>
-					 @endif
+					</div>
 					@endif
-				</div>
-			@else
-				@if($person->is_checked == 'T')
-					<p class="profile-status">Статус: <b>Проверен</b></p>
-				@endif
+				</span>
+			@endif
+			@if($person->is_checked == 'T')
+				<p class="profile-status">Статус: <b>Проверен</b></p>
 			@endif
 			@if(isset($person->Comment))
 				<p class="profile-status profile-status-dismiss">Статус: <b>Отказано</b></p>
 				<p class="profile-comment">Комментарий: <b>{{$person->Comment}}</b></p>
 			@endif
-		</span>
 		</div>
 	</div>
 

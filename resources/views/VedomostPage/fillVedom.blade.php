@@ -75,7 +75,7 @@
 						<select onchange="fill_vedomost();" id="ved" name="ved" class="form-control" data-style="btn-default" data-icon-base="ion" data-tick-icon="ion-md-checkmark">
 							<option value="-1">Выберите элемент</option>
 							@foreach ($vedList as $vl)
-								<option value="{{ $vl->id }}" @if($loop->iteration == 1) selected @endif>{{ $vl->id }}</option>
+								<option value="{{ $vl->id }}" @if($loop->iteration == 1) selected @endif>{{ $vl->id.' - ('.$vl->st_name.') '.$vl->predmet_name }}</option>
 							@endforeach
 						</select>
 					</div>

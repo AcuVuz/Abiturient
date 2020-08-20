@@ -84,7 +84,7 @@
 			</div>
 			<div class="row" style="font-size: 18px; max-width: 176mm; margin-left: 32mm; border-bottom: 1px solid black; ">&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp  &nbsp&nbsp&nbsp</div>
 			
-			<table class="ztable"border="1" cellspacing="0" style="margin-left: 20mm; margin-top: 3mm; width: 204mm; max-width: 204mm;">
+			<table class="ztable" border="1" cellspacing="0" style="margin-left: 20mm; margin-top: 3mm; width: 204mm; max-width: 204mm;">
 				<thead>
 					<tr>
 						<th rowspan="2">№ </br>п/п</th>
