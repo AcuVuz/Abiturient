@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <style type="text/css" media="print">
     @page {
- 				size: auto;   /* auto is the initial value */
- 				margin-top: 0;  /* this affects the margin in the printer settings */
+ 				size: auto;  
+ 				margin-top: 0;  
  			}
     </style>
 @endsection
@@ -156,6 +156,7 @@ $(function() {
         // Open this row
         var d = row.data();
         var ff = '';
+        console.log(d[12] + ' ' + d[11]);
         $.ajax({
             dataType: 'json',
             url: '/GetStudentsStamentStatistic',

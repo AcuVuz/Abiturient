@@ -38,6 +38,11 @@
                     <a href="/reitmag" class="sidenav-link"><div>Рейтинг магистратура</div></a>
                 </li>
             </ul>
+            <ul class="sidenav-menu">
+                <li class="sidenav-item{{ $routeName == 'dashboards.dashboard-reitbak' ? ' active' : '' }}">
+                    <a href="/reitbak" class="sidenav-link"><div>Рейтинг бакалавриат</div></a>
+                </li>
+            </ul>
             @if ($role == 1 || $role == 2)
                 <ul class="sidenav-menu">
                     <li class="sidenav-item{{ $routeName == 'dashboards.dashboard-printtest' ? ' active' : '' }}">

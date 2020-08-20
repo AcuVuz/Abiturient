@@ -29,26 +29,47 @@ class RetingController extends Controller
     }
     public function reitmag(){
 
-     $role = session('role_id');
-     $users = session('user_name');
-     $abit_branch = ABranch::GetBranch();
+        $role = session('role_id');
+        $users = session('user_name');
+        $abit_branch = ABranch::GetBranch();
 
-     return view('ReitingPage.reting_magistr',
-         [
-             'title' => 'Рейтинг магистратура',
-             'role' => $role,
-             'username' => $users,
-             'abit_branch' => $abit_branch
-         ]);
+        return view('ReitingPage.reting_magistr',
+            [
+                'title' => 'Рейтинг магистратура',
+                'role' => $role,
+                'username' => $users,
+                'abit_branch' => $abit_branch
+            ]);
     }
-    public function PrepareReport(Request $request){
+    public function reitbak(){
 
-       $query = DB::select('CALL abit_reit_mag(?)',[$request->gid]);
+        $role = session('role_id');
+        $users = session('user_name');
+        $abit_branch = ABranch::GetBranch();
+
+        return view('ReitingPage.reiting_bakalavr',
+            [
+                'title' => 'Рейтинг бакалавриат',
+                'role' => $role,
+                'username' => $users,
+                'abit_branch' => $abit_branch
+            ]);
+    }
+
+    public function PrepareReport(Request $request){
+       if($request->stid == 3){
+            $query = DB::select('CALL abit_reit_mag(?)',[$request->gid]);
+            $report = 'ReportPages.Report_Reit_Mag';
+       }else if($request->stid == 1){
+            $query = DB::select('CALL abit_reit_bak(?)',[$request->gid]);
+            $report = 'ReportPages.Report_Reit_Bak';
+       }
+       
        $facultet = AFacultet::GetFacultetName($request->fkid);
        $group = AGroup::GetGroupName($request->gid);
        $formobuch = AFormObuch::GetFormObuchName($request->foid);
        
-       return view('ReportPages.Report_Reit_Mag',['query' => $query,
+       return view($report,['query' => $query,
        'facultet' => $facultet,
        'group_name' => $group->name,
        'foname' => $formobuch->name]);

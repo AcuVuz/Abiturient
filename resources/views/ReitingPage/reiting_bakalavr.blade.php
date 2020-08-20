@@ -57,7 +57,7 @@ function fill_formobuch()
 function fill_group()
 {
  var fkid = $('#abit_facultet').val();
- var stid = 3;
+ var stid = 1;
  var foid = $('#abit_formobuch').val();
  $.ajax({
   url: '/vedomost/get_group',
@@ -80,19 +80,19 @@ function fill_group()
 
 }
 function PrepRep(){
- var stid = 3;
- var gid = $('#abit_group').val();
- var fkid = $('#abit_facultet').val();
- var foid = $('#abit_formobuch').val();
- if(gid != "null" && fkid != "null" && foid != "null"){
-  window.location = "/reitmag/report_reit_mag?gid=" + gid + '&fkid=' + fkid + '&foid=' + foid + '&stid=' + stid;
+    var stid = 1;
+    var gid = $('#abit_group').val();
+    var fkid = $('#abit_facultet').val();
+    var foid = $('#abit_formobuch').val();
+    if(gid != "null" && fkid != "null" && foid != "null"){
+    window.location = "/reitmag/report_reit_mag?gid=" + gid + '&fkid=' + fkid + '&foid=' + foid + '&stid=' + stid;
  }
 }
 </script>
 @endsection
 
 @section('content')
-<h4>Рейтинг магистратура</h4>
+<h4>Рейтинг бакалавриат</h4>
 <div class="card mb-4">
  <div class="form-group">
   <input type="button"  class="btn btn-secondary" onClick="PrepRep();"value="Распечатать">

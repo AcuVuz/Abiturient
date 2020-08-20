@@ -78,6 +78,7 @@ Route::post('/grafik/get_predmet', 'GrafikController@get_predmet')->middleware('
 Route::post('/grafik/save', 'GrafikController@save')->middleware('check');
 Route::get('/vedomost', 'VedomostController@index')->name('dashboards.dashboard-vedomost')->middleware('check');
 Route::get('/reitmag', 'Reting\RetingController@reitmag')->name('dashboards.dashboard-reitmag')->middleware('check');
+Route::get('/reitbak', 'Reting\RetingController@reitbak')->name('dashboards.dashboard-reitbak')->middleware('check');
 Route::get('/print/test/form', 'PrintController@printtest_show')->name('dashboards.dashboard-printtest')->middleware('check');
 Route::post('/print/test/search_predmet', 'PrintController@search_predmet')->name('dashboards.dashboard-printtest')->middleware('check');
 Route::get('/reitmag/report_reit_mag', 'Reting\RetingController@PrepareReport')->middleware('check');
