@@ -51,6 +51,7 @@
     @endif
   @endforeach
   <th>Сумма баллов</th>
+  <th>Телефон</th>
   </tfooter>
   <tbody>
    @php ($i = 0)
@@ -68,6 +69,16 @@
         @endforeach
       @endif
       <td>{{$q->sum_all_ball}}</td>
+      <td>  
+        @if ($q->phone_result != "")  
+          @foreach(explode('|', $q->phone_result) as $phone)
+            {{$phone}}
+            @if (count(explode('|', $q->phone_result)) > 1)
+              </br>
+            @endif          
+          @endforeach
+        @endif
+      </td>
      </tr>
     @endforeach
   </tbody>
