@@ -30,4 +30,39 @@ class AStatments extends Model
 				->first();
 		return $query;
 	}
+
+	public static function GetGroupStatment($id_group){
+		$query = AStatments::
+				select('abit_statements.id', 'p.famil', 'p.name', 'p.otch')
+				->join('persons as p', 'p.id', 'abit_statements.person_id')
+				->where('abit_statements.group_id', $id_group)
+				->whereNull('abit_statements.prikaz_zach_id')
+				->orderBy('p.famil')
+				->get();
+				
+		return $query;
+		
+	}
+
+	public static function GetGroupStatmentWithPrikaz($id_group, $id_prikaz){
+		$query = AStatments::
+				select('abit_statements.id', 'p.famil', 'p.name', 'p.otch')
+				->join('persons as p', 'p.id', 'abit_statements.person_id')
+				->where([
+					['abit_statements.group_id', $id_group],
+					['abit_statements.prikaz_zach_id', $id_prikaz]
+					])
+				->orderBy('p.famil')
+				->get();
+				
+		return $query;
+		
+	}
+
+	public static function UpdatePrikazStatment($id_statement, $id_prikaz){
+		$query = AStatments::where('id', $id_statement)->first();
+		$query->prikaz_zach_id = $id_prikaz;
+		$query->save();
+	}
+
 }

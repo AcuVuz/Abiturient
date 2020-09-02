@@ -73,7 +73,14 @@ Route::post('/direction/get_group', 'DirectionController@get_group');
 Route::post('/direction/get_predmet', 'DirectionController@get_predmet');
 Route::post('/direction/search_predmet', 'DirectionController@search_predmet');
 
+Route::get('/MovePrikaz', 'MovePrikaz@index')->name('dashboards.dashboard-MovePrikaz')->middleware('check');
+Route::post('/getStatgroup', 'MovePrikaz@GetGroupStat');
+Route::post('/getStatgroupWithPrikaz', 'MovePrikaz@GetStatgroupWithPrikaz');
+Route::post('/MovePrikaz/UpdateZach', 'MovePrikaz@UpdateZach');
 Route::get('/grafik', 'GrafikController@index')->name('dashboards.dashboard-grafik')->middleware('check');
+Route::get('/prikaz', 'PrikazController@index')->name('dashboards.dashboard-prikaz')->middleware('check');
+Route::post('/prikaz/save', 'PrikazController@save')->name('dashboards.dashboard-prikaz')->middleware('check');
+Route::post('/prikaz/delete', 'PrikazController@delete')->name('dashboards.dashboard-prikaz')->middleware('check');
 Route::post('/grafik/get_predmet', 'GrafikController@get_predmet')->middleware('check');
 Route::post('/grafik/save', 'GrafikController@save')->middleware('check');
 Route::get('/vedomost', 'VedomostController@index')->name('dashboards.dashboard-vedomost')->middleware('check');

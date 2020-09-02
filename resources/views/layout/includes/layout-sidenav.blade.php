@@ -54,6 +54,16 @@
                         <a href="/grafik" class="sidenav-link"><div>График экзаменов</div></a>
                     </li>
                 </ul>
+                <ul class="sidenav-menu">
+                    <li class="sidenav-item{{ $routeName == 'dashboards.dashboard-prikaz' ? ' active' : '' }}">
+                        <a href="/prikaz" class="sidenav-link"><div>Приказы</div></a>
+                    </li>
+                </ul>
+                <ul class="sidenav-menu">
+                    <li class="sidenav-item{{ $routeName == 'dashboards.dashboard-MovePrikaz' ? ' active' : '' }}">
+                        <a href="/MovePrikaz" class="sidenav-link"><div>Перенос людей в приказы</div></a>
+                    </li>
+                </ul>
             @endif
         </li>
         <!-- Печать документов -->
