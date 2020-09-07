@@ -88,7 +88,6 @@
 				<div class="form-group">
 					<input type="button" onclick="$('#prikaz_id').val('-1'); $('#name').val('');" class="btn btn-success" value="Новый приказ">
 					<input type="button" onclick="create();" class="btn btn-success" value="Сохранить" >
-					<input type="button" onclick="document.location.href = '/prikaz/fill_prikaz'" class="btn btn-danger" value="Заполнить">
 					@if($role == 1) <input type="button" onclick="del();" class="btn btn-danger" value="Удалить"> @endif
 				</div>
                 <div class="form-row" id="abit_facultet_block">

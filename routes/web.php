@@ -143,7 +143,13 @@ Route::get('/reset-password', 'ResetPasswordController@index');
 Route::get('/contact', 'Contact\ContactController@index')->middleware('check');
 //=============== Отображение страницы Тех.поддержки  ============================//
 Route::get('/support', 'Support\SupportController@index')->middleware('check');
-
+Route::get('/jurnal', 'JurnalController@index')->middleware('check');
+Route::post('/jurnal/get_facultet', 'JurnalController@get_facultet')->middleware('check');
+Route::post('/jurnal/get_stlevel', 'JurnalController@get_stlevel')->middleware('check');
+Route::post('/jurnal/get_form_obuch', 'JurnalController@get_form_obuch')->middleware('check');
+Route::post('/jurnal/get_group', 'JurnalController@get_group')->middleware('check');
+Route::get('/jurnal/print_titul', 'JurnalController@print_titul')->middleware('check');
+Route::get('/jurnal/print_jurnal', 'JurnalController@print_jurnal')->middleware('check');
 
 Route::post('/discard_checked_abit', 'ProfileController@DiscardCheckedAbit');
 
