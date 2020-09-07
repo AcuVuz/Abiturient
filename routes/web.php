@@ -166,6 +166,13 @@ Route::get('/repekzcart', function(){
  return view('ReportPages.Report_Ekzcart');
 });
 
+Route::get('/repjournaltit', function(){
+    return view('ReportPages.Report_Journal_Tit');
+   });
+   
+Route::get('/repjournal', function(){
+    return view('ReportPages.Report_Journal');
+});
 
 Route::get('/statistic', function(){
  return view('DashboardPage.dashboardStatistic', [
