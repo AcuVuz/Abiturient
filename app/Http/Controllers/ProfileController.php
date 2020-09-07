@@ -678,6 +678,7 @@ class ProfileController extends Controller
 						if ($tmp->ball_count <= $ttmp) $testScatter_success= true;
 						else $testScatter_success = false;
 					}
+					
 					if ($max_ball != $test->max_ball) $testScatter_success = false;
 					if ($max_quest != $test->count_question) $testScatter_success = false;
 					// добавить проверку на дату и время ивента этого теста
@@ -700,7 +701,7 @@ class ProfileController extends Controller
 						else $testScatter_success = false;
 					}
 					else $testScatter_success = false;
-
+					//dump($testScatter_success);
 					if ($testScatter_success)
 					{
 						switch ($test->status) {
