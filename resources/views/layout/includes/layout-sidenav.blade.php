@@ -35,6 +35,11 @@
             </ul>
             @if ($role == 1 || $role == 2)
                 <ul class="sidenav-menu">
+                    <li class="sidenav-item">
+                        <a href="/AbitForMon" target="_blank" class="sidenav-link"><div>Статистика МОН</div></a>
+                    </li>
+                </ul>
+                <ul class="sidenav-menu">
                     <li class="sidenav-item{{ $routeName == 'dashboards.dashboard-jurnal' ? ' active' : '' }}">
                         <a href="/jurnal" class="sidenav-link"><div>Жураналы</div></a>
                     </li>

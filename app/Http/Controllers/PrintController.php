@@ -12,6 +12,7 @@ use App\ADocument;
 use App\ASertificate;
 use App\APersPriv;
 use App\AExamsCard;
+use App\AStatementLgot;
 use App\AVedomost;
 use App\Tests;
 use App\TestScatter;
@@ -253,5 +254,41 @@ class PrintController extends Controller
 				'test_body'	=> $test_body
 			]
 		);
+	}
+
+	public function abitformon() {
+		$abits = AStatments::select(
+						"abit_statements.id",
+						"p.famil", 
+						"p.name", 
+						"p.otch", 
+						"p.gender", 
+						"p.birthday", 
+						"p.country",
+						"p.adr_obl",
+						"p.adr_rajon",
+						"p.adr_city",
+						"p.adr_street",
+						"p.adr_house",
+						"p.adr_flatroom",
+						'ag.name as spec',
+						'ag.minid',
+						'fo.name as fo_name',
+						'ag.st_id',
+						'ap.is_budg'
+					)
+					->leftjoin('persons as p', 'p.id', 'abit_statements.person_id')
+					->leftjoin('abit_prikaz as ap', 'ap.id', 'abit_statements.prikaz_zach_id')
+					->leftjoin('abit_group as ag', 'ag.id', 'abit_statements.group_id')
+					->leftjoin('abit_formObuch as fo', 'fo.id', 'ag.fo_id')
+					->whereNotNull('abit_statements.prikaz_zach_id')
+					->get();
+		$lgot = [];
+		foreach ($abits as $abit) {
+			$lgot += [
+				$abit->id => AStatementLgot::where('state_id', '=', $abit->id)->count()
+			];
+		}
+		return view('ReportPages.Report_AbitMon', ["abits" => $abits, "lgot" => $lgot]);
 	}
 }

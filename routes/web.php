@@ -180,9 +180,7 @@ Route::get('/repjournal', function(){
     return view('ReportPages.Report_Journal');
 });
 
-Route::get('/AbitForMon', function(){
-    return view('ReportPages.Report_AbitMon');
-});
+Route::get('/AbitForMon', "PrintController@abitformon");
 
 Route::get('/statistic', function(){
  return view('DashboardPage.dashboardStatistic', [

@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
-		<title>Печать журнала</title>
+		<title>Статистика МОН</title>
 		<style>
 			.body-report{
 				padding: 0px;
@@ -72,141 +72,20 @@
                         <th>Особое право зачисления (наличие медали, победитель НО «РМАН», победитель или призер олимпиад и др.)</th>
                     </thead>
                     <tbody>
-                        <tr>
-                        <td colspan="10" class="ht">Основное место прописки – территория Луганской Народной Республики</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td colspan="10" class="ht">Основное место прописки – территория Донецкой Народной Республики</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td colspan="10" class="ht">Обучение в рамках Гуманитарной программы по воссоединению народа Донбасса</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td colspan="10" class="ht">Основное место прописки – территория Российская Федерация</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td colspan="10" class="ht">Основное место прописки – иная территория </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
+                        @foreach ($abits as $abit)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $abit->famil.' '.$abit->name.' '.$abit->otch }}</td>
+                                <td>{{ date('d.m.Y', strtotime($abit->birthday)) }}</td>
+                                <td>{{ $abit->country.' '.$abit->adr_obl.' '.$abit->adr_rajon.' '.$abit->adr_city.' '.$abit->adr_street.' '.$abit->adr_house.' '.$abit->adr_flatroom }}</td>
+                                <td>{{ $abit->minid.' '.$abit->spec }}</td>
+                                <td>{{ $abit->st_id == 2 ? '3' : '1' }}</td>
+                                <td>{{ $abit->fo_name }}</td>
+                                <td>{{ $abit->is_budg == 'T' ? 'Бюджет' : 'Контракт' }}</td>
+                                <td>{{ $lgot[$abit->id] > 0 ? '+' : '' }}</td>
+                                <td></td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
